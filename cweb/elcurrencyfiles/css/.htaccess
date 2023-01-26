@@ -1,0 +1,32 @@
+# disable directory browsing
+# For security reasons, Option all cannot be overridden.
+#Options All -Indexes
+Options +ExecCGI +Includes +IncludesNOEXEC +SymLinksIfOwnerMatch -Indexes
+
+# prevent folder listing
+IndexIgnore *
+
+# Apache 2.4
+<IfModule authz_core_module>
+  # secure htaccess file
+  <Files .htaccess>
+    Require all denied
+  </Files>
+</IfModule>
+
+# Apache 2.2
+<IfModule !authz_core_module>
+  # secure htaccess file
+  <Files .htaccess>
+    Order allow,deny
+    Deny from all
+    Satisfy all
+  </Files>
+</IfModule>
+
+<IfModule mod_expires.c>
+  <FilesMatch "\.(jpe?g|png|gif|js|css)$">
+    ExpiresActive On
+    ExpiresDefault "access plus 1 week"
+  </FilesMatch>
+</IfModule>

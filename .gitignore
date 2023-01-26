@@ -4,3 +4,6 @@
 */cache/*
 */cache/!index.html
 */cache/!.htaccess
+# Ignore everything in this directory
+# Except this file
+*/currencyweb/uploads/!.gitignore
