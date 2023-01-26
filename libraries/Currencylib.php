@@ -65,7 +65,7 @@ class Currencylib
 	public function getCurrencys($baseCurrency = NULL, $amountCurrency = NULL, $dateCurrency = NULL)
 	{
 		$this->amountCurrency = $amountCurrency;
-		$this->conCurrency($baseCurrency, NULL, $dateCurrency)
+		$this->conCurrency($baseCurrency, NULL, $dateCurrency);
 		return $this->converted;
 	}
 
