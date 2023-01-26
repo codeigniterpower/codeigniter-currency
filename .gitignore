@@ -1,9 +1,13 @@
-*/config/development
-*/logs/log-*.php
-*/logs/!index.html
-*/cache/*
-*/cache/!index.html
-*/cache/!.htaccess
+cweb/elcurrencyweb/config/development
+cweb/elcurrencyweb/logs/log-*.php
+cweb/elcurrencyweb/logs/!index.html
 # Ignore everything in this directory
 # Except this file
-*/currencyweb/uploads/!.gitignore
+cweb/elcurrencyweb/cache/*
+cweb/elcurrencyweb/cache/!index.html
+cweb/elcurrencyweb/cache/!.htaccess
+# Ignore everything in this directory
+# Except this file
+cweb/currencyweb/elcurrencyfiles/uploads/!.gitignore
+# temporally do not use CI3 direct fiels.. lter we will use CI3 as module
+cweb/vendor/codeigniter3
