@@ -1,118 +1,172 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * elcurrency Currencylib Class for requestinig to apilayer using marketshare currency conversion
+ *
+ * @author      PICCORO Lenz McKAY
+ * @copyright Copyright (c) 2023
+ * @version ab - 1.0
+ */
 class Currencylib
 {
 
-    private $CI;
+	/** internal object from framewrok*/
+	private $CI;
 
-    private $converted;
+	/** result of conversion when invoking the function */
+	private $converted;
 
-    private $dateCurrency;
+	/** the desired history point of the currency to convert */
+	private $dateCurrency;
 
-    private $baseCurrency;
+	/** 3 letters base currency to compared */
+	private $baseCurrency;
 
-    private $destiCurrency;
+	/** 3 letters array or comma separated currency desired to convert */
+	private $destiCurrency;
 
-    private $amountCurrency;
+	/** if you desired to convert and amount event just the unit of the currency */
+	private $amountCurrency;
 
-    private $currencyApiKey;
+	/** apy key of the apilayer, will only work with an valid one */
+	private $currencyApiKey;
 
-    private $currencyApiUrl;
+	/** urs to invoke, mostly not necesary to change */
+	private $currencyApiUrl;
 
-    public function __construct()
-    {
-        $this->CI =& get_instance();
-//        $this->CI->config->load('currencylib', true);
+	/**
+	 * @author      PICCORO Lenz McKAY
+	 * name: descondefault constructor
+	 */
+	public function __construct()
+	{
+		$this->CI =& get_instance();
+		$this->CI->config->load('currencylib', true);
+		$this->dateCurrency = date('Y-m-d');
+		$this->amountCurrency = 1;
+		$this->currencyApiKey = $this->CI->config->item('currency_api_key', 'currencylib');
+		$this->currencyApiUrl = $this->CI->config->item('currency_api_url', 'currencylib');
+	}
 
-        $this->dateCurrency = date('Y-m-d');
-        $this->amountCurrency = 1;
-//        $this->currencyApiKey = $this->CI->config->item('currency_api_key', 'currencylib');
-//        $this->currencyApiUrl = $this->CI->config->item('currency_api_url', 'currencylib');
-    }
+	// TODO init and document tthe lib
+	public function initialize()
+	{
+		// TODO init the amount, destino, base and date using array parameters
+	}
 
-    public function initialize()
-    {
-        // TODO init the amount, destino, base and date using array parameters
-    }
+	/**
+	 * name: getCurrencys
+	 * @author      PICCORO Lenz McKAY
+	 * @param string baseCurrency 3 letter code to convert, array or comma separated
+	 * @param float multiplicer of currency
+	 * @param string dateCurrency YYYY-MM-DD, if null lasted
+	 * @return
+	 */
+	public function getCurrencys($baseCurrency = NULL, $amountCurrency = NULL, $dateCurrency = NULL)
+	{
+		$this->amountCurrency = $amountCurrency;
+		$this->conCurrency($baseCurrency, NULL, $dateCurrency)
+		return $this->converted;
+	}
 
-    public function convertCurrency($baseCurrency = NULL, $destiCurrency = NULL, $dateCurrency = NULL)
-    {
-        if (NULL == $this->currencyApiKey) {
-//            throw new \Exception('Api Key missing');
-        }
+	/**
+	 * name: conCurrency
+	 * @author      PICCORO Lenz McKAY
+	 * @param string baseCurrency 3 letter code to convert, array or comma separated
+	 * @param string destiCurrency 3 letter code base to compare
+	 * @param string dateCurrency YYYY-MM-DD, if null lasted
+	 * @return
+	 */
+	public function conCurrency($baseCurrency = NULL, $destiCurrency = NULL, $dateCurrency = NULL)
+	{
+		$this->baseCurrency = $baseCurrency;
+		$this->destiCurrency = $destiCurrency;
+		$this->dateCurrency = $dateCurrency;
 
-        $this->baseCurrency = $baseCurrency;
-        $this->destiCurrency = $destiCurrency;
-        $this->dateCurrency = $dateCurrency;
-
-        if (strcasecmp($this->baseCurrency,$this->destiCurrency) == 0)
-            return 1;
+		if (strcasecmp($this->baseCurrency,$this->destiCurrency) == 0)
+			return $this->converted = array($this->baseCurrency => 1);
  
-        $this->converted = $this->requestCurrency();
-        $this->converted = $this->converted * $this->amountCurrency;
+		$this->requestCurrency();
+			return $this->converted;
 
-        return $this->converted;
-    }
+	}
 
-    private function requestCurrency()
-    {
+	/**
+	 * name: requestCurrency
+	 * @author      PICCORO Lenz McKAY
+	 * @return mixed array with the resquested ones based on conCurrency/getCurrencys parameters
+	 */
+	private function requestCurrency()
+	{
 
-        $this->converted = 0;
-    //curl --request GET --url 'https://api.apilayer.com/exchangerates_data/2022-12-12?symbols=VES&base=USD' --header 'apikey: VT8SP8bScl98eMHzetvJQS9a1D8U0Y8j'
+		if (NULL == $this->currencyApiKey) {
+			log_message('error', __CLASS__ .' missing apy key' );
+			return array('ERR'=>0);
+		}
+		if (NULL == $this->amountCurrency) {
+			$this->amountCurrency = 1;
+		}
+		if (NULL == $this->dateCurrency) {
+			$this->dateCurrency = date('Y-m-d');
+		}
+		if (NULL == $this->baseCurrency) {
+			$this->baseCurrency = 'USD';
+		}
+		if (NULL == $this->destiCurrency) {
+			$this->destiCurrency = 'VES';
+		}
 
-        $postdata = http_build_query(
-            array(
-                'symbols' => 'VES',
-                'base' => 'USD'
-            )
-        );
+		$urlrequested = $this->currencyApiUrl."/".$this->dateCurrency."?symbols=".$this->destiCurrency."&base=".$this->baseCurrency;
 
-        $opts = array('http' =>
-            array(
-                'method'  => 'GET',
-                'header'  => 'apikey: VT8SP8bScl98eMHzetvJQS9a1D8U0Y8j\r\nContent-Type: text/plain\r\n',
-                'content' => $postdata
-            )
-        );
+		log_message('debug', __CLASS__ .'URL: '.print_r($urlrequested,TRUE) );
+		$this->converted = 0;
 
-        $context = stream_context_create($opts);
+		$curl = curl_init();
 
-        $result = file_get_contents('https://api.apilayer.com/exchangerates_data/'.date('Y-m-d'), false, $context);
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => $urlrequested,
+			CURLOPT_HTTPHEADER => array(
+				"Content-Type: text/plain",
+				"apikey: ".$this->currencyApiKey
+			),
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "GET"
+		));
+		log_message('debug', __CLASS__ .':curl request: '. print_r($curl,TRUE) );
 
-        log_message('info', 'result of data json: '. print_r($result,TRUE) );
+		$response = curl_exec($curl);
+		log_message('debug', __CLASS__ .':json response: '. print_r($response,TRUE) );
+		if (! isset($response)) 
+		{
+			return array('ERR'=>0);
+		}
+		curl_close($curl);
 
-        if (isset($result)) {
-            $conversion = json_decode($result, true);
-            $rates = $conversion['rates'];
+		$conversion = json_decode($response, true);
+		log_message('debug', __CLASS__ .':json decode: '. print_r($response,TRUE) );
+		if(! array_key_exists('rates', $conversion))
+		{
+			return array('ERR'=>0);
+		}
+		$rates = $conversion['rates'];
 
-            if ( isset($rates) ) {
-                $this->converted = $rates['VES'];
-            }
-        }
-        log_message('info', 'result of convert: '. print_r($this->converted,TRUE) );
-        return $this->converted;
+		$this->converted = $rates;
+		$resultstoprint = '';
+		foreach($rates as $destiCurrency => $valueCurrency)
+		{
+			$valueCurrency = floatval($valueCurrency)*floatval($this->amountCurrency);
+			$resultstoprint .= $destiCurrency.':'.$valueCurrency.'; ';
+			$this->converted[$destiCurrency] = $valueCurrency;
+		} 
+		log_message('info', __CLASS__ .': converted rates: '. print_r($resultstoprint,TRUE) );
+		log_message('debug', __CLASS__ .': converted rates: '. print_r($this->converted,TRUE) );
+		return $this->converted;
 
-/*
-        $url = 'https://free.currencyconverterapi.com/api/v5/convert?q=' . $this->baseCurrency . '_' . $this->destiCurrency . '&compact=ultra&apiKey=' . $this->currencyApiKey;
-        $handle = @fopen($url, 'r');
+	}
 
-        if ($handle) {
-            $result = fgets($handle, 4096);
-            fclose($handle);
-        }
-
-        if (isset($result)) {
-            $conversion = json_decode($result, true);
-            if (isset($conversion[$this->baseCurrency . '_' . $this->destiCurrency])) {
-                return $conversion[$this->baseCurrency . '_' . $this->destiCurrency];
-            }
-        }
-
-        return $this->converted = 0;*/
-    }
-
-    public function setApiKey($apiKey)
-    {
-        $this->currencyApiKey = $apiKey;
-    }
 }
