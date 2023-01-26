@@ -1,26 +1,7 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-		$menucss = '
-<style type="text/css">
-.topnav {
-  font-family : font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;  font-weight: normal;  background-color:  #4CAF50;  padding: 0px 12px;  position: fixed;  top: 0;  left: 0;  right: 0;  z-index: 999;
-}
-.topnavsub {
-  font-weight: normal;  background-color:  green;   margin: 1rem;  position: relative;  top: 5px;  z-index: 99;
-}
-.topnav a {
-  font-weight: normal;  text-decoration: none;  float: center;  color: #f2f2f2;  padding: 2px 12px;
-}
-.topnav a:hover, .topnav a.active {
-  font-weight: normal;  background-color: white;  color: #4CAF50;  border-bottom: 3px solid #222222;
-}
-</style>
-';
-
-		$metaline1 = array('name' => 'description', 'content' => 'Codeigniter powered with steroids series 3.X by Mckay Lenz');
-		$metaline2 = array('name' => 'keywords', 'content' => 'system, admin, catalogo, sistemas, recibo, pago, saint');
-		$metaline3 = array('name' => 'Content-type', 'content' => 'text/html; charset='.config_item('charset'), 'type' => 'equiv');
+	// initialization of default meta tags
 		if ( strcmp(ENVIRONMENT, 'development') == 0 )
 		{
 			$metaline4 = array('name' => 'Cache-Control', 'content' => 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0', 'type' => 'equiv');
@@ -30,30 +11,33 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		}
 		else
 		{
-			$metaline6 = $metaline5 = $metaline4 = '';
+			$metaline4 = $metaline5 = $metaline6 = '';
 			$idcache = '';
 		}
-		$metaline7 = array('name' => 'Content-Security-Policy', 'content' => '');
-		$meta = array( $metaline1, $metaline2, $metaline3, $metaline4, $metaline5, $metaline6, $metaline7 );
 
+		$metaline1 = array('name' => 'description', 'content' => 'Codeigniter powered with steroids series 3.X by Mckay Lenz');
+		$metaline2 = array('name' => 'keywords', 'content' => 'system, admin, catalogo, sistemas, currency, rates, monedas');
+		$metaline3 = array('name' => 'Content-type', 'content' => 'text/html; charset='.config_item('charset'), 'type' => 'equiv');
+		$metaline7 = array('name' => 'Content-Security-Policy', 'content' => '');
+
+	// set the meta header tags in an usable array and configure the header metadata
+		$meta = array( $metaline1, $metaline2, $metaline3, $metaline4, $metaline5, $metaline6, $metaline7 );
+		$headermetatag = meta($meta);
+
+		// inicializacion de variables de rutas a los css
 		$pathcss = base_url() . '/assets/css/'; $typcs='text/css';
 		$pathjsc = base_url() . '/assets/js/'; $typjs='text/javascript';
 
 		$linkwebcss = array('type'=>$typcs,'rel'=>'stylesheet','href' => $pathcss.'bootstrap.css'.$idcache); // script de css sin tener que especificar clases en cada tag
 		$linkwebcssd = array('type'=>$typcs,'rel'=>'stylesheet','href' => $pathcss.'flatpickr.min.css'.$idcache); // script de css sin tener que especificar clases en cada tag
-		$linkwebcssjs = array('type'=>$typjs,'src' => $pathjsc.'bootstrap-native.js'.$idcache); // script de css sin tener que especificar clases en cada tag
-		$linkwebcssjsd = array('type'=>$typjs,'src' => $pathjsc.'flatpickr.js'.$idcache); // script de css sin tener que especificar clases en cada tag
-		$linkwebcssjsu = array('type'=>$typjs,'src' => $pathjsc.'polyfill.js'.$idcache); // script de css compatibilidad navegadores viejos
 
     echo doctype('xhtml1-trans'), PHP_EOL,'<html xmlns="http://www.w3.org/1999/xhtml">', PHP_EOL;
 	echo '<head>'. PHP_EOL;
+		$this->load->helper('header');
 		echo meta($meta);
 		echo link_tag($linkwebcss);
 		echo link_tag($linkwebcssd);
-		echo script_tag($linkwebcssjs);
-		echo script_tag($linkwebcssjsu);
-		echo script_tag($linkwebcssjsd);
-		echo $menucss . PHP_EOL;
+		echo link_js('polyfill.js');
 	echo '</head>'. PHP_EOL;
 	echo '<body>'.PHP_EOL;
 
