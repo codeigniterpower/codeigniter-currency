@@ -37,8 +37,9 @@ class Home extends CP_Controller {
 		$data['currentinx'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;
 		$this->load->view('header.php',$data);
-		$this->load->view('indexview',$data);
-		$this->load->view('footer.php',$data);
+        $this->load->view('menu');
+		$this->load->view('home.php',$data);
+		// $this->load->view('footer.php',$data);
     }
 
 }

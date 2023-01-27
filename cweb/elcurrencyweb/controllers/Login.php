@@ -37,7 +37,7 @@ class Login extends CP_Controller {
 		$data['currentinx'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;
 		$this->load->view('header.php',$data);
-		$this->load->view('indexlogin',$data);
+		$this->load->view('login',$data);
 		$this->load->view('footer.php',$data);
     }
 
