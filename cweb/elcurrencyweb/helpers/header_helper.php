@@ -81,9 +81,9 @@ if (! function_exists('link_css')) {
 		}
 
 		$script = '';
-		$openscrjs = '<script type="text/css" rel="stylesheet" ';
+		$openscrjs = '<link rel="stylesheet" ';
 		foreach ($linkssrc as $k => $v) {
-			$script .= $openscrjs . ' src="'.$v.'" media="all" '.$params.' ></script>';
+			$script .= $openscrjs . ' href="'.$v.'" media="all" '.$params.' ></link>';
 		}
 
 		return $script;
