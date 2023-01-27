@@ -49,9 +49,9 @@ if (! function_exists('header_meta')) {
 		$metaline2 = array('name' => 'keywords', 'content' => 'system, admin, catalogo, sistemas, currency, rates, monedas');
 		$metaline3 = array('name' => 'Content-type', 'content' => 'text/html; charset='.config_item('charset'), 'type' => 'equiv');
 		$metaline7 = array('name' => 'Content-Security-Policy', 'content' => '');
-
+		$metaline8 = array('name' => "viewport", "content" => "width=device-width, initial-scale=1.0" );
 	// set the meta header tags in an usable array and configure the header metadata
-		$meta = array( $metaline1, $metaline2, $metaline3, $metaline4, $metaline5, $metaline6, $metaline7 );
+		$meta = array( $metaline1, $metaline2, $metaline3, $metaline4, $metaline5, $metaline6, $metaline7, $metaline8 );
 		$headermetatag = meta($meta);
 
 		return $headermetatag;
@@ -69,21 +69,21 @@ if (! function_exists('link_css')) {
 	 *
 	 * @param array|string $link       Script source or an array of scrits sources
 	 */
-	function link_css($link = '')
+	function link_css($link = '', $params = '')
 	{
 		$linkssrc = array();
 		//<link href="main.css" rel="stylesheet" />
 		if ( ! is_array($link)) {
-			if ( strripos($link, 'http') > 0)
+			if ( strripos($link, 'http') !== FALSE)
 				$linkssrc['src'] = $link;
 			else
-				$linkssrc['src'] = $link;
+				$linkssrc['src'] = base_url().'elcurrencyfiles/css/'.$link;
 		}
 
 		$script = '';
-		$openscrjs = '<script rel="stylesheet" ';
+		$openscrjs = '<script type="text/css" rel="stylesheet" ';
 		foreach ($linkssrc as $k => $v) {
-			$script .= $openscrjs . ' src="'.base_url().'elcurrencyfiles/css/'.$v.'" media="all"></script>';
+			$script .= $openscrjs . ' src="'.$v.'" media="all" '.$params.' ></script>';
 		}
 
 		return $script;
@@ -106,16 +106,16 @@ if (! function_exists('link_js')) {
 		$linkssrc = array();
 		//<script src="/assets/webpack/runtime.a33f0906.bundle.js" defer="defer" nonce=""></script>
 		if ( ! is_array($link)) {
-			if ( strripos($link, 'http') > 0)
+			if ( strripos($link, 'http') !== FALSE)
 				$linkssrc['src'] = $link;
 			else
-				$linkssrc['src'] = $link;
+				$linkssrc['src'] = base_url().'elcurrencyfiles/js/'.$link;
 		}
 
 		$script = '';
 		$openscrjs = '<script type="text/javascript" ';
 		foreach ($linkssrc as $k => $v) {
-			$script .= $openscrjs . ' src="'.base_url().'elcurrencyfiles/js/'.$v.'" defer="defer" nonce=""></script>';
+			$script .= $openscrjs . ' src="'.$v.'" defer="defer" nonce=""></script>';
 		}
 
 		return $script;

@@ -9,6 +9,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		echo link_js('polyfill.js');
 		echo link_js('currencyweb.js');
 		echo link_css('currencyweb.css');
-		// TODO : here the CSS and JS links use HTTP urls or just the name of the file
+		echo link_css("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+			// TODO : here the CSS and JS links use HTTP urls or just the name of the file
 	echo '</head>'. PHP_EOL;
 	echo '<body>'.PHP_EOL;
