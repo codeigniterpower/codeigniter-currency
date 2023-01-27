@@ -1,6 +1,6 @@
 <?php
 /**
- * CodeIgniterpower
+ * CodeIgniterpower header
  *
  * @package	CodeIgniterpower
  * @author	PICCORO Lenz McKAY
@@ -19,6 +19,76 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @category	html helper
  * @author	PICCORO Lenz McKAY
  */
+ 
+// ------------------------------------------------------------------------
+
+
+if (! function_exists('header_meta')) {
+	/**
+	 * Script
+	 *
+	 * Generates the header meta tag for our project with all the necesary headers tags of meta
+	 *
+	 */
+	function header_meta($link = '')
+	{
+		if ( strcmp(ENVIRONMENT, 'development') == 0 )
+		{
+			$metaline4 = array('name' => 'Cache-Control', 'content' => 'no-cache, no-store, must-revalidate, max-age=0, post-check=0, pre-check=0', 'type' => 'equiv');
+			$metaline5 = array('name' => 'Last-Modified', 'content' => gmdate("D, d M Y H:i:s") . ' GMT', 'type' => 'equiv');
+			$metaline6 = array('name' => 'pragma', 'content' => 'no-cache', 'type' => 'equiv');
+			$idcache = '?'.time();
+		}
+		else
+		{
+			$metaline4 = $metaline5 = $metaline6 = '';
+			$idcache = '';
+		}
+
+		$metaline1 = array('name' => 'description', 'content' => 'codeigniter-currency powered with steroids series');
+		$metaline2 = array('name' => 'keywords', 'content' => 'system, admin, catalogo, sistemas, currency, rates, monedas');
+		$metaline3 = array('name' => 'Content-type', 'content' => 'text/html; charset='.config_item('charset'), 'type' => 'equiv');
+		$metaline7 = array('name' => 'Content-Security-Policy', 'content' => '');
+
+	// set the meta header tags in an usable array and configure the header metadata
+		$meta = array( $metaline1, $metaline2, $metaline3, $metaline4, $metaline5, $metaline6, $metaline7 );
+		$headermetatag = meta($meta);
+
+		return $headermetatag;
+	}
+}
+
+// ------------------------------------------------------------------------
+
+
+if (! function_exists('link_css')) {
+	/**
+	 * Script
+	 *
+	 * Generates link header tags of stylesheet sources
+	 *
+	 * @param array|string $link       Script source or an array of scrits sources
+	 */
+	function link_css($link = '')
+	{
+		$linkssrc = array();
+		//<link href="main.css" rel="stylesheet" />
+		if ( ! is_array($link)) {
+			if ( strripos($link, 'http') > 0)
+				$linkssrc['src'] = $link;
+			else
+				$linkssrc['src'] = $link;
+		}
+
+		$script = '';
+		$openscrjs = '<script rel="stylesheet" ';
+		foreach ($linkssrc as $k => $v) {
+			$script .= $openscrjs . ' src="'.base_url().'elcurrencyfiles/css/'.$v.'" media="all"></script>';
+		}
+
+		return $script;
+	}
+}
 
 // ------------------------------------------------------------------------
 
@@ -36,16 +106,16 @@ if (! function_exists('link_js')) {
 		$linkssrc = array();
 		//<script src="/assets/webpack/runtime.a33f0906.bundle.js" defer="defer" nonce=""></script>
 		if ( ! is_array($link)) {
-			if ( strripos($link, 'http') == TRUE)
+			if ( strripos($link, 'http') > 0)
 				$linkssrc['src'] = $link;
 			else
-				$linkssrc['src'] = base_url().$link;
+				$linkssrc['src'] = $link;
 		}
 
 		$script = '';
 		$openscrjs = '<script type="text/javascript" ';
 		foreach ($linkssrc as $k => $v) {
-			$script .= $openscrjs . ' src="'.$v.'" defer="defer" nonce=""></script>';
+			$script .= $openscrjs . ' src="'.base_url().'elcurrencyfiles/js/'.$v.'" defer="defer" nonce=""></script>';
 		}
 
 		return $script;

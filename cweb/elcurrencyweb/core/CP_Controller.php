@@ -87,7 +87,7 @@ class CP_Controller extends CI_Controller
 	 * @param string $moduledir nombre del directorio de controllers especifico sino directorios de modulos
 	 * @return string html table con los nombres de archivos de controladores o los directorios si no se especifica modulo dir
 	 */
-	public function genmenu($modulename = NULL)
+	public function genmenu($modulename = NULL, $menuclasscss = NULL)
 	{
 		$currentctr = $this->currentctr;
 		$currentinx = $this->currentinx;
@@ -104,8 +104,8 @@ class CP_Controller extends CI_Controller
 		{
 			$menuitemactive = '';
 			$menuclasssubdi = '';
+			$menumainstring = '';
 
-			$menumainstring = '<div class="topnav '.$menuclasssubdi.'">';
 /*			if( $user_email == NULL OR $user_loged == FALSE )
 			{
 				$menumainstring .= '</div>';
@@ -142,26 +142,20 @@ class CP_Controller extends CI_Controller
 		}
 		else
 		{
-			$menuclasssubdi = 'topnavsub';
-			$menumainstring .= '<div class="topnav '.$menuclasssubdi.'">';
+			$menuclasssubdi = '';
 			foreach($arraycontrls as $menuidex=>$menulink)
 			{
 				$menuitemactive = '';
 				if(stripos($menulink,$currentctr)>1)
-				$menuitemactive = 'active';
-				if(stripos($menulink,'proc')>1)
-					continue;
+					$menuitemactive = 'active';
 				$findname = '/'.$modulename.'/';
 				$menuname = preg_replace($findname, '', $menulink, 1);
 				$menuname = str_replace('/','',$menuname);
-				$menuname = str_replace('m', '', $menuname);
-				if(stripos($menulink,'Index')>1)
-				$menuname = 'Recomenzar';
 				$menuname = ucfirst($menuname);
 				$menuname = str_replace('_', ' ', $menuname);
 				$menuname = ucwords($menuname);
 				$menulink = strtolower($menulink);
-				$menumainstring .= ' '.anchor($menulink,$menuname,'class=" shyButton button btn btn-10 btn-sm '.$menuitemactive.' " ').' ';
+				$menumainstring .= ' '.anchor($menulink,$menuname,'class=" '.$menuclasscss .' '. $menuitemactive.' " ').' ';
 			}
 		}
 		$menumainstring .= '</div>';
@@ -190,10 +184,7 @@ class CP_Controller extends CI_Controller
 		{
 			if( strpos($file,'htm') !== FALSE)
 				continue;
-			if( strpos($file,'.php') === FALSE AND $moduledir == '')
-				$name = str_replace('.php', '', $file).'/index'.str_replace('.php', '', $file);
-			else
-				$name = $moduledir.'/'.str_replace('.php', '', $file);
+			$name = $moduledir.'/'.str_replace('.php', '', $file);
 			$controllers[] = $name;
 		}
 		return $controllers;
