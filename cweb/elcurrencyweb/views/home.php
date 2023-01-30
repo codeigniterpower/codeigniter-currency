@@ -1,5 +1,5 @@
         <div class="col py-3">
-                <div class="container-pagination d-flex justify-content-between">
+                <!-- <div class="container-pagination d-flex justify-content-between">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                           <li class="page-item">
@@ -26,7 +26,7 @@
                           <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="seek">
                         </div>
                       </form>
-                </div>
+                </div> -->
                 <br>
                 <?php 
                     $data = array(
@@ -37,12 +37,20 @@
                     );
                 ?>
                 <div class="contain-table">
+                              <h1 style="text-align: center;">DD/MM/YYYY</h1>
                                 <?php 
                                     echo $this->table->generate($data);
                                 ?>
+                                <?php 
+                                echo br(3);
+                                echo '<h1 style="text-align: center;">DD/MM/YYYY</h1>';
+
+                                  $compare = true;
+                                  if($compare) echo $this->table->generate($data);                                  
+                                ?>
                 </div>
                   
-                  
+                    <!-- <br>
                   <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                       <li class="page-item">
@@ -59,7 +67,7 @@
                         </a>
                       </li>
                     </ul>
-                  </nav>
+                  </nav> -->
                 <!-- colocar contenido -->
         </div>
 
