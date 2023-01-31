@@ -36,7 +36,7 @@
                         </li>
 
 
-                        <li>
+                        <!-- <li>
                             <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle links-menu">
                                 <i class="fs-4 bi-bootstrap links-menu"></i> <span class="ms-1 d-none d-sm-inline links-menu">Bootstrap</span>  </a>
                             <ul class="collapse nav flex-column ms-1 links-menu" id="submenu2" data-bs-parent="#menu">
@@ -47,10 +47,10 @@
                                     <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu">Item</span> 1 </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> -->
 
                         
-                        <li>
+                        <!-- <li>
                             <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle links-menu">
                                 <i class="fs-4 bi-grid links-menu"></i> <span class="ms-1 d-none d-sm-inline links-menu">Products</span> </a>
                                 <ul class="collapse nav flex-column ms-1 links-menu" id="submenu3" data-bs-parent="#menu">
@@ -67,7 +67,7 @@
                                     <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu">Product</span> 4</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="#" class="nav-link px-0 align-middle links-menu">
                                 <i class="fs-4 bi-people links-menu"></i> <span class="ms-1 d-none d-sm-inline links-menu">Customers</span>  </a>
