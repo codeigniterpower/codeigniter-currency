@@ -73,7 +73,7 @@ COMMENT = 'listado paises en que aplica los sistemas y codigos isos';
 -- -----------------------------------------------------
 -- Table `cur_usarios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cur_usarios` (
+CREATE TABLE IF NOT EXISTS `cur_usuarios` (
   `user_id` VARCHAR(40) NOT NULL COMMENT 'intranet o correo del usuario',
   `user_status` VARCHAR(40) NULL DEFAULT 'PASIVO' COMMENT 'PASIVO|ACTIVO',
   `sessionflag` VARCHAR(40) NULL DEFAULT NULL COMMENT 'quien modifico YYYYMMDDhhmmss + codger + . + ficha',
