@@ -18,7 +18,7 @@
  * it under the terms of the CC-BY-NC-SA License
  * 
  */
-class curency_m extends CI_Model 
+class Currency_m extends CI_Model 
 {
 
 	protected $dbc;
@@ -30,7 +30,7 @@ class curency_m extends CI_Model
 	}
 
 	/**
-	 * verifica si el usuario es valido con la clave provista en md5
+	 * get all currencies and their conversion, based on a first one, by default USD currency
 	 *
 	 * @access	public
 	 * @param	string  $curDest XXX[,YYY,ZZZ] optional and can be various
@@ -71,7 +71,7 @@ class curency_m extends CI_Model
 		$querysqlrs = $this->dbc->query($querysql);
 		$currency_result = $querysqlrs->result_array();
 
-		log_message('info', __METHOD__ . ' error detection: '. $currency_result ); // mysql oly
+		log_message('info', __METHOD__ . ' error detection: '. print_r($currency_result,TRUE) ); // mysql oly
 		return $currency_result;
 
 	}

@@ -1,10 +1,6 @@
 <?php 
 /**
- * usuario_m.php
- * 
- * abstraccion para obtener datos de usuario en codeigniter
- *
- * tabla y campos
+ * table adn colums
  * * cur_usuarios(ficha,username,userclave,)
  * 
  * @author  PICCORO Lenz McKAY <mckaygerhard@gmail.com>
@@ -15,7 +11,7 @@
  * it under the terms of the GNU General Public License v3 or any other.
  * 
  */
-class usuario_m extends CI_Model 
+class Usuario_m extends CI_Model 
 {
 
 	protected $db1;
@@ -27,13 +23,14 @@ class usuario_m extends CI_Model
 	}
 
 	/**
-	 * verifica si el usuario es valido con la clave provista en md5
-	 *
+	 * check if a user is present at the db table
+	 * if a user is listed in the table are able to login in the web, if not just rejected
+	 * the credentials are managed by mail api not by database storage.. 
+	 * 
 	 * @access	public
 	 * @param	string  $username
-	 * @param	string  $userclave
-	 * @param	string  $credential(md5 de usuario y clave juntos)
-	 * @return	boolean TRUE si datos son validos
+	 * @param	string  $userstatus
+	 * @return	boolean ARRAY with user if user are listed
 	 */
 	public function getusuariodb($username = NULL, $userstatus = NULL)
 	{
@@ -68,12 +65,14 @@ class usuario_m extends CI_Model
 	}
 
 	/**
-	 * actualiza/crea data del usuario segiun filtro, si campos desconocidos en filtro falla
+	 * updates removes user from db, 
+	 * if a user is listed in the table are able to login in the web, if not just rejected
+	 * the credentials are managed by mail api not by database storage.. 
 	 *
 	 * @access	public
 	 * @param	array  datauser campos de la tabla con sus valores
 	 * @param	array  filter  campos de parte "where" del query con los filtros
-	 * @return	boolean TRUE si actualizacion exitosa
+	 * @return	boolean TRUE on sucess, FALSE on any error that will be logged in CI log
 	 */
 	public function setusuariodb($parametros=NULL, $filter=NULL)
 	{

@@ -1,8 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * elyanero Controller Class de inicio login/logout y info user
- *
+ * THIS CONTROLLER ONLY LOAD WHEN THE APPLICATION CALLS WITHOUT LOGIN SESSION OR WHEN LOGOUT
+ * remmembered that each controller is a request calll in the web app
+ * 
  * @author      PICCORO Lenz McKAY
  * @copyright Copyright (c) 2018, 2019
  * @version ab - 1.0

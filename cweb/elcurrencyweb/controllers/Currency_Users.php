@@ -1,17 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * THIS CONTROLLER IS FOR MANAGE THE CURRENCY INTO DB AND MAKE CONVERSTIONS WITH ALREADY LOGGED IN SESSION
- * remmembered that each controller is a request calll in the web app
+ * currencylib Controller Class de inicio login/logout y info user
  *
  * @author      PICCORO Lenz McKAY
  * @copyright Copyright (c) 2018, 2019
  * @version ab - 1.0
  */
-class Currency_Manager extends CP_Controller {
+class Currency_Users extends CP_Controller {
 
 	/**
 	 * name: desconocido
+	 * @param
+	 * @return
 	 */
 	function __construct()
 	{
@@ -22,7 +23,7 @@ class Currency_Manager extends CP_Controller {
 	}
 
 	/**
-	 * index que muestra vista con instrucciones, las instrucciones estan en la vista indexinput
+	 * index just is the entry point of the controller, default to list users
 	 * 
 	 * @name: index
 	 * @param void
@@ -30,27 +31,26 @@ class Currency_Manager extends CP_Controller {
 	 */
 	public function index()
 	{
-		$this->listcurrencies();
+		$this->listusers();
 	}
 
 	/**
-	 * this controler is the URI call to set the currency and stored into DB, 
-	 * it also has a button or trick to request a call to api and get lasted currency from api
-	 * mean can also have a form to request a specific currency conversion
-	 *
-	 * @access	public
+	 * listusers show user list, that can get into the currency manager system
+	 * 
+	 * @name: index
+	 * @param void
+	 * @return void
 	 */
-	public function listcurrencies()
+	public function listusers()
 	{
 		$data = array();
 		$data['menu'] = $this->genmenu();
-		//$this->
 		$data['currency_list_dbarray'] = $this->currentctr;
 		$data['currency_list_apiarray'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;
 		$this->load->view('header.php',$data);
 		$this->load->view('menu');
-		$this->load->view('currency',$data);
+		$this->load->view('empty',$data);
 	}
 }
 
