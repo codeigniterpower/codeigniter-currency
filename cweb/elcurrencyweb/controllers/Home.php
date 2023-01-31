@@ -1,7 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * home Controller Class presentation for user login or non login, just put information depending of the sesion valitadion
+ * THIS CONTROLLER ONLY LOAD WHEN THE APPLICATION CALLS WITH ALREADY LOGGED IN SESSION
+ * remmembered that each controller is a request calll in the web app
  *
  * @author      PICCORO Lenz McKAY
  * @copyright Copyright (c) 2018, 2019

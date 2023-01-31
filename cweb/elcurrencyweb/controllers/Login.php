@@ -14,24 +14,53 @@ class Login extends CP_Controller {
 	 * @param
 	 * @return
 	 */
-    function __construct()
-    {
-        parent::__construct();
+	function __construct()
+	{
+		parent::__construct();
 	$this->load->helper(array('form', 'url','html'));
 	$this->output->enable_profiler(ENVIRONMENT !== 'production');
 
-    }
+	}
 
-    /**
-     * index default action
-     * 
-     * @name: index
-     * @param void
-     * @return void
-     */
-    public function index()
-    {
-        $data = array();
+	/**
+	 * index default action
+	 * 
+	 * @name: index
+	 * @param void
+	 * @return void
+	 */
+	public function index()
+	{
+		$this->login_form();
+	}
+
+	/**
+	 * login action
+	 * 
+	 * @name: index
+	 * @param void
+	 * @return void
+	 */
+	public function login_action($idcheck = NULL)
+	{
+		$data = array();
+        $user_email = $this->input->post('user_email');
+        $user_pass = $this->input->post('user_pass');
+        $user_url = $this->input->get_post('user_url');
+
+
+	}
+
+	/**
+	 * login form
+	 * 
+	 * @name: index
+	 * @param void
+	 * @return void
+	 */
+	public function login_form()
+	{
+		$data = array();
 		$data['menu'] = $this->genmenu();
 		$data['currentctr'] = $this->currentctr;
 		$data['currentinx'] = $this->currentinx;
@@ -39,45 +68,26 @@ class Login extends CP_Controller {
 		$this->load->view('header.php',$data);
 		$this->load->view('login',$data);
 		$this->load->view('footer.php',$data);
-    }
+	}
 
-    /**
-     * login action
-     * 
-     * @name: index
-     * @param void
-     * @return void
-     */
-    public function login()
-    {
-        $data = array();
+	/**
+	 * logout action
+	 * 
+	 * @name: index
+	 * @param void
+	 * @return void
+	 */
+	public function logout()
+	{
+		$data = array();
 		$data['menu'] = $this->genmenu();
 		$data['currentctr'] = $this->currentctr;
 		$data['currentinx'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;
 		$this->load->view('header.php',$data);
 		$this->load->view('login',$data);
-        $this->load->view('footer.php',$data);
-    }
-
-    /**
-     * logout action
-     * 
-     * @name: index
-     * @param void
-     * @return void
-     */
-    public function logout()
-    {
-        $data = array();
-		$data['menu'] = $this->genmenu();
-		$data['currentctr'] = $this->currentctr;
-		$data['currentinx'] = $this->currentinx;
-		$data['currenturl'] = $this->currenturl;
-		$this->load->view('header.php',$data);
-		$this->load->view('login',$data);
-        $this->load->view('footer.php',$data);
-    }
+		$this->load->view('footer.php',$data);
+	}
 
 
 }

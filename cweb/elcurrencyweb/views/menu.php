@@ -12,65 +12,25 @@
 
                     <ul class="nav nav-pills position-fixed flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                         <li class="nav-item" >
-                            <a href="#" class="nav-link align-middle px-0 links-menu">
+                            <a href="<?php echo site_url() . "/Home"  ?>" class="nav-link align-middle px-0 links-menu">
                                 <i class="fs-4 bi-house"></i>
                                 <span class="ms-1 d-none d-sm-inline">Home</span>
                             </a>
                         </li>
-
-                        <li class="">
-                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle links-menu">
-                                <i class="fs-4 bi-speedometer2 links-menu"></i> <span class="ms-1 d-none d-sm-inline links-menu">Dashboard</span>  </a>
-                            <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu">Item </span>  1  </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu">Item 2</span> 2  </a>
-                                </li>
-                            </ul>
+                        <li>
+                            <a href="<?php echo site_url() . "/Currency_Manager"  ?>" class="nav-link px-0 align-middle links-menu">
+                                <i class="fs-4 bi-table links-menu"></i>
+                                <span class="ms-1 d-none d-sm-inline links-menu">Currency</span>  </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link px-0 align-middle links-menu">
-                                <i class="fs-4 bi-table links-menu"></i> <span class="ms-1 d-none d-sm-inline links-menu">Orders</span>  </a>
+                            <a href="<?php echo site_url() . "/Currency_History"  ?>" class="nav-link px-0 align-middle links-menu">
+                                <i class="fs-4 bi-speedometer2 links-menu"></i>
+                                <span class="ms-1 d-none d-sm-inline links-menu">History</span>  </a>
                         </li>
-
-
-                        <!-- <li>
-                            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle links-menu">
-                                <i class="fs-4 bi-bootstrap links-menu"></i> <span class="ms-1 d-none d-sm-inline links-menu">Bootstrap</span>  </a>
-                            <ul class="collapse nav flex-column ms-1 links-menu" id="submenu2" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu" >Item</span> 1 </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu">Item</span> 1 </a>
-                                </li>
-                            </ul>
-                        </li> -->
-
-                        
-                        <!-- <li>
-                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle links-menu">
-                                <i class="fs-4 bi-grid links-menu"></i> <span class="ms-1 d-none d-sm-inline links-menu">Products</span> </a>
-                                <ul class="collapse nav flex-column ms-1 links-menu" id="submenu3" data-bs-parent="#menu">
-                                <li class="w-100">
-                                    <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu">Product</span> 1</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu">Product</span> 2</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu">Product</span> 3</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-0 links-menu"> <span class="d-none d-sm-inline links-menu">Product</span> 4</a>
-                                </li>
-                            </ul>
-                        </li> -->
                         <li>
-                            <a href="#" class="nav-link px-0 align-middle links-menu">
-                                <i class="fs-4 bi-people links-menu"></i> <span class="ms-1 d-none d-sm-inline links-menu">Customers</span>  </a>
+                            <a href="<?php echo site_url() . "/Currency_Users"  ?>" class="nav-link px-0 align-middle links-menu">
+                                <i class="fs-4 bi-people links-menu"></i>
+                                <span class="ms-1 d-none d-sm-inline links-menu">Users</span>  </a>
                         </li>
                     </ul>
                     <hr>
