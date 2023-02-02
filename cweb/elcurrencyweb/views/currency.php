@@ -1,4 +1,4 @@
-        <div class="col py-3">
+<div class="col py-3">
                 <!-- <div class="container-pagination d-flex justify-content-between">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
@@ -27,28 +27,87 @@
                         </div>
                       </form>
                 </div> -->
+                <section>
+                  <div id="liveAlertPlaceholder"></div>
+                  <br>
+                  <div class="d-flex w-100">
+                    
+                    <form class="d-flex m-auto ">
+                      <div class="form-group">
+                        <!-- <label for="seek">Email address</label> -->
+                        <input type="text" class="form-control" id="input-seek" placeholder="VES">
+                        <small id="coin" class="form-text text-muted">Introduzca </small>
+                      </div>
+                      <button type="submit" id="seek" class="btn btn-outline-success ms-2">Solucitar</button>
+                    </form>
+                  </div>
+                  <!-- <h1 class="text-center" id="search">TEXT</h1> -->
+                </section>
+          
+
+                <script>
+
+                </script>
                 <br>
                 <div class="contain-table">
-                              <h1 style="text-align: center;">History of your coins rate</h1>
-                                <?php 
-									if(is_array($currency_list_dbarray)){
-										$this->table->clear();
-                                  $this->table->set_heading(array_keys($currency_list_dbarray[0]));
-                                  echo $this->table->generate($currency_list_dbarray);
-									}
-                                ?>
-                                <?php 
-                                echo br(3);
-                                echo '<h1 style="text-align: center;">Current currency rate for today</h1>';
-
-                                  $compare = true;
-                                  if(is_array($currency_list_apiarray) AND $compare){
-										$this->table->clear();
-									$this->table->set_heading(array_keys($currency_list_apiarray[0]));
-									echo $this->table->generate($currency_list_apiarray);
-								}
-                                ?>
+                  <!-- <h1 style="text-align: center;">History of your coins rate</h1> -->
+                  <?php 
+									    // if(is_array($currency_list_dbarray)){
+										    // $this->table->clear();
+                        // if(count($currency_list_dbarray))
+                        // $this->table->set_heading(array_keys($currency_list_dbarray[0]));
+                        // echo $this->table->generate($currency_list_dbarray);
+									    // }
+                  ?>
+                  <?php 
+                      echo br(2);
+                      echo '<h1 style="text-align: center;">Current currency rate for today</h1>';
+                      $compare = true;
+                      if(is_array($currency_list_apiarray) AND $compare){
+										    $this->table->clear();
+                        if(count($currency_list_apiarray))
+                          $this->table->set_template( array( 'table_open' => '<table id="table_id2">',) );
+                          $this->table->set_heading(array_keys($currency_list_apiarray[0]));
+									        echo $this->table->generate($currency_list_apiarray);
+								      }
+                  ?>
                 </div>
+                <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script> 
+
+                <script>
+                    $(document).ready( function () {
+                          $('#table_id2').DataTable();
+                    } );
+                  // let data = <?php //echo json_encode($currency_list_apiarray); ?>;
+                  // let input = document.getElementById("input-seek");
+                  // let answer =""
+                  // let seek = document.getElementById("seek");
+                  // if(seek ){
+                  //   seek.addEventListener('click', () => {
+                  //     if(answer.hasOwnProperty('MONEDA')){
+                  //       alert(answer, 'success')
+                  //     }
+                  //    })
+                  //   seek.addEventListener('click', function(e){
+                  //     e.preventDefault()
+                  //     if(input.value.trim().length > 0){
+                  //       answer = data.find(tasa => tasa.MON_TASA_MONEDA === input.value.toUpperCase())
+                  //     }
+                  //   },true ) ;
+                  // }
+                  // const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+                  // const alert = (message, type) => {
+                  //   const wrapper = document.createElement('div')
+                  //   wrapper.innerHTML = [
+                  //     `<div class="alert alert-${type} alert-dismissible text-center" role="alert">`,
+                  //     `   <div>${message.MONEDA}</div>`,
+                  //     '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                  //     '</div>'
+                  //   ].join('')
+                    
+                  //   alertPlaceholder.append(wrapper)
+                  // }
+                </script> 
                   
                     <!-- <br>
                   <nav aria-label="Page navigation example">
