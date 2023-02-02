@@ -71,3 +71,7 @@ table {
       border-bottom: 0;
     }
   }
+  .even:hover, .odd:hover{
+      background: #ececf0;
+      cursor: pointer;
+  }
