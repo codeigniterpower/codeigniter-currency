@@ -21,10 +21,19 @@
 class Currency_m extends CI_Model 
 {
 
+	private $tablect;
+	private $tablecp;
+	private $tablecb;
+	private $tablecm;
+
 	public function __construct() 
 	{
 		parent::__construct();
 		$this->dbc = $this->load->database('elcurrencydb', TRUE);
+		$this->tablect = 'cur_tasas_moneda';
+		$this->tablecp = 'cur_pais';
+		$this->tablecb = 'cur_banco';
+		$this->tablecm = 'cur_moneda';
 	}
 
 	/** auto close db on production */
@@ -152,7 +161,7 @@ class Currency_m extends CI_Model
 						(SELECT 
 								CONCAT(m1.iso4217a3, \":\", m1.nombre_moneda)
 							FROM
-								cur_moneda AS m1
+								".$this->tablecm." AS m1
 							WHERE
 								m1.cod_moneda = t.cod_moneda_base
 							LIMIT 1 OFFSET 0) 
@@ -160,7 +169,7 @@ class Currency_m extends CI_Model
 						(SELECT 
 								CONCAT(m1.iso4217a3, \":\", m1.nombre_moneda)
 							FROM
-								cur_moneda AS m1
+								".$this->tablecm." AS m1
 							WHERE
 								m1.cod_moneda = t.cod_moneda_destino
 							LIMIT 1 OFFSET 0) 
@@ -171,7 +180,7 @@ class Currency_m extends CI_Model
 					t.sessionflag,
 					t.sessionficha
 				FROM
-					cur_tasas_moneda AS t)
+					".$this->tablect." AS t)
 				AS tablec
 			WHERE
 				1=1 
@@ -198,7 +207,7 @@ class Currency_m extends CI_Model
 	public function readCurrencyNames($paramfilters = NULL)
 	{
 		$columns = 'cod_moneda,iso4217a3,iso3166a1,simbolo_unicode,nombre_moneda,estado,notas_pais,sessionflag,sessionficha';
-		return $this->crudReadTable('cur_moneda', NULL, $columns);
+		return $this->crudReadTable($this->tablecm, NULL, $columns);
 	}
 
 	/**
@@ -212,7 +221,7 @@ class Currency_m extends CI_Model
 	public function readCurrencyBancos($paramfilters = NULL)
 	{
 		$columns = 'cod_banco,cod_pais,cod_swif,cod_bic,nombre_banco,estado,sessionflag,sessionficha';
-		return $this->crudReadTable('cur_banco', $paramfilters, $columns);
+		return $this->crudReadTable($this->tablecb, $paramfilters, $columns);
 	}
 
 	/**
@@ -226,7 +235,7 @@ class Currency_m extends CI_Model
 	public function readCurrencyCountry($paramfilters = NULL)
 	{
 		$columns = 'cod_pais,nombre_pais,nombre_iso,iso3166a2,iso3166a3,estado,notas_pais,sessionflag,sessionficha';
-		return $this->crudReadTable('cur_pais', $paramfilters, $columns);
+		return $this->crudReadTable($this->tablecp, $paramfilters, $columns);
 	}
 
 	/**
@@ -276,10 +285,10 @@ class Currency_m extends CI_Model
 				$sqlfilter .= ' AND '.$nombre.'="'.$$nombre.'"';
 			}
 		}
-		$querysql1 = "SELECT ".$columns." FROM cur_moneda WHERE 1=1 ".$sqlfilter ;
+		$querysql1 = "SELECT ".$columns." FROM ".$tablename." WHERE 1=1 ".$sqlfilter ;
 		$sqlrs = $this->dbp->query($sqlfichadata1);
 		$arreglo_data = $sqlrs->result_array();
-		log_message('debug', __METHOD__ .' return cur_moneda data '. print_r($arreglo_data,TRUE));
+		log_message('debug', __METHOD__ .' return '.$tablename.' data '. print_r($arreglo_data,TRUE));
 		$this->closedb();
 		return $arreglo_data;
 	}
@@ -324,18 +333,16 @@ class Currency_m extends CI_Model
 		$strsqli = array();
 		$strsqlc1 = '';
 		$id = 1000;
-		$curFechaTasa = $curFecha.$id;
 
 		foreach($curDest as $rowc => $keyc )
 		{
-			$cod_tasa = $curFecha;
+			$cod_tasa = $curFecha.$id;
 			$cod_tasa_tipo = 'INTERNA';
 			$mon_tasa_moneda = $keyc['mon_tasa_moneda'];
 			$cod_moneda_destino = $keyc['moneda'];
 			$cod_moneda_base = $curBase;
-			$fecha_tasa = $curFecha.$id;
 
-			$strsqlc1 = "SELECT count(cod_tasa) as cuantos FROM cur_tasas_moneda WHERE SUBSTRING(fecha_tasa, 1, 10) = '".$curFecha."' and cod_moneda_destino = (SELECT cod_moneda FROM cur_moneda WHERE iso4217a3 = '".$cod_moneda_destino."' LIMIT 1 OFFSET 0)";
+			$strsqlc1 = "SELECT count(cod_tasa) as cuantos FROM ".$this->tablect." WHERE SUBSTRING(cod_tasa, 1, 10) = '".$curFecha."' and cod_moneda_destino = (SELECT cod_moneda FROM cur_moneda WHERE iso4217a3 = '".$cod_moneda_destino."' LIMIT 1 OFFSET 0)";
 			$queryrs = $this->dbc->query($strsqlc1);
 			$rowcheck = $queryrs->row_array();
 			log_message('debug', __METHOD__ .' cod tasa check for ' . print_r($cod_moneda_destino, TRUE));
@@ -348,7 +355,7 @@ class Currency_m extends CI_Model
 					continue; // we already have at leas one register with this currency code registered, by pass and skip it
 				}
 			}
-			$strsqlc1 = "SELECT count(cod_moneda) as cuantos FROM cur_moneda WHERE iso4217a3 = '".$cod_moneda_destino."' LIMIT 1 OFFSET 0 ";
+			$strsqlc1 = "SELECT count(cod_moneda) as cuantos FROM ".$this->tablecm." WHERE iso4217a3 = '".$cod_moneda_destino."' LIMIT 1 OFFSET 0 ";
 			$queryrs = $this->dbc->query($strsqlc1);
 			$rowcheck = $queryrs->row_array();
 			log_message('debug', __METHOD__ .' cod moneda check for ' . print_r($cod_moneda_destino, TRUE));
@@ -361,7 +368,7 @@ class Currency_m extends CI_Model
 					continue; // we do not have a 3 letter code registered of this currency, skip it
 				}
 			}
-			$strsqli[] = "INSERT INTO `elcurrencydb`.`cur_tasas_moneda` (`cod_tasa`, `cod_tasa_tipo`, `mon_tasa_moneda`, `cod_moneda_base`, `cod_moneda_destino`, `fecha_tasa`) VALUES ('".$cod_tasa."', 'INTERNA', ".$mon_tasa_moneda.", (SELECT cod_moneda FROM cur_moneda WHERE iso4217a3 = '".$cod_moneda_base."' LIMIT 1 OFFSET 0), (SELECT cod_moneda FROM cur_moneda WHERE iso4217a3 = '".$cod_moneda_destino."' LIMIT 1 OFFSET 0), '".$fecha_tasa."');";
+			$strsqli[] = "INSERT INTO `elcurrencydb`.`".$this->tablect."` (`cod_tasa`, `cod_tasa_tipo`, `mon_tasa_moneda`, `cod_moneda_base`, `cod_moneda_destino`) VALUES ('".$cod_tasa."', 'INTERNA', ".$mon_tasa_moneda.", (SELECT cod_moneda FROM ".$this->tablecm." WHERE iso4217a3 = '".$cod_moneda_base."' LIMIT 1 OFFSET 0), (SELECT cod_moneda FROM ".$this->tablecm." WHERE iso4217a3 = '".$cod_moneda_destino."' LIMIT 1 OFFSET 0));";
 			$id += 1;
 		}
 		log_message('debug', __METHOD__ .' SQL: ' . print_r($strsqli, TRUE));
@@ -388,6 +395,51 @@ class Currency_m extends CI_Model
 		return 1;
 	}
 
-	
+	/**
+	 * update only one currency mount from the currency table using the given code
+	 *
+	 * @access	public
+	 * @param	array  $curDest ( 0[YYY,ZZZ] 1[YYY,ZZZ] .. )
+	 * @param	string  $fecha YYYYMMDD optional if null curren date
+	 * @param	string  $curBase XXX optional if null USD
+	 * @return	boolean FALSE on errors
+	 */
+	public function updateCurrencyMount($cod_currency = NULL, $mon_tasa_moneda = NULL)
+	{
+		log_message('debug', __METHOD__ .' parametros received: cd ' . var_export($cod_currency, TRUE) . ' mount ' . var_export($mon_tasa_moneda, TRUE));
+
+		$codcurrencylen = strlen($mon_tasa_moneda);
+
+		if( $codcurrencylen < 14 OR  $codcurrencylen > 14 )
+		{
+			log_message('debug', __METHOD__ .' parametros received: ERRROR cod_currency ' . var_export($cod_currency, TRUE));
+			return FALSE;
+		}
+		if( !is_numeric(trim($mon_tasa_moneda)) )
+		{
+			log_message('debug', __METHOD__ .' parametros received: ERROR not numeric ' . var_export($mon_tasa_moneda, TRUE));
+			return FALSE;
+		}
+
+		$data = array('mon_tasa_moneda' => $mon_tasa_moneda);
+		$where = "cod_currency = '".$cod_currency."'";
+		$savesql = $this->dbc->update_string($this->tablecm, $data, $where); 
+
+		$this->dbc->trans_start();
+		$this->dbc->query($savesql);
+		$this->dbc->trans_complete();
+
+		if ($this->dbc->trans_status() === FALSE)
+		{
+			$error = $this->dbc->error();
+			$qu = $this->dbc->last_query();
+			log_message('error', __METHOD__ .' DB problem : ' . print_r($error, TRUE) . ' why: '.print_r($qu, TRUE));
+		}
+
+		log_message('info', __METHOD__ .' DB : registers inserted from API currency ');
+		$this->closedb();
+		return 1;
+	}
+
 
 }

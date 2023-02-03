@@ -60,6 +60,65 @@ class Currency_Manager extends CP_Controller {
 		$this->load->view('menu');
 		$this->load->view('currency.php',$data);
 	}
+
+	/**
+	 * TODO document this: call this from the vie to store the mount of a currency code, returns the code if success
+	 */
+	public function savecurrency()
+	{
+		// example:
+		$cod_currency = $this->input->post('inputfield_name', FALSE);
+		$this->load->model('Currency_m','dbcm');
+		$result = $this->dbcm->updateCurrencyMount($cod_currency, $new_mount);
+		
+	}
+
+	/**
+	 * uri CALL to invoke the api and store the data into db
+	 *
+	 * @access	public
+	 * @param   $codkey mixed and authentication string key to check api
+	 */
+	public function callapitodb($codkey = NULL)
+	{
+		$data = array();
+		$data['menu'] = $this->genmenu();
+		// example invokation http://localhost/~general/codeigniter-currencylib/cweb/index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD
+		// example shot base "index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD"
+		$dateapi = $this->input->get_post('dateapi', FALSE);
+		$currencyBase = $this->input->get_post('curbase', FALSE);
+		if($codkey == NULL)
+		{
+			echo "unauthorized access";
+			return;
+		}
+		if($dateapi == NULL)
+		{
+			echo "no date given";
+			return;
+		}
+		if(strlen($dateapi) < 10 OR strlen($dateapi) > 10 )
+		{
+			echo "no valid date";
+			return;
+		}
+		if(strlen($currencyBase) < 3 OR strlen($currencyBase) > 3 )
+		{
+			echo "no valid currency base money";
+			return;
+		}
+		$currency_list_apiarray = array();
+		$this->load->library('Currencylib');
+		$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi($currencyBase);
+		$this->load->model('Currency_m','dbcm');
+		$createdbresult = $this->dbcm->createCurrencyFromApi($currency_list_apiarray, $dateapi, $currencyBase);
+		
+		if( $createdbresult == 1)
+			echo "salvado";
+		echo "error";
+	}
+
+
 }
 
 /* End of file currency_manager.php */
