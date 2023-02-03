@@ -434,7 +434,7 @@ class Currency_m extends CI_Model
 			$error = $this->dbc->error();
 			$qu = $this->dbc->last_query();
 			log_message('error', __METHOD__ .' DB problem : ' . print_r($error, TRUE) . ' why: '.print_r($qu, TRUE));
-			return FALSE
+			return FALSE;
 		}
 
 		log_message('info', __METHOD__ .' DB : registers inserted from API currency ');
