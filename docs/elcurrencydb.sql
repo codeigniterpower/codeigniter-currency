@@ -7,17 +7,16 @@
 -- -----------------------------------------------------
 -- Table `cur_tasas_moneda`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cur_tasas_moneda` (
-  `cod_tasa` VARCHAR(40) NOT NULL COMMENT 'YYYYMMDDhh - id de cada tasa diaria',
-  `cod_tasa_tipo` VARCHAR(40) NOT NULL DEFAULT 'OFICIAL' COMMENT 'OFICIAL|INTERNA',
-  `mon_tasa_moneda` DECIMAL(40,20) NOT NULL COMMENT 'monto: cuanto moneda -destino- vale moneda -base- cada una tiene una x/1 para la inversa',
-  `cod_moneda_base` VARCHAR(40) NOT NULL COMMENT 'cos_iso - moneda en el cual se basa la tasa, base',
-  `cod_moneda_destino` VARCHAR(40) NOT NULL COMMENT 'cos_iso - moneda el cual esta elmonto equiparado',
-  `fecha_tasa` VARCHAR(40) NOT NULL COMMENT 'YYYYMMDDhhmmss',
-  `sessionflag` VARCHAR(40) NULL DEFAULT NULL COMMENT 'quien modifico YYYYMMDDhhmmss + codger + . + ficha',
-  `sessionficha` VARCHAR(40) NULL DEFAULT NULL COMMENT 'quien lo creo YYYYMMDDhhmmss + codger + . + ficha',
-  PRIMARY KEY (`cod_tasa`, `fecha_tasa`))
-COMMENT = 'tabla de tasas diarias - solo se ingresa en las cod moneda tasa base existentes';
+CREATE TABLE `cur_tasas_moneda` (
+  `cod_tasa` varchar(40) NOT NULL COMMENT 'YYYYMMDDhhXXXX and XXXX could be mmss or id numeric starting from 1000',
+  `cod_moneda_base` varchar(40) NOT NULL COMMENT 'cos_iso - moneda en el cual se basa la tasa, base',
+  `mon_tasa_moneda` decimal(40,20) NOT NULL COMMENT 'monto: cuanto moneda -destino- vale moneda -base- cada una tiene una x/1 para la inversa',
+  `cod_moneda_destino` varchar(40) NOT NULL COMMENT 'cos_iso - moneda el cual esta elmonto equiparado',
+  `cod_tasa_tipo` varchar(40) NOT NULL DEFAULT 'OFICIAL' COMMENT 'OFICIAL|INTERNA',
+  `sessionflag` varchar(40) DEFAULT NULL COMMENT 'quien modifico YYYYMMDDhhmmss + codger + . + ficha',
+  `sessionficha` varchar(40) DEFAULT NULL COMMENT 'quien lo creo YYYYMMDDhhmmss + codger + . + ficha',
+  PRIMARY KEY (`cod_tasa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='tabla de tasas diarias - solo se ingresa en las cod moneda tasa base existentes';
 
 
 -- -----------------------------------------------------
@@ -85,8 +84,8 @@ COMMENT = 'acceso, entra o no entra segun aparezca, autentica es con el mta';
 -- -----------------------------------------------------
 -- Data for table `cur_tasas_moneda`
 -- -----------------------------------------------------
-INSERT INTO `cur_tasas_moneda` (`cod_tasa`, `cod_tasa_tipo`, `mon_tasa_moneda`, `cod_moneda_base`, `cod_moneda_destino`, `fecha_tasa`, `sessionflag`, `sessionficha`) VALUES ('2020121208', 'INTERNA', 0.00000092576231029539, '928', '840', '20201211080000', 'NULL', 'NULL');
-INSERT INTO `cur_tasas_moneda` (`cod_tasa`, `cod_tasa_tipo`, `mon_tasa_moneda`, `cod_moneda_base`, `cod_moneda_destino`, `fecha_tasa`, `sessionflag`, `sessionficha`) VALUES ('2020121208', 'INTERNA', 1080190.87500000000000000000, '840', '928', '20201211080001', 'NULL', 'NULL');
+INSERT INTO `cur_tasas_moneda` (`cod_tasa`, `cod_tasa_tipo`, `mon_tasa_moneda`, `cod_moneda_base`, `cod_moneda_destino`, `sessionflag`, `sessionficha`) VALUES ('20201212080000', 'INTERNA', 0.00000092576231029539, '928', '840', 'NULL', 'NULL');
+INSERT INTO `cur_tasas_moneda` (`cod_tasa`, `cod_tasa_tipo`, `mon_tasa_moneda`, `cod_moneda_base`, `cod_moneda_destino`, `sessionflag`, `sessionficha`) VALUES ('20201212080001', 'INTERNA', 1080190.87500000000000000000, '840', '928', 'NULL', 'NULL');
 
 
 -- -----------------------------------------------------

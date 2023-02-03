@@ -12,3 +12,5 @@ cweb/currencyweb/elcurrencyfiles/uploads/!.gitignore
 # temporally do not use CI3 direct fiels.. lter we will use CI3 as module
 cweb/vendor/codeigniter3
 cweb/elcurrencyweb/config/database.php
+# ignore backup files of model DB
+docs/elcurrencydb.mwb.bak

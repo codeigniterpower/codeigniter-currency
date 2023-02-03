@@ -50,26 +50,21 @@
                 </script>
                 <br>
                 <div class="contain-table">
-                  <h1 style="text-align: center;">History of your coins rate</h1>
-                  <?php 
-									    if(is_array($currency_list_dbarray)){
-										    $this->table->clear();
-                        if(count($currency_list_dbarray))
-                        $this->table->set_template( array( 'table_open' => '<table id="table_id">',) );
-                        $this->table->set_heading(array_keys($currency_list_dbarray[0]));
-                        echo $this->table->generate($currency_list_dbarray);
-									    }
-                  ?>
-                  <?php 
-                //      echo br(3);
-                //      echo '<h1 style="text-align: center;">Current currency rate for today</h1>';
-                //      $compare = true;
-                //      if(is_array($currency_list_apiarray) AND $compare){
-							//			    $this->table->clear();
-              //          if(count($currency_list_apiarray))
-              //            $this->table->set_heading(array_keys($currency_list_apiarray[0]));
-						//			        echo $this->table->generate($currency_list_apiarray);
-							//	      }
+                 <?php 
+					echo '<h1 style="text-align: center;">Currenct Stored currency for today</h1>';
+						if(is_array($currency_list_dbarrayhis))
+						{
+							if(count($currency_list_dbarrayhis))
+							{
+								$this->table->clear();
+								$this->table->set_template( array( 'table_open' => '<table id="table_id">',) );
+					                        $this->table->set_heading(array_keys($currency_list_dbarrayhis[0]));
+                						echo $this->table->generate($currency_list_dbarrayhis);
+							}
+							else
+								echo "There's not data stored today, check if your system already call the api in backend, or check if your DB is configured.";
+						}
+						echo br(2);
                   ?>
                 </div>
 
