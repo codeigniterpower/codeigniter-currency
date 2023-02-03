@@ -96,13 +96,13 @@ class Currency_Manager extends CP_Controller {
 
 		$this->load->library('form_validation');
 		$validfields = $this->form_validation->required('dateapi');
-		$validfields = $this->form_validation->exact_length('dateapi',10);
+		//$validfields = $this->form_validation->exact_length('dateapi',10);
 		$validfields = $this->form_validation->required('curbase');
-		$validfields = $this->form_validation->exact_length('curbase',3);
+		//$validfields = $this->form_validation->exact_length('curbase',3);
 
 		if($validfields == FALSE)
 		{
-			echo "unauthorized access";
+			echo "empty input parametest dateapi or curbase";
 			return;
 		}
 		if($codkey == NULL)
@@ -124,7 +124,9 @@ class Currency_Manager extends CP_Controller {
 		$createdbresult = $this->dbcm->createCurrencyFromApi($currency_list_apiarray, $currencyDate, $currencyBase);
 		
 		if( $createdbresult == 1)
+		{
 			echo "salvado";
+		}
 		echo "error";
 	}
 
