@@ -44,8 +44,11 @@ class Currencylib
 		$this->CI->config->load('currencylib', true);
 		$this->dateCurrency = date('Y-m-d');
 		$this->amountCurrency = 1;
+
 		$this->currencyApiKey = $this->CI->config->item('currency_api_key', 'currencylib');
+		log_message('error', __CLASS__ .' Api key configured ' .$this->currencyApiKey);
 		$this->currencyApiUrl = $this->CI->config->item('currency_api_url', 'currencylib');
+		log_message('error', __CLASS__ .' Api key URL request '.$this->currencyApiUrl );
 	}
 
 	// TODO init and document tthe lib
@@ -55,6 +58,9 @@ class Currencylib
 	}
 
 	/**
+	 * this allow to conver and amoutn of one corrency to other one, 
+	 * means this is only to get only one currency but with a specific multiplier
+	 * 
 	 * name: getCurrencys
 	 * @author      PICCORO Lenz McKAY
 	 * @param string baseCurrency 3 letter code to convert, array or comma separated
@@ -62,32 +68,33 @@ class Currencylib
 	 * @param string dateCurrency YYYY-MM-DD, if null lasted
 	 * @return
 	 */
-	public function getCurrencys($baseCurrency = NULL, $amountCurrency = NULL, $dateCurrency = NULL)
+	public function getOneCurrencyByApi($baseCurrency = NULL, $amountCurrency = NULL, $dateCurrency = NULL)
 	{
 		$this->amountCurrency = $amountCurrency;
-		$this->conCurrency($baseCurrency, NULL, $dateCurrency);
+		$this->getAllCurrencyByApi($baseCurrency, NULL, $dateCurrency);
 		return $this->converted;
 	}
 
 	/**
-	 * name: conCurrency
+	 * this retrieve all the currency by a date or at current date, 
+	 * you can pass specific currencies in 3 letter form code and 
+	 * optionaly specified a base currency (by default USD )
+	 * 
+	 * name: getCurrencyByApi
 	 * @author      PICCORO Lenz McKAY
 	 * @param string baseCurrency 3 letter code to convert, array or comma separated
 	 * @param string destiCurrency 3 letter code base to compare
 	 * @param string dateCurrency YYYY-MM-DD, if null lasted
 	 * @return
 	 */
-	public function conCurrency($baseCurrency = NULL, $destiCurrency = NULL, $dateCurrency = NULL)
+	public function getAllCurrencyByApi($baseCurrency = NULL, $destiCurrency = NULL, $dateCurrency = NULL)
 	{
 		$this->baseCurrency = $baseCurrency;
 		$this->destiCurrency = $destiCurrency;
 		$this->dateCurrency = $dateCurrency;
 
-		if (strcasecmp($this->baseCurrency,$this->destiCurrency) == 0)
-			return $this->converted = array($this->baseCurrency => 1);
- 
 		$this->requestCurrency();
-			return $this->converted;
+		return $this->converted;
 
 	}
 
@@ -104,16 +111,20 @@ class Currencylib
 			return array('ERR'=>0);
 		}
 		if (NULL == $this->amountCurrency) {
+			log_message('debug', __CLASS__ .' amount of currency error, set to 1 before convert' );
 			$this->amountCurrency = 1;
 		}
 		if (NULL == $this->dateCurrency) {
+			log_message('error', __CLASS__ .' missing date currency request, set to current day' );
 			$this->dateCurrency = date('Y-m-d');
 		}
 		if (NULL == $this->baseCurrency) {
+			log_message('error', __CLASS__ .' missing base currency request, set to USD' );
 			$this->baseCurrency = 'USD';
 		}
 		if (NULL == $this->destiCurrency) {
-			$this->destiCurrency = 'VES';
+			log_message('error', __CLASS__ .' missing destiny currency request, set to all' );
+			$this->destiCurrency = '';
 		}
 
 		$urlrequested = $this->currencyApiUrl."/".$this->dateCurrency."?symbols=".$this->destiCurrency."&base=".$this->baseCurrency;
@@ -140,31 +151,52 @@ class Currencylib
 		log_message('debug', __CLASS__ .':curl request: '. print_r($curl,TRUE) );
 
 		$response = curl_exec($curl);
-		log_message('debug', __CLASS__ .':json response: '. print_r($response,TRUE) );
+		$conversion = json_decode($response, true);
+		$resulterr = FALSE;
+
 		if (! isset($response)) 
 		{
-			return array('ERR'=>0);
+			$resulterr = array('ERR'=>1);
+			log_message('debug', __CLASS__ .':json ERROR response: '. print_r($resulterr,TRUE) .' '. print_r($urlrequested,TRUE) );
+		}
+		else if( !is_array($conversion) )
+		{
+			$resulterr = array('ERR'=>2);
+			log_message('debug', __CLASS__ .':json ERROR validation: '. print_r($resulterr,TRUE) .' '. print_r($response,TRUE) );
+		}
+		else if(! array_key_exists('rates', $conversion))
+		{
+			$resulterr = array('ERR'=>3);
+			log_message('debug', __CLASS__ .':json ERROR decode: '. print_r($resulterr,TRUE) .' '. print_r($response,TRUE));
 		}
 		curl_close($curl);
 
-		$conversion = json_decode($response, true);
-		log_message('debug', __CLASS__ .':json decode: '. print_r($response,TRUE) );
-		if(! array_key_exists('rates', $conversion))
+		if( $resulterr !== FALSE )
 		{
-			return array('ERR'=>0);
+			$this->converted = array(0=>$resulterr);
+			return $resulterr;
 		}
-		$rates = $conversion['rates'];
 
+		$rates = $conversion['rates'];
 		$this->converted = $rates;
-		$resultstoprint = '';
+
 		foreach($rates as $destiCurrency => $valueCurrency)
 		{
 			$valueCurrency = floatval($valueCurrency)*floatval($this->amountCurrency);
-			$resultstoprint .= $destiCurrency.':'.$valueCurrency.'; ';
-			$this->converted[$destiCurrency] = $valueCurrency;
-		} 
-		log_message('info', __CLASS__ .': converted rates: '. print_r($resultstoprint,TRUE) );
+			$rates[$destiCurrency] = $valueCurrency;
+
+			$this->converted = $rates;
+		}
+
+		$currency_list_apiarray = array();
+		foreach( $this->converted as $keyc => $valc)
+		{
+			$currency_list_apiarray[] = array('moneda' => $keyc, 'mon_tasa_moneda' => $valc);
+		}
+
+		log_message('info', __CLASS__ .': converted rates: '. print_r($currency_list_apiarray,TRUE) );
 		log_message('debug', __CLASS__ .': converted rates: '. print_r($this->converted,TRUE) );
+		$this->converted = $currency_list_apiarray;
 		return $this->converted;
 
 	}

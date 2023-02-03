@@ -44,11 +44,11 @@ class Currencylib
 		$this->CI->config->load('currencylib', true);
 		$this->dateCurrency = date('Y-m-d');
 		$this->amountCurrency = 1;
-		log_message('error', __CLASS__ .' missing apy 7key' );
+
 		$this->currencyApiKey = $this->CI->config->item('currency_api_key', 'currencylib');
-		log_message('error', __CLASS__ .' missing apy 8key' .$this->currencyApiKey);
+		log_message('error', __CLASS__ .' Api key configured ' .$this->currencyApiKey);
 		$this->currencyApiUrl = $this->CI->config->item('currency_api_url', 'currencylib');
-		log_message('error', __CLASS__ .' missing apy 9key'.$this->currencyApiUrl );
+		log_message('error', __CLASS__ .' Api key URL request '.$this->currencyApiUrl );
 	}
 
 	// TODO init and document tthe lib
@@ -58,6 +58,9 @@ class Currencylib
 	}
 
 	/**
+	 * this allow to conver and amoutn of one corrency to other one, 
+	 * means this is only to get only one currency but with a specific multiplier
+	 * 
 	 * name: getCurrencys
 	 * @author      PICCORO Lenz McKAY
 	 * @param string baseCurrency 3 letter code to convert, array or comma separated
@@ -65,22 +68,26 @@ class Currencylib
 	 * @param string dateCurrency YYYY-MM-DD, if null lasted
 	 * @return
 	 */
-	public function getCurrencys($baseCurrency = NULL, $amountCurrency = NULL, $dateCurrency = NULL)
+	public function getOneCurrencyByApi($baseCurrency = NULL, $amountCurrency = NULL, $dateCurrency = NULL)
 	{
 		$this->amountCurrency = $amountCurrency;
-		$this->conCurrency($baseCurrency, NULL, $dateCurrency);
+		$this->getAllCurrencyByApi($baseCurrency, NULL, $dateCurrency);
 		return $this->converted;
 	}
 
 	/**
-	 * name: conCurrency
+	 * this retrieve all the currency by a date or at current date, 
+	 * you can pass specific currencies in 3 letter form code and 
+	 * optionaly specified a base currency (by default USD )
+	 * 
+	 * name: getCurrencyByApi
 	 * @author      PICCORO Lenz McKAY
 	 * @param string baseCurrency 3 letter code to convert, array or comma separated
 	 * @param string destiCurrency 3 letter code base to compare
 	 * @param string dateCurrency YYYY-MM-DD, if null lasted
 	 * @return
 	 */
-	public function conCurrency($baseCurrency = NULL, $destiCurrency = NULL, $dateCurrency = NULL)
+	public function getAllCurrencyByApi($baseCurrency = NULL, $destiCurrency = NULL, $dateCurrency = NULL)
 	{
 		$this->baseCurrency = $baseCurrency;
 		$this->destiCurrency = $destiCurrency;
@@ -103,20 +110,20 @@ class Currencylib
 			log_message('error', __CLASS__ .' missing apy key' );
 			return array('ERR'=>0);
 		}
-		log_message('error', __CLASS__ .' missing apy 1key' );
 		if (NULL == $this->amountCurrency) {
+			log_message('debug', __CLASS__ .' amount of currency error, set to 1 before convert' );
 			$this->amountCurrency = 1;
 		}
-		log_message('error', __CLASS__ .' missing apy 2key' );
 		if (NULL == $this->dateCurrency) {
+			log_message('error', __CLASS__ .' missing date currency request, set to current day' );
 			$this->dateCurrency = date('Y-m-d');
 		}
-		log_message('error', __CLASS__ .' missing apy 3key' );
 		if (NULL == $this->baseCurrency) {
+			log_message('error', __CLASS__ .' missing base currency request, set to USD' );
 			$this->baseCurrency = 'USD';
 		}
-		log_message('error', __CLASS__ .' missing apy 4key' );
 		if (NULL == $this->destiCurrency) {
+			log_message('error', __CLASS__ .' missing destiny currency request, set to all' );
 			$this->destiCurrency = '';
 		}
 
@@ -184,7 +191,7 @@ class Currencylib
 		$currency_list_apiarray = array();
 		foreach( $this->converted as $keyc => $valc)
 		{
-			$currency_list_apiarray[] = array( 'MON_TASA_MONEDA' => $keyc, 'MONEDA' => $valc );
+			$currency_list_apiarray[] = array('moneda' => $keyc, 'mon_tasa_moneda' => $valc);
 		}
 
 		log_message('info', __CLASS__ .': converted rates: '. print_r($currency_list_apiarray,TRUE) );
