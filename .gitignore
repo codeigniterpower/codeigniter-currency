@@ -13,4 +13,4 @@ cweb/currencyweb/elcurrencyfiles/uploads/!.gitignore
 cweb/vendor/codeigniter3
 cweb/elcurrencyweb/config/database.php
 # ignore backup files of model DB
-docs/elcurrencydb.mwb.bak
+docs/*.bak
