@@ -49,8 +49,8 @@ class Currency_Manager extends CP_Controller {
 		$currency_list_apiarray = array();
 		$this->load->model('Currency_m','dbcm');
 		$currency_list_dbarraynow = $this->dbcm->readCurrenciesTodayStored();
-		$this->load->library('Currencylib');
-		$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi('USD');
+		//$this->load->library('Currencylib');
+		//$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi('USD');
 
 		$data['currency_list_dbarraynow'] = $currency_list_dbarraynow;
 		$data['currency_list_apiarray'] = $currency_list_apiarray;
@@ -67,6 +67,12 @@ class Currency_Manager extends CP_Controller {
 	public function savecurrency()
 	{
 		// example:
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('form_validation');
+		$validfields = $this->form_validation->required('inputfield_name');
+		$validfields = $this->form_validation->exact_length('inputfield_name',10);
+		$validfields = $this->form_validation->required('curbase');
+		$validfields = $this->form_validation->exact_length('curbase',3);
 		$cod_currency = $this->input->post('inputfield_name', FALSE);
 		$this->load->model('Currency_m','dbcm');
 		$result = $this->dbcm->updateCurrencyMount($cod_currency, $new_mount);
@@ -85,33 +91,37 @@ class Currency_Manager extends CP_Controller {
 		$data['menu'] = $this->genmenu();
 		// example invokation http://localhost/~general/codeigniter-currencylib/cweb/index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD
 		// example shot base "index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD"
-		$dateapi = $this->input->get_post('dateapi', FALSE);
+		$currencyDate = $this->input->get_post('dateapi', FALSE);
 		$currencyBase = $this->input->get_post('curbase', FALSE);
+
+		$this->load->library('form_validation');
+		$validfields = $this->form_validation->required('dateapi');
+		$validfields = $this->form_validation->exact_length('dateapi',10);
+		$validfields = $this->form_validation->required('curbase');
+		$validfields = $this->form_validation->exact_length('curbase',3);
+
+		if($validfields == FALSE)
+		{
+			echo "unauthorized access";
+			return;
+		}
 		if($codkey == NULL)
 		{
 			echo "unauthorized access";
 			return;
 		}
-		if($dateapi == NULL)
+		if($currencyDate == NULL)
 		{
 			echo "no date given";
 			return;
 		}
-		if(strlen($dateapi) < 10 OR strlen($dateapi) > 10 )
-		{
-			echo "no valid date";
-			return;
-		}
-		if(strlen($currencyBase) < 3 OR strlen($currencyBase) > 3 )
-		{
-			echo "no valid currency base money";
-			return;
-		}
 		$currency_list_apiarray = array();
 		$this->load->library('Currencylib');
-		$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi($currencyBase);
+		$currencyDate = date('Y-m-d',strtotime($currencyDate));
+		$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi($currencyBase,NULL,$currencyDate);
 		$this->load->model('Currency_m','dbcm');
-		$createdbresult = $this->dbcm->createCurrencyFromApi($currency_list_apiarray, $dateapi, $currencyBase);
+		$currencyDate = date('Ymd',strtotime($currencyDate));
+		$createdbresult = $this->dbcm->createCurrencyFromApi($currency_list_apiarray, $currencyDate, $currencyBase);
 		
 		if( $createdbresult == 1)
 			echo "salvado";
