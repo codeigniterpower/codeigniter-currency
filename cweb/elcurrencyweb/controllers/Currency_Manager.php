@@ -42,23 +42,35 @@ class Currency_Manager extends CP_Controller {
 	 */
 	public function listcurrencies()
 	{
-		$data = array();
-		$data['menu'] = $this->genmenu();
+		// $data = array();
+		// $data['menu'] = $this->genmenu();
 
 		$currency_list_dbarraynow = array();
-		$currency_list_apiarray = array();
+		// $currency_list_apiarray = array();
 		$this->load->model('Currency_m','dbcm');
 		$currency_list_dbarraynow = $this->dbcm->readCurrenciesTodayStored();
-		//$this->load->library('Currencylib');
-		//$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi('USD');
+		// $this->load->library('Currencylib');
+		// $currency_list_apiarray = $this->currencylib->getAllCurrencyByApi('USD');
 
 		$data['currency_list_dbarraynow'] = $currency_list_dbarraynow;
-		$data['currency_list_apiarray'] = $currency_list_apiarray;
+		// $data['currency_list_apiarray'] = $currency_list_apiarray;
 		$data['currenturl'] = $this->currenturl;
 
 		$this->load->view('header.php',$data);
 		$this->load->view('menu');
 		$this->load->view('currency.php',$data);
+	}
+
+	public function updatecurrency(){
+		$this->load->model('Currency_m','dbcm');
+		$mon_tasa_moneda = $this->input->post('mon_tasa_moneda', FALSE);
+		$cod_tasa = $this->input->post('cod_tasa', FALSE);
+		if(is_numeric($mon_tasa_moneda))
+		{	// readCurrenciesTodayStored($curDest = NULL, $fecha = NULL, $curBase = NULL)
+			$editCurrency = $this->dbcm->readCurrenciesTodayStored(NULL, $cod_tasa ,$mon_tasa_moneda);
+			
+		}
+
 	}
 
 	/**
