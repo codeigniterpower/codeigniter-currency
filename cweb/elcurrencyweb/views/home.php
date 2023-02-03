@@ -24,14 +24,13 @@
             </li> -->
           </ul>
         </div>    
-
+        <br>
 
         <section class="descriptions-contains">
-                <div class="whoUs">
+                <div class="whoUs" style="width: 95%; margin: auto;">
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus odit id, quidem temporibus distinctio quae consequuntur provident autem perferendis! Distinctio delectus enim provident asperiores obcaecati recusandae commodi molestias at ex!</p>
                 </div>
                 <div class="documentation">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus odit id, quidem temporibus distinctio quae consequuntur provident autem perferendis! Distinctio delectus enim provident asperiores obcaecati recusandae commodi molestias at ex!</p>
                   <div class="contain-toggle">
                     <button class="btn text-start btn-outline-success w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
                       Get
@@ -95,12 +94,11 @@
                     </div>
                   </div>
                 </div>
-
-                
+                <br>
         </section>
 
         
-        <div class="fab-container">
+        <div class="fab-container position-fixed">
           <div class="fab shadow">
             <div class="fab-content">
               <span class="material-icons">Contact us</span>
