@@ -68,10 +68,10 @@ class Currencylib
 	 * @param string dateCurrency YYYY-MM-DD, if null lasted
 	 * @return
 	 */
-	public function getOneCurrencyByApi($baseCurrency = NULL, $amountCurrency = NULL, $dateCurrency = NULL)
+	public function getOneCurrencyByApi($baseCurrency = NULL, $destiCurrency = NULL, $amountCurrency = NULL)
 	{
 		$this->amountCurrency = $amountCurrency;
-		$this->getAllCurrencyByApi($baseCurrency, NULL, $dateCurrency);
+		$this->getAllCurrencyByApi($baseCurrency, $destiCurrency, NULL);
 		return $this->converted;
 	}
 
