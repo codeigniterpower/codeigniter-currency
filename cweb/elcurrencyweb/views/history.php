@@ -27,29 +27,52 @@
                         </div>
                       </form>
                 </div> -->
+                <section>
+                  <div id="liveAlertPlaceholder"></div>
+                  <br>
+                  <div class="d-flex w-100">
+                    
+                    <!-- <form class="d-flex m-auto "> -->
+                      <!-- <div class="form-group"> -->
+                        <!-- <label for="seek">Email address</label> -->
+                        <!-- <input type="text" class="form-control" id="input-seek" placeholder="VES"> -->
+                        <!-- <small id="coin" class="form-text text-muted">Introduzca </small> -->
+                      <!-- </div> -->
+                      <!-- <button type="submit" id="seek" class="btn btn-outline-success ms-2">Solucitar</button> -->
+                    <!-- </form> -->
+                  <!-- </div> -->
+                  <!-- <h1 class="text-center" id="search">TEXT</h1> -->
+                </section>
+          
+
+                <script>
+
+                </script>
                 <br>
                 <div class="contain-table">
-                              <h1 style="text-align: center;">History of your coins rate</h1>
-                                <?php 
-									if(is_array($currency_list_dbarray)){
-										$this->table->clear();
-                                  $this->table->set_heading(array_keys($currency_list_dbarray[0]));
-                                  echo $this->table->generate($currency_list_dbarray);
-									}
-                                ?>
-                                <?php 
-                                echo br(3);
-                                echo '<h1 style="text-align: center;">Current currency rate for today</h1>';
-
-                                  $compare = true;
-                                  if(is_array($currency_list_apiarray) AND $compare){
-										$this->table->clear();
-									$this->table->set_heading(array_keys($currency_list_apiarray[0]));
-									echo $this->table->generate($currency_list_apiarray);
-								}
-                                ?>
+                  <h1 style="text-align: center;">History of your coins rate</h1>
+                  <?php 
+									    if(is_array($currency_list_dbarray)){
+										    $this->table->clear();
+                        if(count($currency_list_dbarray))
+                        $this->table->set_template( array( 'table_open' => '<table id="table_id">',) );
+                        $this->table->set_heading(array_keys($currency_list_dbarray[0]));
+                        echo $this->table->generate($currency_list_dbarray);
+									    }
+                  ?>
+                  <?php 
+                //      echo br(3);
+                //      echo '<h1 style="text-align: center;">Current currency rate for today</h1>';
+                //      $compare = true;
+                //      if(is_array($currency_list_apiarray) AND $compare){
+							//			    $this->table->clear();
+              //          if(count($currency_list_apiarray))
+              //            $this->table->set_heading(array_keys($currency_list_apiarray[0]));
+						//			        echo $this->table->generate($currency_list_apiarray);
+							//	      }
+                  ?>
                 </div>
-                  
+
                     <!-- <br>
                   <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
@@ -70,8 +93,91 @@
                   </nav> -->
                 <!-- colocar contenido -->
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script> 
 
+  <script>
+      let table = $(document).ready( function () {
+        table1 = $('#table_id').DataTable();
+
+          $('#table_id tbody').on('click', 'tr', function () {
+            var data = table1.row(this).data();
+          console.log(data)
+            alert(data,'primary');
+          });
+       } );
+       
+  </script>
             
+
+
+            <script>
+                    let data = <?php echo json_encode($currency_list_dbarray); ?>;
+
+                  // console.log(data)
+                  // let input = document.getElementById("input-seek");
+                  // let answer =""
+                  // let seek = document.getElementById("seek");
+                  // if(seek ){
+                  //   seek.addEventListener('click', () => {
+                  //     if(answer.hasOwnProperty('base')){
+                  //       alert(answer, 'success')
+                  //     }
+                  //    })
+                  //   seek.addEventListener('click', function(e){
+                  //     e.preventDefault()
+                  //     if(input.value.length > 0){
+                  //       answer = data.find(tasa => tasa.base === input.value)
+                  //     }
+                  //   },true ) ;
+                  // }
+                  // ,'even'
+
+                  // console.log(tr)
+                  const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+                  const alert = (message, type) => {
+                    const wrapper = document.createElement('div')
+
+                    
+                    wrapper.innerHTML = [
+                      `<div class="alert alert-${type} alert-dismissible text-center custom-alerts" role="alert" style="   position: fixed; width: 55%; left: 30%; top: 30%; z-index: 10000000000;">`,
+                      '<br>',
+                      `<form">`, 
+                        '<div class="form-group">',
+                          '<label for="exampleInputEmail1">COD_TASA</label>',
+                          '<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder='+ message[0] +'>',
+                          // `<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>`,
+                        '</div>',
+                        '<div class="form-group">',
+                          '<label for="exampleInputPassword1">MON_TASA_MONEDA</label>',
+                          '<input type="text" class="form-control" id="exampleInputPassword1" placeholder='+ message[1] +' >',
+                        '</div>',
+                        '<div class="form-group">',
+                          '<label for="exampleInputPassword1">BASE</label>',
+                          '<input type="text" class="form-control" id="exampleInputPassword1" placeholder='+ message[2] +'>',
+                        '</div>',
+                        '<div class="form-group">',
+                          '<label for="exampleInputPassword1">MONEDA</label>',
+                          '<input type="text" class="form-control" id="exampleInputPassword1" placeholder='+ message[0] +'>',
+                        '</div>',
+                        '<br>',
+                        '<button type="submit" class="btn btn-outline-success">Enviar</button>',
+                      '</form>',
+                      '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                      '</div>'
+                    ].join('')
+                    
+                    alertPlaceholder.append(wrapper)
+                  }
+
+                  // let tr = document.getElementsByClassName('odd')
+                  // for (let i = 0; i < tr.length; i++) {
+                    // tr[0].addEventListener('click',function(){
+                      // alert(answer, 'success')
+                    // },true)
+                    
+                  // }
+                </script> 
+                  
       </div>
     </div>  
       <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 

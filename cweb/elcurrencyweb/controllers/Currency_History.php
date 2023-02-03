@@ -48,10 +48,12 @@ class Currency_History extends CP_Controller {
 		$data = array();
 		$data['menu'] = $this->genmenu();
 
+		$currency_list_dbarray = array();
+		$currency_list_apiarray = array();
 		$this->load->model('Currency_m','dbcm');
 		$currency_list_dbarray = $this->dbcm->getCurrencies(); // TODO : for now the model only brings everything that has the tables, in the following view the filter options are created
 		$this->load->library('Currencylib');
-		$currency_list_apiarray = $this->currencylib->getCurrencys();
+		$currency_list_apiarray = $this->currencylib->conCurrency('USD');
 
 		$data['currency_list_dbarray'] = $currency_list_dbarray;
 		$data['currency_list_apiarray'] = $currency_list_apiarray;
@@ -60,6 +62,11 @@ class Currency_History extends CP_Controller {
 		$this->load->view('header.php',$data);
 		$this->load->view('menu');
 		$this->load->view('history',$data);
+	}
+
+	public function updateCurrenci($id = NULL)
+	{
+		
 	}
 }
 

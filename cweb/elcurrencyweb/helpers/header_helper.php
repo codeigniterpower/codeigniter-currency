@@ -91,6 +91,46 @@ if (! function_exists('link_css')) {
 
 		return $script;
 	}
+
+	
+}
+
+// ------------------------------------------------------------------------
+
+
+
+if (! function_exists('link_scss')) {
+	/**
+	 * Script
+	 *
+	 * Generates link header tags of stylesheet sources
+	 *
+	 * @param array|string $link       Script source or an array of scrits sources
+	 */
+	function link_scss($link = '', $params = '')
+	{
+		$nocache = '';
+		if ( strcmp(ENVIRONMENT, 'development') == 0 )
+			$nocache = '?'.time();
+		$linkssrc = array();
+		//<link href="main.css" rel="stylesheet" />
+		if ( ! is_array($link)) {
+			if ( strripos($link, 'http') !== FALSE)
+				$linkssrc['src'] = $link;
+			else
+				$linkssrc['src'] = base_url().'elcurrencyfiles/css/'.$link;
+		}
+
+		$script = '';
+		$openscrjs = '<link rel="stylesheet/less" ';
+		foreach ($linkssrc as $k => $v) {
+			$script .= $openscrjs . ' href="'.$v.$nocache.'" '.$params.' ></link>';
+		}
+
+		return $script;
+	}
+
+	
 }
 
 // ------------------------------------------------------------------------

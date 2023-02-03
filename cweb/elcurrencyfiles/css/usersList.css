@@ -1,0 +1,38 @@
+.img-fluid{
+    width: 100px;
+    border-radius: 42px;
+}
+.h5-gmail{
+    
+    text-align: center;
+}
+.candidate-list-option{
+    font-size: 13px;
+}
+.td-candidate{
+    width: max-content;
+    margin: auto;
+}
+.list-unstyled{
+    color: #969696;
+}
+.access-icon{
+    margin-left: 25px;
+}
+ .ul-access-icons{
+        padding-top: 1rem !important;
+}
+.icons-list-users{
+    font-size: 27px;
+}
+@media screen and (min-width:620px){
+
+.h5-gmail{
+    text-align: start;
+}
+}
+@media screen and (min-width:600px){
+    .td-candidate{
+        width: 100%;
+    }
+}
