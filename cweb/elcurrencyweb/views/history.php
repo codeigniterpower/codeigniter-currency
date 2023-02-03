@@ -97,11 +97,15 @@
 
   <script>
       let table = $(document).ready( function () {
-        table1 = $('#table_id').DataTable();
+        table1 = $('#table_id').DataTable(
+          {
+            "order": [0],
+          }
+        );
 
           $('#table_id tbody').on('click', 'tr', function () {
             var data = table1.row(this).data();
-          console.log(data)
+          // console.log(data)
             alert(data,'primary');
           });
        } );
@@ -142,23 +146,23 @@
                       `<div class="alert alert-${type} alert-dismissible text-center custom-alerts" role="alert" style="   position: fixed; width: 55%; left: 30%; top: 30%; z-index: 10000000000;">`,
                       '<br>',
                       `<form">`, 
-                        '<div class="form-group">',
-                          '<label for="exampleInputEmail1">COD_TASA</label>',
-                          '<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder='+ message[0] +'>',
-                          // `<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>`,
-                        '</div>',
+                        //'<div class="form-group">',
+                        //  '<label for="exampleInputEmail1">COD_TASA</label>',
+                        // '<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder='+ message[0] +'>',
+                        // `<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>`,
+                        //'</div>',
                         '<div class="form-group">',
                           '<label for="exampleInputPassword1">MON_TASA_MONEDA</label>',
                           '<input type="text" class="form-control" id="exampleInputPassword1" placeholder='+ message[1] +' >',
                         '</div>',
-                        '<div class="form-group">',
-                          '<label for="exampleInputPassword1">BASE</label>',
-                          '<input type="text" class="form-control" id="exampleInputPassword1" placeholder='+ message[2] +'>',
-                        '</div>',
-                        '<div class="form-group">',
-                          '<label for="exampleInputPassword1">MONEDA</label>',
-                          '<input type="text" class="form-control" id="exampleInputPassword1" placeholder='+ message[0] +'>',
-                        '</div>',
+                        //'<div class="form-group">',
+                        //  '<label for="exampleInputPassword1">BASE</label>',
+                        //  '<input type="text" class="form-control" id="exampleInputPassword1" placeholder='+ message[2] +'>',
+                        //'</div>',
+                        //'<div class="form-group">',
+                        // '<label for="exampleInputPassword1">MONEDA</label>',
+                        //  '<input type="text" class="form-control" id="exampleInputPassword1" placeholder='+ message[0] +'>',
+                        // '</div>',
                         '<br>',
                         '<button type="submit" class="btn btn-outline-success">Enviar</button>',
                       '</form>',
