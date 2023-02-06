@@ -301,7 +301,7 @@ class Currency_m extends CI_Model
 	 *
 	 * @access	public
 	 * @param	array  $curDest ( 0[YYY,ZZZ] 1[YYY,ZZZ] .. )
-	 * @param	string  $fecha YYYYMMDD optional if null curren date
+	 * @param	string  $fecha YYYYMMDDHH optional if null curren date
 	 * @param	string  $curBase XXX optional if null USD
 	 * @return	boolean FALSE on errors
 	 */
@@ -309,46 +309,71 @@ class Currency_m extends CI_Model
 	{
 		log_message('debug', __METHOD__ .' parametros received: cd ' . var_export($curDest, TRUE) . ' cb ' . var_export($curBase, TRUE) . ' date ' . var_export($curFecha, TRUE));
 
-		if( is_array($curDest) and array_key_exists('ERR', $curDest[0]) )
+		if( is_array($curDest) )
 		{
-			log_message('debug', __METHOD__ .' parametros received: ERRROR from api ( 0[ERR,0] ) ' . var_export($curDest, TRUE));
-			return FALSE;
+			if( count($curDest) > 0) 
+				if( array_key_exists('ERR', $curDest[0]) )
+				{
+					log_message('debug', __METHOD__ .' parametros received: ERRROR from api ( 0[ERR,0] ) ' . var_export($curDest, TRUE));
+					return FALSE;
+				}
+			if( count($curDest) < 1) 
+			{
+				log_message('debug', __METHOD__ .' no currencies to update seems array empty: ' . var_export($curDest, TRUE));
+				return FALSE;
+			}
 		}
 		if( !is_array($curDest) )
 		{
 			log_message('debug', __METHOD__ .' parametros received: not in array ( 0[YYY,ZZZ] 1[YYY,ZZZ] .. ) ' . var_export($curDest, TRUE));
 			return FALSE;
 		}
-		if( strlen($curBase) < 3 )
+		if( mb_strlen($curBase) < 3 )
 		{
-			log_message('debug', __METHOD__ .' parametros received: not a 3 key code cb (XXX) ' . var_export($curBase, TRUE) . ' date ' . var_export($curBase, TRUE));
+			log_message('debug', __METHOD__ .' parametros received: not a 3 key code cb (XXX) ' . var_export($curBase, TRUE));
 			return FALSE;
 		}
-		if( strlen($curFecha) < 10 AND strlen($curFecha) > 10 )
+		if( mb_strlen($curFecha) < 8 AND mb_strlen($curFecha) > 8 )
 		{
-			log_message('debug', __METHOD__ .' parametros received: date has no hour cb (XXX) ' . var_export($curBase, TRUE) . ' date (YYYYMMDDHH) ' . var_export($curBase, TRUE));
+			log_message('debug', __METHOD__ .' parametros received: date seems not valid (YYYYmmddHHmm) ' . var_export($curFecha, TRUE));
 			$curFecha = date('YmdH');
 		}
 
 		$strsqli = array();
 		$strsqlc1 = '';
-		$id = 1000;
+		$id = 1;
+		$cod_tasa = $curFecha.'1000'; // YYYYmmddHH+XXXX
+		$cod_moneda_base = $curBase;
+
+		$strsqlc1 = "SELECT count(cod_tasa) as cuantos FROM ".$this->tablect." WHERE SUBSTRING(cod_tasa, 1, 10) = '".$curFecha."' and cod_moneda_base = (SELECT cod_moneda FROM ".$this->tablecm." WHERE iso4217a3 = '".$cod_moneda_base."' LIMIT 1 OFFSET 0)";
+		$queryrs = $this->dbc->query($strsqlc1);
+		$rowcheck = $queryrs->row_array();
+		log_message('debug', __METHOD__ .' cod tasa check for ' . print_r($curFecha, TRUE).' of ' . print_r($curBase, TRUE));
+		if(is_array($rowcheck))
+		{
+			$wehave = $rowcheck['cuantos'];
+			if( $wehave > 0 )
+			{
+				log_message('debug', __METHOD__ .' cod tasa skiped, we already have a rate for this hour over ' . print_r($curFecha, TRUE));
+				$this->closedb();
+				return 1;
+			}
+		}
 
 		foreach($curDest as $rowc => $keyc )
 		{
-			$cod_tasa = $curFecha.$id;
 			$cod_tasa_tipo = 'INTERNA';
 			$mon_tasa_moneda = $keyc['mon_tasa_moneda'];
 			$cod_moneda_destino = $keyc['moneda'];
-			$cod_moneda_base = $curBase;
 
-			$strsqlc1 = "SELECT count(cod_tasa) as cuantos FROM ".$this->tablect." WHERE SUBSTRING(cod_tasa, 1, 10) = '".$curFecha."' and cod_moneda_destino = (SELECT cod_moneda FROM cur_moneda WHERE iso4217a3 = '".$cod_moneda_destino."' LIMIT 1 OFFSET 0)";
+			$strsqlc1 = "SELECT count(cod_tasa) as cuantos FROM ".$this->tablect." WHERE cod_tasa = '".$cod_tasa."'";
 			$queryrs = $this->dbc->query($strsqlc1);
 			$rowcheck = $queryrs->row_array();
-			log_message('debug', __METHOD__ .' cod tasa check for ' . print_r($cod_moneda_destino, TRUE));
+			log_message('debug', __METHOD__ .' cod tasa check for ' . print_r($cod_moneda_destino, TRUE).' cod_tasa ' . print_r($cod_tasa, TRUE));
 			if(is_array($rowcheck))
 			{
 				$wehave = $rowcheck['cuantos'];
+				log_message('debug', __METHOD__ .' we have ' . print_r($cod_moneda_destino, TRUE).' at least ' . print_r($wehave, TRUE));
 				if( $wehave > 0 )
 				{
 					log_message('debug', __METHOD__ .' cod tasa skiped, we already have a rate for this hour over ' . print_r($cod_moneda_destino, TRUE));
@@ -370,6 +395,7 @@ class Currency_m extends CI_Model
 			}
 			$strsqli[] = "INSERT INTO `elcurrencydb`.`".$this->tablect."` (`cod_tasa`, `cod_tasa_tipo`, `mon_tasa_moneda`, `cod_moneda_base`, `cod_moneda_destino`) VALUES ('".$cod_tasa."', 'INTERNA', ".$mon_tasa_moneda.", (SELECT cod_moneda FROM ".$this->tablecm." WHERE iso4217a3 = '".$cod_moneda_base."' LIMIT 1 OFFSET 0), (SELECT cod_moneda FROM ".$this->tablecm." WHERE iso4217a3 = '".$cod_moneda_destino."' LIMIT 1 OFFSET 0));";
 			$id += 1;
+			$cod_tasa += 1;
 		}
 		log_message('debug', __METHOD__ .' SQL: ' . print_r($strsqli, TRUE));
 
