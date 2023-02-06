@@ -6,20 +6,20 @@
         </section>
         <br>
         <div class="contain-table">
-          <h1 style="text-align: center;">History of your coins rate</h1>
           <?php 
-            echo '<h1 style="text-align: center;">Currenct Stored currency for today</h1>';
               if(is_array($currency_list_dbarraynow))
               {
                 if(count($currency_list_dbarraynow))
                 {
+                  echo '<h1 style="text-align: center;">Currenct Stored currency for today</h1>';
                   $this->table->clear();
                   $this->table->set_template( array( 'table_open' => '<table id="table_id">',) );
                   $this->table->set_heading(array_keys($currency_list_dbarraynow[0]));
                   echo $this->table->generate($currency_list_dbarraynow);
                 }
-                else
-                  echo "There's not data stored today, check if your system already call the api in backend, or check if your DB is configured.";
+                // else
+                // <h1 style="text-align: center;">History of your coins rate</h1>
+                  // echo "There's not data stored today, check if your system already call the api in backend, or check if your DB is configured.";
               }
               echo br(2);
           ?>
@@ -43,31 +43,33 @@
 
           let buttonEditData = document.getElementById("edit");
 
-          buttonEditData.addEventListener("click",function(e){
-            e.preventDefault()
-             let codTasa = document.getElementById("cod_tasa");
-             let monTasaMoneda = document.getElementById("mon_tasa_moneda");
+          buttonEditData.addEventListener("onclick",function(event){
+            // event.preventDefault()
+            let codTasa = document.getElementById("cod_tasa");
+            let monTasaMoneda = document.getElementById("mon_tasa_moneda");
              let object = {
-              cod_tasa:codTasa.value,
-              mon_tasa_moneda:monTasaMoneda.value
-             }
-            fetch(baseUrl+'index.php/Currency_Manager/updatecurrency',{ 
+               method:'post',
+               cod_tasa:codTasa.value,
+               mon_tasa_moneda:monTasaMoneda.value
+              }
+            fetch("<?php echo site_url() ?>" + '/Currency_Manager/updatecurrency',{ 
               method: 'POST', 
               object
             })
             .then(data=>{
+
               console.log(data)
             })            
-             .catch(error => console.log(error))
-             .finally()
-            })
-
+            .catch(error => console.log(error))
+            .finally()
+          })
+          
           
         });
-
+        
         
         // ---------------------------------------------------------------------------
-      
+        
          const containModal = document.getElementById('contain-modal')
          let divModal = document.createElement('div')         
          divModal.innerHTML = [
@@ -81,21 +83,22 @@
            '       <div class="modal-body">',     
            '          <form>',
            '           <div class="input-group  mb-3">',
-           '                <select class="form-select" id="append-button-single-field" data-placeholder="Choose one thing">',
-           '                    <option>Reactive</option>',
-           '                    <option>Solution</option>',
-           '                    <option>Conglomeration</option>',
-           '                    <option>Algoritm</option>',
-           '                    <option>Holistic</option>',
-           '                    <option>Holistic</option>',
-           '                    <option>Solution</option>',
-           '                    <option>Conglomeration</option>',
-           '                    <option>Algoritm</option>',
-           '                    <option>Holistic</option>',
-           '                    <option>Holistic</option>',
-           '                    <option>Holistic</option>',
-           '                    <option>Holistic</option>',
-           '                </select>',
+           '            <input type="date" name="date" style="width: 100%">  ',
+          //  '                <select class="form-select" id="append-button-single-field" data-placeholder="Choose one thing">',
+          //  '                    <option>Reactive</option>',
+          //  '                    <option>Solution</option>',
+          //  '                    <option>Conglomeration</option>',
+          //  '                    <option>Algoritm</option>',
+          //  '                    <option>Holistic</option>',
+          //  '                    <option>Holistic</option>',
+          //  '                    <option>Solution</option>',
+          //  '                    <option>Conglomeration</option>',
+          //  '                    <option>Algoritm</option>',
+          //  '                    <option>Holistic</option>',
+          //  '                    <option>Holistic</option>',
+          //  '                    <option>Holistic</option>',
+          //  '                    <option>Holistic</option>',
+          //  '                </select>',
            '           </div>',
            '          </form>',
            '          <small id="count" class="form-text text-muted"></small>',
@@ -113,20 +116,9 @@
          containModal.append(divModal)
          $('#staticBackdrop').modal('show');
 
+         $(selector).datepicker("method-name",[value]);
 
          let buttonGetData = document.getElementById("button");
-     //   console.log(buttonGetData)
-       // buttonGetData.addEventListener(function(){
-          // fetch(baseUrl+'Currency_Manager/savecurrency',{ 
-          //   method: 'POST', 
-          //   body
-          // })
-          // .then()
-          // .catch()
-          // .finally()
-       // })
-
-        //  watch()
 
       })
     
@@ -138,14 +130,14 @@
          wrapper.innerHTML = [
            `<div class="alert alert-${type} alert-dismissible text-center custom-alerts" role="alert" style="   position: fixed; width: 55%; left: 30%; top: 30%; z-index: 10000000000;">`,
            '<br>',
-           `<form  id="edit-form">`, 
+           `<form method="POST" action="<?php echo site_url() ?>/Currency_Manager/updatecurrency" target="_self" id="edit-form">`, 
              '<div class="form-group">',
                '<label for="cod_tasa">cod_tasa</label>',
-               '<input name="cod_tasa" type="number" class="form-control" id="cod_tasa" placeholder='+ message[2] +' >',
+               '<input name="cod_tasa" type="number" class="form-control" id="cod_tasa" placeholder='+ message[0] +' >',
              '</div>',
              '<div class="form-group">',
                '<label for="mon_tasa_moneda">mon_tasa_moneda</label>',
-               '<input name="mon_tasa_moneda" type="text" class="form-control" id="mon_tasa_moneda" placeholder='+ message[1] +' >',
+               '<input name="mon_tasa_moneda" type="text" class="form-control" id="mon_tasa_moneda" placeholder='+ message[2] +' >',
              '</div>',
              '<br>',
              '<button type="submit" class="btn btn-outline-success" id="edit">Enviar</button>',
