@@ -410,7 +410,7 @@ class Currency_m extends CI_Model
 
 		$codcurrencylen = strlen($mon_tasa_moneda);
 
-		if( $codcurrencylen < 14 OR  $codcurrencylen > 14 )
+		if( $codcurrencylen < 12 OR  $codcurrencylen > 12 )
 		{
 			log_message('debug', __METHOD__ .' parametros received: ERROR cod_currency ' . var_export($cod_currency, TRUE));
 			return FALSE;
