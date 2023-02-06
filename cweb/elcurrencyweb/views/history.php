@@ -7,6 +7,19 @@
         <br>
         <div class="contain-table">
           <h1 style="text-align: center;">History of your coins rate</h1>
+          <div class="w-75 m-auto">
+            <form>
+              <div class="mb-3">
+                <!-- <label for="date" class="form-label">Email address</label> -->
+                <input type="date" class="form-control" name="dateHistory" id="dateHistory">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              </div>
+              <!-- <div class="d-flex justify-content-center mb-3 ">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div> -->
+            </form>
+          </div>
+
           <?php 
             echo '<h1 style="text-align: center;">Currenct Stored currency for today</h1>';
               if(is_array($currency_list_dbarrayhis))
@@ -108,6 +121,28 @@
       //   ].join('')
       //   alertPlaceholder.append(wrapper)
       // }
+
+      $('#dateHistory').change(function() {
+        let dateHistory = $(this).val();
+        let object = {
+          dateHistory:dateHistory
+        }
+        // console.log(dateHistory, 'change')
+        fetch("<?php echo site_url() ?>" + '/Currency_History/'+dateHistory,{ 
+          method: 'POST', 
+          object
+        }).then(data=>{
+              window.alert(dateHistory)
+              
+            }).catch(error=>{
+  
+            }).finally()
+
+      });
+
+     inputDate.addEventListener('onchange',function(event){
+     })
+          
     </script>
       </div>
     </div>  
