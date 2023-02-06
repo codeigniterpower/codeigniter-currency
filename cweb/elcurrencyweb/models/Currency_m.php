@@ -404,15 +404,15 @@ class Currency_m extends CI_Model
 	 * @param	string  $curBase XXX optional if null USD
 	 * @return	boolean FALSE on errors
 	 */
-	public function updateCurrencyMount($cod_currency = NULL, $mon_tasa_moneda = NULL)
+	public function updateCurrencyMount($cod_tasa = NULL, $mon_tasa_moneda = NULL)
 	{
-		log_message('debug', __METHOD__ .' parametros received: cd ' . var_export($cod_currency, TRUE) . ' mount ' . var_export($mon_tasa_moneda, TRUE));
+		log_message('debug', __METHOD__ .' parametros received: cd ' . var_export($cod_tasa, TRUE) . ' mount ' . var_export($mon_tasa_moneda, TRUE));
 
-		$codcurrencylen = strlen($mon_tasa_moneda);
+		$codcurrencylen = strlen($cod_tasa);
 
 		if( $codcurrencylen < 12 OR  $codcurrencylen > 12 )
 		{
-			log_message('debug', __METHOD__ .' parametros received: ERROR cod_currency ' . var_export($cod_currency, TRUE));
+			log_message('debug', __METHOD__ .' parametros received: ERROR cod_tasa ' . var_export($codcurrencylenla, TRUE));
 			return FALSE;
 		}
 		if( !is_numeric(trim($mon_tasa_moneda)) )
@@ -422,8 +422,8 @@ class Currency_m extends CI_Model
 		}
 
 		$data = array('mon_tasa_moneda' => $mon_tasa_moneda);
-		$where = "cod_currency = '".$cod_currency."'";
-		$savesql = $this->dbc->update_string($this->tablecm, $data, $where); 
+		$where = "cod_tasa = '".$cod_tasa."'";
+		$savesql = $this->dbc->update_string($this->tablect, $data, $where); 
 
 		$this->dbc->trans_start();
 		$this->dbc->query($savesql);
