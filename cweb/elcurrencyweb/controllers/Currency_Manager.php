@@ -63,31 +63,47 @@ class Currency_Manager extends CP_Controller {
 
 	public function updatecurrency(){
 		$this->load->model('Currency_m','dbcm');
-		$mon_tasa_moneda = $this->input->post('mon_tasa_moneda', FALSE);
-		$cod_tasa = $this->input->post('cod_tasa', FALSE);
-		if(is_numeric($mon_tasa_moneda))
-		{	// readCurrenciesTodayStored($curDest = NULL, $fecha = NULL, $curBase = NULL)
-			$editCurrency = $this->dbcm->readCurrenciesTodayStored(NULL, $cod_tasa ,$mon_tasa_moneda);
-			
+		$this->load->library('form_validation');
+		$mon_tasa_moneda = $this->input->get_post('mon_tasa_moneda', FALSE);
+		$cod_tasa = $this->input->get_post('cod_tasa', FALSE);
+		$validfields = $this->form_validation->required($cod_tasa);
+		if($validfields == FALSE){
+			$error = 1;
+		}
+		$validfields = $this->form_validation->decimal($mon_tasa_moneda);
+		if($validfields == FALSE){
+			$error = 2;
+		}
+		$validfields = $this->form_validation->exact_length($cod_tasa,12);
+		if($validfields == FALSE){
+			$error = 3;
 		}
 
-	}
+		$validfields = $this->form_validation->numeric($cod_tasa);
+		if($validfields){
+			// echo "cod_tasa isn't number";
+			$error = 4;
+		}
+		$result = $this->dbcm->updateCurrencyMount($cod_tasa, $mon_tasa_moneda);
+		echo json_encode(array('RESUK'=>$result));
 
-	/**
-	 * TODO document this: call this from the vie to store the mount of a currency code, returns the code if success
-	 */
-	public function savecurrency()
-	{
-		// example:
-		$this->load->helper(array('form', 'url'));
-		$this->load->library('form_validation');
-		$validfields = $this->form_validation->required('inputfield_name');
-		$validfields = $this->form_validation->exact_length('inputfield_name',10);
-		$validfields = $this->form_validation->required('curbase');
-		$validfields = $this->form_validation->exact_length('curbase',3);
-		$cod_currency = $this->input->post('inputfield_name', FALSE);
-		$this->load->model('Currency_m','dbcm');
-		$result = $this->dbcm->updateCurrencyMount($cod_currency, $new_mount);
+
+		
+		// if(is_numeric($mon_tasa_moneda))
+		// {	// readCurrenciesTodayStored($curDest = NULL, $fecha = NULL, $curBase = NULL)
+
+			// $editCurrency = $this->dbcm->readCurrenciesTodayStored(NULL, $cod_tasa ,$mon_tasa_moneda);
+			
+		// }
+
+		// $this->load->helper(array('form', 'url'));
+		
+		// $validfields = $this->form_validation->exact_length('inputfield_name',10);
+		// $validfields = $this->form_validation->required('curbase');
+		// $validfields = $this->form_validation->exact_length('curbase',3);
+		// $cod_currency = $this->input->post('inputfield_name', FALSE);
+		// $this->load->model('Currency_m','dbcm');
+		// $result = $this->dbcm->updateCurrencyMount($cod_currency, $new_mount);
 		
 	}
 
