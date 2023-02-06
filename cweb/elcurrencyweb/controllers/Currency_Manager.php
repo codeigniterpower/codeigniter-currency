@@ -121,41 +121,49 @@ class Currency_Manager extends CP_Controller {
 		// example shot base "index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD"
 		$currencyDate = $this->input->get_post('dateapi', FALSE);
 		$currencyBase = $this->input->get_post('curbase', FALSE);
+		$currencyDest = $this->input->get_post('curdest', FALSE);
 
 		$this->load->library('form_validation');
-		$validfields = $this->form_validation->required('dateapi');
-		//$validfields = $this->form_validation->exact_length('dateapi',10);
-		$validfields = $this->form_validation->required('curbase');
-		//$validfields = $this->form_validation->exact_length('curbase',3);
+		$missdest = $this->form_validation->required($currencyDest);
+		$validcurren = $this->form_validation->min_length($currencyDest,3);
+		$missdate = $this->form_validation->required($currencyDate);
+		$validfields = $this->form_validation->exact_length($currencyDate,10);
+		$missbase = $this->form_validation->required($currencyBase);
+		$validfields = $this->form_validation->exact_length($currencyBase,3);
 
+		if($missdate == FALSE)
+			$currencyDate = date('Y-m-d');
+		if($missbase == FALSE)
+			$currencyBase = 'USD';
 		if($validfields == FALSE)
+			$currencyBase = 'USD';
+		if($missdest == FALSE)
+			$currencyDest = NULL;
+		if($validcurren == FALSE OR $missdest == FALSE)
 		{
-			echo "empty input parametest dateapi or curbase";
-			return;
+			echo "invalid input parametest currency dest seems missing";
+			if(mb_strlen($currencyDest) > 3)
+			{
+				if(stripos($currencyDest,',') == FALSE)
+				{
+					echo "invalid input parametest currency dest";
+					$currencyDest = NULL;
+				}
+			}
 		}
 		if($codkey == NULL)
 		{
 			echo "unauthorized access";
-			return;
-		}
-		if($currencyDate == NULL)
-		{
-			echo "no date given";
-			return;
+			return json_encode(array('result'=>'unauthorized access'));
 		}
 		$currency_list_apiarray = array();
 		$this->load->library('Currencylib');
 		$currencyDate = date('Y-m-d',strtotime($currencyDate));
-		$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi($currencyBase,NULL,$currencyDate);
+		$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi($currencyBase,$currencyDest,$currencyDate);
 		$this->load->model('Currency_m','dbcm');
-		$currencyDate = date('Ymd',strtotime($currencyDate));
+		$currencyDate = date('Ymd',strtotime($currencyDate)).date('H');
 		$createdbresult = $this->dbcm->createCurrencyFromApi($currency_list_apiarray, $currencyDate, $currencyBase);
-		
-		if( $createdbresult == 1)
-		{
-			echo "salvado";
-		}
-		echo "error";
+		return json_encode(array('result'=>$createdbresult));
 	}
 
 
