@@ -71,6 +71,9 @@ if (! function_exists('link_css')) {
 	 */
 	function link_css($link = '', $params = '')
 	{
+		$nocache = '';
+		if ( strcmp(ENVIRONMENT, 'development') == 0 )
+			$nocache = '?'.time();
 		$linkssrc = array();
 		//<link href="main.css" rel="stylesheet" />
 		if ( ! is_array($link)) {
@@ -83,11 +86,51 @@ if (! function_exists('link_css')) {
 		$script = '';
 		$openscrjs = '<link rel="stylesheet" ';
 		foreach ($linkssrc as $k => $v) {
-			$script .= $openscrjs . ' href="'.$v.'" media="all" '.$params.' ></link>';
+			$script .= $openscrjs . ' href="'.$v.$nocache.'" media="all" '.$params.' ></link>';
 		}
 
 		return $script;
 	}
+
+	
+}
+
+// ------------------------------------------------------------------------
+
+
+
+if (! function_exists('link_scss')) {
+	/**
+	 * Script
+	 *
+	 * Generates link header tags of stylesheet sources
+	 *
+	 * @param array|string $link       Script source or an array of scrits sources
+	 */
+	function link_scss($link = '', $params = '')
+	{
+		$nocache = '';
+		if ( strcmp(ENVIRONMENT, 'development') == 0 )
+			$nocache = '?'.time();
+		$linkssrc = array();
+		//<link href="main.css" rel="stylesheet" />
+		if ( ! is_array($link)) {
+			if ( strripos($link, 'http') !== FALSE)
+				$linkssrc['src'] = $link;
+			else
+				$linkssrc['src'] = base_url().'elcurrencyfiles/css/'.$link;
+		}
+
+		$script = '';
+		$openscrjs = '<link rel="stylesheet/less" ';
+		foreach ($linkssrc as $k => $v) {
+			$script .= $openscrjs . ' href="'.$v.$nocache.'" '.$params.' ></link>';
+		}
+
+		return $script;
+	}
+
+	
 }
 
 // ------------------------------------------------------------------------
@@ -103,6 +146,9 @@ if (! function_exists('link_js')) {
 	 */
 	function link_js($link = '')
 	{
+		$nocache = '';
+		if ( strcmp(ENVIRONMENT, 'development') == 0 )
+			$nocache = '?'.time();
 		$linkssrc = array();
 		//<script src="/assets/webpack/runtime.a33f0906.bundle.js" defer="defer" nonce=""></script>
 		if ( ! is_array($link)) {
@@ -115,7 +161,7 @@ if (! function_exists('link_js')) {
 		$script = '';
 		$openscrjs = '<script type="text/javascript" ';
 		foreach ($linkssrc as $k => $v) {
-			$script .= $openscrjs . ' src="'.$v.'" defer="defer" nonce=""></script>';
+			$script .= $openscrjs . ' src="'.$v.$nocache.'" defer="defer" nonce=""></script>';
 		}
 
 		return $script;

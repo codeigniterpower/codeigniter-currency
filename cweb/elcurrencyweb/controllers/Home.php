@@ -1,14 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * THIS CONTROLLER ONLY LOAD WHEN THE APPLICATION CALLS WITHOUT LOGIN SESSION OR WHEN LOGOUT
+ * THIS CONTROLLER ONLY LOAD WHEN THE APPLICATION CALLS WITH ALREADY LOGGED IN SESSION
  * remmembered that each controller is a request calll in the web app
- * 
+ *
  * @author      PICCORO Lenz McKAY
  * @copyright Copyright (c) 2018, 2019
  * @version ab - 1.0
  */
-class Index extends CP_Controller {
+class Home extends CP_Controller {
 
 	/**
 	 * name: desconocido
@@ -24,7 +24,7 @@ class Index extends CP_Controller {
     }
 
     /**
-     * index que muestra vista con instrucciones, las instrucciones estan en la vista indexinput
+     * index that shows the presentation, or login 
      * 
      * @name: index
      * @param void
@@ -38,11 +38,12 @@ class Index extends CP_Controller {
 		$data['currentinx'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;
 		$this->load->view('header.php',$data);
-		$this->load->view('indexview',$data);
-		$this->load->view('footer.php',$data);
+        $this->load->view('menu');
+		$this->load->view('home.php',$data);
+		// $this->load->view('footer.php',$data);
     }
 
 }
 
-/* End of file welcome.php */
+/* End of file currency_manager.php */
 /* Location: ./application/controllers/welcome.php */

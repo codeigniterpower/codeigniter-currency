@@ -1,5 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-	echo '<p><small>'.br().br();
+	echo '<p style="display: flex; justify-content: center;"><small>'.br().br();
 		if (ENVIRONMENT !== 'production') 
 			echo 'DEVEL MODE: ON (<strong>render: {elapsed_time}</strong> s).'. PHP_EOL;
 	echo br();
