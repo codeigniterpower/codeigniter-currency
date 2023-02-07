@@ -39,7 +39,7 @@ TODO
 
 #### DEVELOPMENT
 
-TODO
+Check [docs/README-developers.md](docs/README-developers.md)
 
 ## Authors and acknowledgment
 
