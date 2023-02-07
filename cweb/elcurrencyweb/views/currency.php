@@ -43,25 +43,35 @@
 
           let buttonEditData = document.getElementById("edit");
 
-          buttonEditData.addEventListener("onclick",function(event){
-            // event.preventDefault()
+          buttonEditData.addEventListener("click",function(event){
+            event.preventDefault()
             let codTasa = document.getElementById("cod_tasa");
             let monTasaMoneda = document.getElementById("mon_tasa_moneda");
-             let object = {
-               method:'post',
-               cod_tasa:codTasa.value,
-               mon_tasa_moneda:monTasaMoneda.value
-              }
-            fetch("<?php echo site_url() ?>" + '/Currency_Manager/updatecurrency',{ 
-              method: 'POST', 
-              object
-            })
-            .then(data=>{
-
-              console.log(data)
-            })            
-            .catch(error => console.log(error))
-            .finally()
+            let object = {
+              method:'post',
+              cod_tasa:codTasa.value,
+              mon_tasa_moneda:monTasaMoneda.value
+            }
+            let button = document.getElementById('edit')
+            $.ajax({
+                 type: 'post',
+                 url: "<?php echo site_url() ?>" + '/Currency_Manager/updatecurrency',
+                 data: object,
+                 success: function(result) {
+                  let answer  = result.split('\n')
+                  button.innerHTML = '<i class="bi bi-check-circle" style="font-size: 25px;"></i>'
+                  button.addEventListener('click',function(){
+                    $('.alert').alert('close')
+                  })
+                },
+                error: function(result) {
+                  button.innerHTML = '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>'
+                  button.addEventListener('click',function(){
+                    $('.alert').alert('close')
+                  })
+                 }
+            });
+          
           })
           
           
@@ -118,7 +128,7 @@
            `<form method="POST" action="<?php echo site_url() ?>/Currency_Manager/updatecurrency" target="_self" id="edit-form">`, 
              '<div class="form-group">',
                '<label for="cod_tasa">cod_tasa</label>',
-               '<input name="cod_tasa" type="number" class="form-control" id="cod_tasa" placeholder='+ message[0] +' >',
+               '<input name="cod_tasa" type="number" class="form-control" id="cod_tasa" value='+message[0]+'  readonly>',
              '</div>',
              '<div class="form-group">',
                '<label for="mon_tasa_moneda">mon_tasa_moneda</label>',
@@ -133,30 +143,6 @@
          alertPlaceholder.append(wrapper)
         }
 
-        //uttonEditData.addEventListener(function(){
-          // fetch(baseUrl+'Currency_Manager/savecurrency',{ 
-          //   method: 'POST', 
-          //   body
-          // })
-          // .then()
-          // .catch()
-          // .finally()
-        //})
-
-      //  function watch(){
-      //   let n = 0;
-      //    window.setInterval(function(){
-      //        l.innerHTML = n+' S';
-      //      n++;
-      //      if(n>3){
-      //          return window.clearInterval()
-      //      }
-      //      console.log(n)
-
-      //    },1000);
-
-
-      //  }
 
  
 
