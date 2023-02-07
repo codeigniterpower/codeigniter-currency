@@ -5,7 +5,7 @@
  * abstraction DB to manage currency and rate convertion
  *
  * cur_moneda
- * * currency(cod iso 3166-1 numeric, cod iso 4217-a, cod iso 3166-1 3letters, name)
+ * * currency(cod iso, 4217-a, 3letters, name)
  * 
  * cur_tasas_moneda
  * * currency(cod rate, amount converted from 1 base unit, iso 3166-1 numeric base, cod iso 3166-1 converted)
@@ -206,7 +206,7 @@ class Currency_m extends CI_Model
 	 */
 	public function readCurrencyNames($paramfilters = NULL)
 	{
-		$columns = 'cod_moneda,iso4217a3,iso3166a1,simbolo_unicode,nombre_moneda,estado,notas_pais,sessionflag,sessionficha';
+		$columns = 'cod_moneda,iso4217a3,simbolo_unicode,nombre_moneda,estado,notas_pais,sessionflag,sessionficha';
 		return $this->crudReadTable($this->tablecm, NULL, $columns);
 	}
 
