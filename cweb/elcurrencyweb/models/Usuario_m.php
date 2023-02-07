@@ -130,4 +130,44 @@ class Usuario_m extends CI_Model
 		return $queryrst;
 	}
 
+	/**
+	 * returns all the user data of the DB
+	 * 
+	 * @access	public
+	 * @param	string  $username
+	 * @param	string  $userstatus
+	 * @return	boolean ARRAY with user if user are listed
+	 */
+	public function getUserData($username = NULL, $usersfilter = NULL)
+	{
+
+		log_message('debug', __METHOD__ .' parametros received: u ' . var_export($username, TRUE) . ' c ' . var_export($usersfilter, TRUE) );
+
+		$clavelen = strlen($usersfilter);
+		$usersfilter = '1=1';
+
+		// determino que es lo que se pide un usuario en todo perfil o todos los usuarios
+		if ( trim($username) != '*' AND trim($username) != '' AND $username != NULL)
+			$usersfilter .= " AND `user_id`='".$username."' ";
+
+		if ( trim($usersfilter) != '*' AND trim($usersfilter) != '' AND $usersfilter != NULL)
+			$usersfilter .= " AND `user_status` = '".$usersfilter. "'";
+
+		log_message('debug', __METHOD__ .' filter query ' . var_export($usersfilter, TRUE) );
+
+		$cuantos = 0;
+		// primero cuento cuantos hay en la misma entidad // TODO hacer join con las entidades asociadas
+		$sqldbusuarios1c = "
+			SELECT * 
+			FROM `cur_usuarios` 
+			WHERE ( ".$usersfilter." ) AND `user_id` <> '' LIMIT 1 OFFSET 0";
+
+		log_message('debug', __METHOD__ .' query db: ' . var_export($sqldbusuarios1c, TRUE) );
+		$querydbusuarios1c = $this->db1->query($sqldbusuarios1c);
+		$usuarios_result = $querydbusuarios1c->result_array();
+
+		log_message('info', __METHOD__ . ' error detection: '. $this->db1->_error_message()); // mysql oly
+		return $usuarios_result;	// devuelve un arreglo y el primer elemento del elemento '0' es 'cuantos'
+	}
+
 }
