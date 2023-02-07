@@ -64,9 +64,10 @@ class Currency_Manager extends CP_Controller {
 	public function updatecurrency(){
 		$this->load->model('Currency_m','dbcm');
 		$this->load->library('form_validation');
-		$mon_tasa_moneda = $this->input->get_post('mon_tasa_moneda', FALSE);
-		$cod_tasa = $this->input->get_post('cod_tasa', FALSE);
+		$mon_tasa_moneda = $this->input->post('mon_tasa_moneda', FALSE);
+		$cod_tasa = $this->input->post('cod_tasa', FALSE);
 		$validfields = $this->form_validation->required($cod_tasa);
+		log_message('error', __METHOD__ .' POST : ' . print_r($_POST, TRUE) . ' why: '.print_r($mon_tasa_moneda, TRUE));
 		if($validfields == FALSE){
 			$error = 1;
 		}
@@ -80,16 +81,18 @@ class Currency_Manager extends CP_Controller {
 		}
 
 		$validfields = $this->form_validation->numeric($cod_tasa);
-		if($validfields){
+		if($validfields == FALSE){
 			// echo "cod_tasa isn't number";
 			$error = 4;
 		}
 		$result = $this->dbcm->updateCurrencyMount($cod_tasa, $mon_tasa_moneda);
-		echo json_encode(array('RESUK'=>$result));
-
-
+		log_message('error', __METHOD__ .' vfjgvfjh : ' . print_r($result, TRUE) . ' why: '.print_r($mon_tasa_moneda, TRUE));
 		
-		// if(is_numeric($mon_tasa_moneda))
+		echo json_encode(array('result' =>$result));
+		
+		// echo json_encode(array('RESUK'=>$result));
+
+				// if(is_numeric($mon_tasa_moneda))
 		// {	// readCurrenciesTodayStored($curDest = NULL, $fecha = NULL, $curBase = NULL)
 
 			// $editCurrency = $this->dbcm->readCurrenciesTodayStored(NULL, $cod_tasa ,$mon_tasa_moneda);
@@ -104,7 +107,7 @@ class Currency_Manager extends CP_Controller {
 		// $cod_currency = $this->input->post('inputfield_name', FALSE);
 		// $this->load->model('Currency_m','dbcm');
 		// $result = $this->dbcm->updateCurrencyMount($cod_currency, $new_mount);
-		
+		// TODO: use this only with desesperate end of time : $this->listcurrencies();
 	}
 
 	/**
