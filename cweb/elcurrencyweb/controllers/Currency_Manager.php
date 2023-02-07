@@ -44,16 +44,24 @@ class Currency_Manager extends CP_Controller {
 	{
 		// $data = array();
 		// $data['menu'] = $this->genmenu();
-
+		$this->load->model('Usuario_m','users');
+		$this->load->model('Currency_m','dbcm');
+		$user_preferences = $this->users->getUserData("gonzalez_angel");
+		// $user_preferences = $this->users->getUserData("lenz_gerardo");
+		//echo print_r( $user,TRUE);
+		
 		$currency_list_dbarraynow = array();
 		$currency_list_dbarraypre = array();
-		// $currency_list_apiarray = array();
-		$this->load->model('Currency_m','dbcm');
-		$currency_list_dbarraypre = $this->dbcm->readCurrenciesTodayStored('VES',NULL,'USD');
-		$currency_list_dbarraynow = $this->dbcm->readCurrenciesTodayStored();
 
+		//  echo print_r(count($user_preferences));
+		if(count($user_preferences)){
+			$currency_list_dbarraypre = $this->dbcm->readCurrenciesTodayStored($user_preferences[0]['cur_monedas_dest'],NULL,$user_preferences[0]['cur_monedas_base']);
+		}
+		// $currency_list_apiarray = array();
+		$currency_list_dbarraynow = $this->dbcm->readCurrenciesTodayStored();
+		$data['user_preferences'] = $user_preferences;
 		$data['currency_list_dbarraynow'] = $currency_list_dbarraynow;
-		// $data['currency_list_apiarray'] = $currency_list_apiarray;
+		$data['currency_list_dbarraypre'] = $currency_list_dbarraypre;
 		$data['currenturl'] = $this->currenturl;
 
 		$this->load->view('header.php',$data);
@@ -69,21 +77,21 @@ class Currency_Manager extends CP_Controller {
 		$validfields = $this->form_validation->required($cod_tasa);
 		log_message('error', __METHOD__ .' POST : ' . print_r($_POST, TRUE) . ' why: '.print_r($mon_tasa_moneda, TRUE));
 		if($validfields == FALSE){
-			$error = 1;
+			$error = 0;
 		}
 		$validfields = $this->form_validation->decimal($mon_tasa_moneda);
 		if($validfields == FALSE){
-			$error = 2;
+			$error = 0;
 		}
 		$validfields = $this->form_validation->exact_length($cod_tasa,12);
 		if($validfields == FALSE){
-			$error = 3;
+			$error = 0;
 		}
 
 		$validfields = $this->form_validation->numeric($cod_tasa);
 		if($validfields == FALSE){
 			// echo "cod_tasa isn't number";
-			$error = 4;
+			$error = 0;
 		}
 		$result = $this->dbcm->updateCurrencyMount($cod_tasa, $mon_tasa_moneda);
 		log_message('error', __METHOD__ .' vfjgvfjh : ' . print_r($result, TRUE) . ' why: '.print_r($mon_tasa_moneda, TRUE));
