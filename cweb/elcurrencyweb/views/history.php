@@ -11,7 +11,7 @@
             <form>
               <div class="mb-3">
                 <!-- <label for="date" class="form-label">Email address</label> -->
-                <input type="date" class="form-control" name="dateHistory" id="dateHistory">
+                <input type="datetime-local" class="form-control" name="dateHistory" id="dateHistory"   >
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
               </div>
               <!-- <div class="d-flex justify-content-center mb-3 ">
@@ -39,9 +39,15 @@
         </div>
 </div>
     <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script> 
-    <script>
+    <!-- <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+      integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script> -->
+  
+  <script>
       $(document).ready( function () {
-      
         // ---------------------------------------------------------------------------
       
         table1 = $('#table_id').DataTable(
@@ -121,28 +127,52 @@
       //   ].join('')
       //   alertPlaceholder.append(wrapper)
       // }
-
+      
       $('#dateHistory').change(function() {
         let dateHistory = $(this).val();
         let object = {
           dateHistory:dateHistory
         }
+        window.alert("hola")
         // console.log(dateHistory, 'change')
-        fetch("<?php echo site_url() ?>" + '/Currency_History/'+dateHistory,{ 
-          method: 'POST', 
-          object
-        }).then(data=>{
-              window.alert(dateHistory)
+          $.ajax({
+                //  type: 'get',
+                 url: "<?php echo site_url() ?>" + '/Currency_History/listcurrencies'+dateHistory,
+                 success:function(result){
+                      console.log(result)
+                 },
+                 error:function(result){
+                  console.log(result)
+                 }
+                //  data: object,
+                //  success: function(result) {
+                //   let answer  = result.split('\n')
+                //   button.innerHTML = '<i class="bi bi-check-circle" style="font-size: 25px;"></i>'
+                //   button.addEventListener('click',function(){
+                //     $('.alert').alert('close')
+                //   })
+                // },
+                // error: function(result) {
+                //   button.innerHTML = '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>'
+                //   button.addEventListener('click',function(){
+                //     $('.alert').alert('close')
+                //   })
+                //  }
+            });
+          
+        // fetch("<?php //echo site_url() ?>" + '/Currency_History/listcurrencies'+dateHistory,{ 
+        //   method: 'POST', 
+        //   object
+        // }).then(data=>{
+        //       window.alert(dateHistory)
               
-            }).catch(error=>{
+        //     }).catch(error=>{
   
-            }).finally()
+        //     }).finally()
 
       });
 
-     inputDate.addEventListener('onchange',function(event){
-     })
-          
+
     </script>
       </div>
     </div>  
