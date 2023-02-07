@@ -436,9 +436,9 @@ class Currency_m extends CI_Model
 
 		$codcurrencylen = strlen($cod_tasa);
 
-		if( $codcurrencylen < 12 OR  $codcurrencylen > 12 )
+		if( $codcurrencylen < 14 OR  $codcurrencylen > 14 )
 		{
-			log_message('debug', __METHOD__ .' parametros received: ERROR cod_tasa ' . var_export($codcurrencylenla, TRUE));
+			log_message('debug', __METHOD__ .' parametros received: ERROR cod_tasa ' . var_export($codcurrencylen, TRUE));
 			return FALSE;
 		}
 		if( !is_numeric(trim($mon_tasa_moneda)) )
