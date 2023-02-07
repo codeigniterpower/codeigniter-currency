@@ -46,11 +46,11 @@ class Currency_Manager extends CP_Controller {
 		// $data['menu'] = $this->genmenu();
 
 		$currency_list_dbarraynow = array();
+		$currency_list_dbarraypre = array();
 		// $currency_list_apiarray = array();
 		$this->load->model('Currency_m','dbcm');
+		$currency_list_dbarraypre = $this->dbcm->readCurrenciesTodayStored('VES',NULL,'USD');
 		$currency_list_dbarraynow = $this->dbcm->readCurrenciesTodayStored();
-		// $this->load->library('Currencylib');
-		// $currency_list_apiarray = $this->currencylib->getAllCurrencyByApi('USD');
 
 		$data['currency_list_dbarraynow'] = $currency_list_dbarraynow;
 		// $data['currency_list_apiarray'] = $currency_list_apiarray;
@@ -89,24 +89,6 @@ class Currency_Manager extends CP_Controller {
 		log_message('error', __METHOD__ .' vfjgvfjh : ' . print_r($result, TRUE) . ' why: '.print_r($mon_tasa_moneda, TRUE));
 		
 		echo json_encode(array('result' =>$result));
-		
-		// echo json_encode(array('RESUK'=>$result));
-
-				// if(is_numeric($mon_tasa_moneda))
-		// {	// readCurrenciesTodayStored($curDest = NULL, $fecha = NULL, $curBase = NULL)
-
-			// $editCurrency = $this->dbcm->readCurrenciesTodayStored(NULL, $cod_tasa ,$mon_tasa_moneda);
-			
-		// }
-
-		// $this->load->helper(array('form', 'url'));
-		
-		// $validfields = $this->form_validation->exact_length('inputfield_name',10);
-		// $validfields = $this->form_validation->required('curbase');
-		// $validfields = $this->form_validation->exact_length('curbase',3);
-		// $cod_currency = $this->input->post('inputfield_name', FALSE);
-		// $this->load->model('Currency_m','dbcm');
-		// $result = $this->dbcm->updateCurrencyMount($cod_currency, $new_mount);
 		// TODO: use this only with desesperate end of time : $this->listcurrencies();
 	}
 

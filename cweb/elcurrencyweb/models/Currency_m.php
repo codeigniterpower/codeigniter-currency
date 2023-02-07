@@ -131,7 +131,7 @@ class Currency_m extends CI_Model
 				$queryfiltro .= ' AND SUBSTRING(cod_tasa, 1, '.$fechalen.')="'.$paramfilters['fecha'].'"';
 			}
 			if( array_key_exists( 'curBase', $paramfilters) )
-				$queryfiltro .= ' AND moneda_base="'.$paramfilters['curBase'].'"';
+				$queryfiltro .= ' AND moneda_base LIKE "'.$paramfilters['curBase'].'%"';
 			if( array_key_exists('curDest', $paramfilters) )
 			{
 				$curDest = $paramfilters['curDest'];
