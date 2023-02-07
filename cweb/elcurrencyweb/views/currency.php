@@ -59,11 +59,15 @@
                  data: object,
                  success: function(result) {
                   let answer  = result.split('\n')
-                  button.innerHTML = '<i class="bi bi-check-circle" style="font-size: 25px;"></i>'
+                  answer = JSON.parse(answer[0])
+                  answer.result !== 1 ? 
+                  button.innerHTML = '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>' :
+                  button.innerHTML ='<i class="bi bi-check-circle" style="font-size: 25px;"></i>';
                   button.addEventListener('click',function(){
                     $('.alert').alert('close')
                   })
                 },
+
                 error: function(result) {
                   button.innerHTML = '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>'
                   button.addEventListener('click',function(){
