@@ -43,7 +43,7 @@ class Currency_History extends CP_Controller {
 	 * @param	none
 	 * @return	boolean FALSE on errors
 	 */
-	public function listcurrencies()
+	public function listcurrencies($id = NULL)
 	{
 		$data = array();
 		$data['menu'] = $this->genmenu();
@@ -56,7 +56,7 @@ class Currency_History extends CP_Controller {
 //		$currency_list_dbarray = $this->dbcm->readCurrenciesTodayStored('VES', NULL, 'USD'); // get VES bolivares currencies on assumed date today but using base USD dollar
 //		$currency_list_dbarray = $this->dbcm->readCurrenciesTodayStored('VES','20230201'); // get VES bolivares currencies fro the give date string, YYYYMMDDHH+XXXX the last X are a fouth digit id
 //		$currency_list_dbarray = $this->dbcm->readCurrenciesTodayStored(NULL,'20230201'); // get all the currencies fro the give date string, YYYYMMDDHH+XXXX the last X are a fouth digit id
-//		$currency_list_dbarray = $this->dbcm->getTasas(array('fecha_tasa'=>'20230201104302')); // againt table retrieve all the columns get only the currencies fro the give date string, YYYYMMDDHH+XXXX the last X are a fouth digit id
+//		$currency_list_dbarray = $this->dbcm->getTasas(array('cod_tasa'=>'2023020110')); // againt table retrieve all the columns get only the currencies fro the give date string, YYYYMMDDHH+XXXX the last X are a fouth digit id
 
 		$data['currency_list_dbarrayhis'] = $currency_list_dbarrayhis;
 		$data['currenturl'] = $this->currenturl;
@@ -64,12 +64,13 @@ class Currency_History extends CP_Controller {
 		$this->load->view('header.php',$data);
 		$this->load->view('menu');
 		$this->load->view('history',$data);
+
 	}
 
-	public function updateCurrenci($id = NULL)
-	{
+	// public function search($id = NULL)
+	// {
 		
-	}
+	// }
 }
 
 /* End of file currency_manager.php */
