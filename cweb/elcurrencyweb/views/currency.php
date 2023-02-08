@@ -7,7 +7,7 @@
         <br>
         <div class="contain-table">
         <div class="d-flex justify-content-center">
-          <button type="button" class="btn btn-outline-success">Llamar a la api</button>
+          <button type="button" class="btn btn-outline-success" id="button-call">Llamar a la api</button>
         </div>
 
           <?php 
@@ -163,7 +163,31 @@
 
         // ---------------------------------------------------------------------------
 
-         let buttonGetData = document.getElementById("button");
+            let buttonGetData = document.getElementById("button-call");
+            buttonGetData.addEventListener('click',function(){
+            buttonGetData.innerHTML=[
+              '<div class="spinner-border" role="status">',
+                '<span class="visually-hidden">Loading...</span>',
+              '</div>'
+            ]
+            $.ajax({
+                type: 'get',
+                url: "<?php echo site_url() ?>" + '/Currency_Manager/callapitodb/'+"<?php $this->load->config('currencyweb');echo $this->config->item('codkey');?>",
+                success: function(result) {
+                   buttonGetData.innerHTML=[
+                      'Llamar a la api',
+                  ]
+                  location.reload()
+               },
+               error: function(result) {
+                 console.log(result)
+                 // button.innerHTML = '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>'
+                 // button.addEventListener('click',function(){
+                   // $('.alert').alert('close')
+                 // })
+                }
+            });
+          })
 
       })
     
