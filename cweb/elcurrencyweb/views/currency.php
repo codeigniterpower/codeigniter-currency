@@ -6,7 +6,7 @@
         </section>
         <br>
         <div class="contain-table">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-end">
           <button type="button" class="btn btn-outline-success" id="button-call">Llamar a la api</button>
         </div>
 
@@ -66,6 +66,7 @@
 
           let buttonEditData = document.getElementById("edit");
 
+          let messageError = document.getElementById("error-message");
           buttonEditData.addEventListener("click",function(event){
             event.preventDefault()
             let codTasa = document.getElementById("cod_tasa");
@@ -83,13 +84,18 @@
                  success: function(result) {
                   let answer  = result.split('\n')
                   answer = JSON.parse(answer[0])
-                  answer.result !== 1 ? 
-                  button.innerHTML = '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>' :
-                  button.innerHTML ='<i class="bi bi-check-circle" style="font-size: 25px;"></i>';
-                  button.addEventListener('click',function(){
-                    $('.alert').alert('close')
-                    location.reload()
-                  })
+                  if(answer.result !== 1){
+                    button.innerHTML = [
+                      '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>',
+                    ]
+                    messageError.innerHTML=`${answer.result}`
+
+                  }else{
+                    button.innerHTML ='<i class="bi bi-check-circle" style="font-size: 25px;"></i>';
+                    button.addEventListener('click',function(){
+                      $('.alert').alert('close')
+                    })
+                  }
                 },
 
                 error: function(result) {
@@ -118,6 +124,7 @@
           alert(data,'primary')
 
           let buttonEditData = document.getElementById("edit");
+          let messageError = document.getElementById("error-message");
 
           buttonEditData.addEventListener("click",function(event){
             event.preventDefault()
@@ -136,13 +143,19 @@
                  success: function(result) {
                   let answer  = result.split('\n')
                   answer = JSON.parse(answer[0])
-                  answer.result !== 1 ? 
-                  button.innerHTML = '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>' :
-                  button.innerHTML ='<i class="bi bi-check-circle" style="font-size: 25px;"></i>';
-                  button.addEventListener('click',function(){
-                    $('.alert').alert('close')
-                    location.reload()
-                  })
+                  if(answer.result !== 1){
+                    button.innerHTML = [
+                      '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>',
+                    ]
+                    messageError.innerHTML=`${answer.result}`
+
+                  }else{
+                    button.innerHTML ='<i class="bi bi-check-circle" style="font-size: 25px;"></i>';
+                    button.addEventListener('click',function(){
+                      $('.alert').alert('close')
+                      location.reload()
+                    })
+                  }
                 },
 
                 error: function(result) {
@@ -181,10 +194,6 @@
                },
                error: function(result) {
                  console.log(result)
-                 // button.innerHTML = '<i class="bi bi-x-octagon-fill" style="color: red;font-size: 25px;"></i>'
-                 // button.addEventListener('click',function(){
-                   // $('.alert').alert('close')
-                 // })
                 }
             });
           })
@@ -199,19 +208,20 @@
          wrapper.innerHTML = [
            `<div class="alert alert-${type} alert-dismissible text-center custom-alerts" role="alert" style="   position: fixed; width: 55%; left: 30%; top: 30%; z-index: 10000000000;">`,
            '<br>',
-           `<form method="POST" action="<?php echo site_url() ?>/Currency_Manager/updatecurrency" target="_self" id="edit-form">`, 
+           `<form class="" method="POST" action="<?php echo site_url() ?>/Currency_Manager/updatecurrency" target="_self" id="edit-form">`, 
              '<div class="form-group">',
                '<label for="cod_tasa">cod_tasa</label>',
                '<input name="cod_tasa" type="number" class="form-control" id="cod_tasa" value='+message[0]+'  readonly>',
              '</div>',
              '<div class="form-group">',
                '<label for="mon_tasa_moneda">mon_tasa_moneda</label>',
-               '<input name="mon_tasa_moneda" type="text" class="form-control" id="mon_tasa_moneda" placeholder='+ message[2] +' >',
+               '<input name="mon_tasa_moneda" type="text" class="form-control" id="mon_tasa_moneda" placeholder='+ message[2] +' required>',
              '</div>',
              '<br>',
              '<button type="submit" class="btn btn-outline-success" id="edit">Enviar</button>',
            '</form>',
            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+           '<p id="error-message" style="color: red;font-size: 25px;"></p>',
            '</div>'
          ].join('')
          alertPlaceholder.append(wrapper)
