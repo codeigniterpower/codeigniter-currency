@@ -85,7 +85,31 @@ class Currency_History extends CP_Controller {
 		$data['totalcount'] = $totalcount;
 		$data['currency_list_dbarrayhis'] = $currency_list_dbarrayhis;
 		$data['currenturl'] = $this->currenturl;
-
+		/* 
+		 // GROCERYCRUP ONLY dont touch, only work for mysql and will render the hole view
+		$this->load->library('Grocery_CRUD');
+		$this->load->database('elcurrencydb');
+		$crud = new grocery_CRUD();
+		$crud->set_theme('bootstrap'); // flexigrid tiene bugs en varias cosas
+		$crud->set_table('cur_tasas_moneda');
+		$crud->set_primary_key('cod_tasa');
+		$crud->columns('cod_tasa','cod_moneda_base','cod_moneda_destino','mon_tasa_moneda','sessionficha','sessionflag');
+		$crud->display_as('cod_tasa','Codigo+Hora')
+			 ->display_as('cod_moneda_base','Base')
+			 ->display_as('cod_moneda_destino','Convertida')
+			 ->display_as('mon_tasa_moneda','Vale')
+			 ->display_as('sessionficha','Modificada')
+			 ->display_as('sessionflag','Creada');
+		$crud->unset_add();
+		$crud->unset_edit();
+		$crud->unset_read();
+		$crud->unset_delete();
+		$crud->callback_column('mon_tasa_moneda',array($this,'_numerosgente'));
+		$output = $crud->render();
+		$data['output'] = $output->output;
+		$data['css_files'] = $output->css_files;
+		$data['js_files'] = $output->js_files;
+		*/
 		$this->load->view('header.php',$data);
 		$this->load->view('menu');
 		$this->load->view('history',$data);

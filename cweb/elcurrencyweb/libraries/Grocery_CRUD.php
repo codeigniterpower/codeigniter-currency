@@ -3725,9 +3725,9 @@ class Grocery_CRUD extends grocery_CRUD_States
 	protected $default_css_path			= null; //autogenerate, please do not modify
 	protected $default_texteditor_path 	= null; //autogenerate, please do not modify
 	protected $default_theme_path		= null; //autogenerate, please do not modify
-	protected $default_language_path	= base_url().'elcurrencyfiles/grocery_crud/languages';
-	protected $default_config_path		= base_url().'elcurrencyfiles/grocery_crud/config';
-	protected $default_assets_path		= base_url().'elcurrencyfiles/grocery_crud';
+	protected $default_language_path	= 'elcurrencyfiles/grocery_crud/languages';
+	protected $default_config_path		= 'elcurrencyfiles/grocery_crud/config';
+	protected $default_assets_path		= 'elcurrencyfiles/grocery_crud';
 
 	/**
 	 *
@@ -4616,7 +4616,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 		$this->config = (object)array();
 
 		/** Initialize all the config variables into this object */
-		$this->config->default_language 	= $ci->config->item('grocery_crud_default_language');
+		$this->config->default_language 	= $ci->config->item('language');
 		$this->config->date_format 			= $ci->config->item('grocery_crud_date_format');
 		$this->config->default_per_page		= $ci->config->item('grocery_crud_default_per_page');
 		$this->config->file_upload_allow_file_types	= $ci->config->item('grocery_crud_file_upload_allow_file_types');
@@ -5470,7 +5470,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 		$upload_dir = !empty($upload_dir) && substr($upload_dir,-1,1) == '/'
 						? substr($upload_dir,0,-1)
 						: $upload_dir;
-		$upload_dir = !empty($upload_dir) ? $upload_dir : base_url().'elcurrencyfiles/uploads';
+		$upload_dir = !empty($upload_dir) ? $upload_dir : 'assets/uploads/files';
 
 		/** Check if the upload Url folder exists. If not then throw an exception **/
 		if (!is_dir(FCPATH.$upload_dir)) {
