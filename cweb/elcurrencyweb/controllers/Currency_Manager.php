@@ -75,26 +75,37 @@ class Currency_Manager extends CP_Controller {
 		$mon_tasa_moneda = $this->input->post('mon_tasa_moneda', FALSE);
 		$cod_tasa = $this->input->post('cod_tasa', FALSE);
 		$validfields = $this->form_validation->required($cod_tasa);
-		log_message('error', __METHOD__ .' POST : ' . print_r($_POST, TRUE) . ' why: '.print_r($mon_tasa_moneda, TRUE));
 		if($validfields == FALSE){
-			$error = 0;
+			log_message('error', __METHOD__ .' POST : ' . print_r($_POST, TRUE) . ' why: '.print_r($cod_tasa, TRUE));
+			return $error = 0;
 		}
-		$validfields = $this->form_validation->decimal($mon_tasa_moneda);
+		$validfields = $this->form_validation->exact_length($cod_tasa,14);
 		if($validfields == FALSE){
-			$error = 0;
+			log_message('error', __METHOD__ .' POST : ' . print_r($_POST, TRUE) . ' why: '.print_r("No cumple con la longitud", TRUE));
+			return $error = 0;
 		}
-		$validfields = $this->form_validation->exact_length($cod_tasa,12);
-		if($validfields == FALSE){
-			$error = 0;
-		}
-
 		$validfields = $this->form_validation->numeric($cod_tasa);
 		if($validfields == FALSE){
-			// echo "cod_tasa isn't number";
-			$error = 0;
+			log_message('error', __METHOD__ .' POST : ' . print_r($_POST, TRUE) . ' why: '.print_r("No es numerico 1", TRUE));
+			echo json_encode(array('result' =>'Debe ser un numero entero o decimal'));
+			return $error = 0;
 		}
+		$validfields = $this->form_validation->required($mon_tasa_moneda);
+		if($validfields == FALSE){
+			log_message('error', __METHOD__ .' POST : ' . print_r($_POST, TRUE) . ' why: '.print_r($mon_tasa_moneda, TRUE));
+			echo json_encode(array('result' =>'Debe ingresar un monto'));
+			return $error = 0;
+		}
+		$validfields = $this->form_validation->numeric($mon_tasa_moneda);
+		if($validfields == FALSE){
+			log_message('error', __METHOD__ .' POST : ' . print_r($_POST, TRUE) . ' why: '.print_r("No es numerico", TRUE));
+			echo json_encode(array('result' =>'Debe ser de tipo numerico'));
+			return $error = 0;
+		}
+
+
 		$result = $this->dbcm->updateCurrencyMount($cod_tasa, $mon_tasa_moneda);
-		log_message('error', __METHOD__ .' vfjgvfjh : ' . print_r($result, TRUE) . ' why: '.print_r($mon_tasa_moneda, TRUE));
+		log_message('error', __METHOD__ .' POST : ' . print_r($result, TRUE) . ' why: '.print_r("Ocurrio un error al guardar", TRUE));
 		
 		echo json_encode(array('result' =>$result));
 		// TODO: use this only with desesperate end of time : $this->listcurrencies();
