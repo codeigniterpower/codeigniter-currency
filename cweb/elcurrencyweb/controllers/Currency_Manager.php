@@ -106,8 +106,33 @@ class Currency_Manager extends CP_Controller {
 	 * @access	public
 	 * @param   $codkey mixed and authentication string key to check api
 	 */
-	public function callapitodb($codkey = NULL)
+	public function callapitodb(
+		$codkey = NULL
+		)
 	{
+		if($codkey != $this->config->item('codkey') ){
+			log_message('error', __METHOD__ .' unauthorized access, missing key api');
+		 	return json_encode(array('result'=>'unauthorized access'));
+		}
+		if($codkey == NULL)
+		{
+			log_message('error', __METHOD__ .' unauthorized access, missing key api');
+		 	return json_encode(array('result'=>'unauthorized access'));
+		}
+		log_message('error', __METHOD__ .' GET : ' . ' from parameter: '.print_r($codkey, TRUE));
+		$this->load->config('currencyweb');
+		$codKey = $this->config->item('codkey');
+		log_message('error', __METHOD__ .' GET : ' . ' from config: '.print_r($codkey, TRUE));
+		if(ENVIRONMENT !== 'production')
+		{
+			if($codKey == 'sha256-EXAMPLE');
+		}
+	  	else
+	  	{
+			//TODO  DEVELOPT A METHOD TO CHECK
+	  	}
+
+		$config['language']     = 'spanish';
 		$data = array();
 		$data['menu'] = $this->genmenu();
 		// example invokation http://localhost/~general/codeigniter-currencylib/cweb/index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD
@@ -115,7 +140,7 @@ class Currency_Manager extends CP_Controller {
 		$currencyDate = $this->input->get_post('dateapi', FALSE);
 		$currencyBase = $this->input->get_post('curbase', FALSE);
 		$currencyDest = $this->input->get_post('curdest', FALSE);
-
+		
 		$this->load->library('form_validation');
 		$missdest = $this->form_validation->required($currencyDest);
 		$validcurren = $this->form_validation->min_length($currencyDest,3);
@@ -123,40 +148,42 @@ class Currency_Manager extends CP_Controller {
 		$validfields = $this->form_validation->exact_length($currencyDate,10);
 		$missbase = $this->form_validation->required($currencyBase);
 		$validfields = $this->form_validation->exact_length($currencyBase,3);
-
 		if($missdate == FALSE)
-			$currencyDate = date('Y-m-d');
+		$currencyDate = date('Y-m-d');
 		if($missbase == FALSE)
 			$currencyBase = 'USD';
 		if($validfields == FALSE)
 			$currencyBase = 'USD';
-		if($missdest == FALSE)
-			$currencyDest = NULL;
 		if($validcurren == FALSE OR $missdest == FALSE)
 		{
-			echo "invalid input parametest currency dest seems missing";
-			if(mb_strlen($currencyDest) > 3)
+			log_message('info', __METHOD__ .' missing currency rates to convert, we will use all availables from api results ');
+			$currencyDest = NULL;
+		}
+		if(mb_strlen($currencyDest) > 3)
+		{
+			if(stripos($currencyDest,',') == FALSE)
 			{
-				if(stripos($currencyDest,',') == FALSE)
-				{
-					echo "invalid input parametest currency dest";
-					$currencyDest = NULL;
-				}
+				log_message('error', __METHOD__ .' invalid currency set, more than one but missing separator, we will use all');
+				$currencyDest = NULL;
 			}
 		}
-		if($codkey == NULL)
-		{
-			echo "unauthorized access";
-			return json_encode(array('result'=>'unauthorized access'));
-		}
+
+
+		log_message('debug', __METHOD__ .' save?1 :  '.print_r($currencyDate, TRUE));
 		$currency_list_apiarray = array();
 		$this->load->library('Currencylib');
+		log_message('debug', __METHOD__ .' save?2 :  '.print_r($currencyDate, TRUE));
 		$currencyDate = date('Y-m-d',strtotime($currencyDate));
 		$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi($currencyBase,$currencyDest,$currencyDate);
+		log_message('debug', __METHOD__ .' save?3 :  '.print_r($currencyDate, TRUE));
 		$this->load->model('Currency_m','dbcm');
 		$currencyDate = date('Ymd',strtotime($currencyDate)).date('H');
 		$createdbresult = $this->dbcm->createCurrencyFromApi($currency_list_apiarray, $currencyDate, $currencyBase);
+		log_message('debug', __METHOD__ .' save? : ' .print_r($createdbresult,TRUE). ' from parameter: '.print_r($currencyDate, TRUE));
 		return json_encode(array('result'=>$createdbresult));
+	// }
+		
+
 	}
 
 
