@@ -6,7 +6,7 @@ For general info check [README.md](README.md)
 
 TODO
 
-## Development framework notes
+### Development framework choice
 
 We choose php and CI2/CI3 due several reasons but two are the most important:
 
@@ -21,6 +21,77 @@ Lavarel is not difficult but it requires that the hired employee knows OOP,
 which translates into a very xpensives salary and money, while CI2/CI3 only 
 requires that you know how to loop and minimal knowledge of conditionals, 
 simple and easy to assimilate.. important key when we talk about money.
+
+## Development notes
+
+### DB models
+
+**Usuario_m**
+
+This model just retrieve the data of a user, the user credentials are not 
+stored, login are managed agains IMAP or external source.. 
+
+The table stored the sesion and will check if are still valid, when time out, 
+will retry the login and refrsh the session into the table.
+
+The permission are simple: if are enabled, can make modifications, either 
+then just can read the currency rates.
+
+**Currency_m**
+
+The first used method is the `readCurrenciesTodayStored` that permits to get 
+a list of current currencies with minimal filters, with support for server side:
+
+```
+ // get VES bolivares currencies on assumed date today but using base USD dollar
+$currency_list_dbarray = $this->dbcm->readCurrenciesTodayStored('VES', NULL, 'USD');
+
+ // get VES bolivares currencies from the given date string, YYYYMMDD[HH] you can get specific hour optional
+$currency_list_dbarray = $this->dbcm->readCurrenciesTodayStored('VES','20230201');
+
+ // get all the currencies from the given date string, YYYYMMDD[HH] you can get specific hour optional
+$currency_list_dbarray = $this->dbcm->readCurrenciesTodayStored(NULL,'20230201');
+
+ // send a filter directly over the currency table, filtering by the cod_tasa column value
+$currency_list_dbarray = $this->dbcm->getTasas(array('cod_tasa'=>'2023020110'));
+```
+
+The second method is the `readCurrenciesHistStored`, with support for server side:
+
+
+```
+		$currency_list_dbarrayhis = array();
+		$currency_list_dbarraycou = array();
+		$this->load->model('Currency_m','dbcm');
+		$parameters = array();
+		// case 1 only count all the history for a specific date, first 100 rows, ordering by cod_tasa ascending
+		$parameters['fecha'] = '20230207'
+		$howmany = 100;
+		$iniciar = 0;
+		$ordercol = 'cod_tasa';
+		$sorting = 'ASC';
+		$countall = TRUE;
+		$currency_list_dbarraycou = $this->dbcm->readCurrenciesHistStored($parameters,$howmany,$iniciar,$ordercol,$sorting,$countall);
+		// case 2 get all the history for a specific date, first 100 rows, ordering by cod_tasa ascending
+		$parameters['fecha'] = '20230207'
+		$howmany = 100;
+		$iniciar = 0;
+		$ordercol = 'cod_tasa';
+		$sorting = 'ASC';
+		$countall = NULL;
+		$currency_list_dbarrayhis = $this->dbcm->readCurrenciesHistStored($parameters,$howmany,$iniciar,$ordercol,$sorting,$countall);
+
+		$totalcount = 0;
+		if(is_array($currency_list_dbarrayhis))
+		{
+			$totalcount = count($currency_list_dbarrayhis);
+		}
+		if(is_array($currency_list_dbarraycou))
+		{
+			if(count($currency_list_dbarraycou))
+				$totalcount = $currency_list_dbarraycou[]['cod_tasa'];
+		}
+```
 
 ### views notes
 

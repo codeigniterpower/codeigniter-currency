@@ -8,7 +8,7 @@
         <div class="contain-table">
           <h1 style="text-align: center;">History of your coins rate</h1>
           <?php 
-            echo '<h1 style="text-align: center;">Currenct Stored currency for today</h1>';
+            echo '<h1 style="text-align: center;">Filtering total of '.$totalcount.'</h1>';
               if(is_array($currency_list_dbarrayhis))
               {
                 if(count($currency_list_dbarrayhis))

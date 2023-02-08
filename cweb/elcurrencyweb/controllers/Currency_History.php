@@ -49,15 +49,40 @@ class Currency_History extends CP_Controller {
 		$data['menu'] = $this->genmenu();
 
 		$currency_list_dbarrayhis = array();
+		$currency_list_dbarraycou = array();
 		$this->load->model('Currency_m','dbcm');
-		$currency_list_dbarrayhis = $this->dbcm->readCurrenciesHistStored();
+		$parameters = array();
+		// case 1 only count all the history for a specific date, first 100 rows, ordering by cod_tasa ascending
+		$parameters['fecha'] = '20230207';
+		$parameters['curDest'] = 'VES';
+		$howmany = 100;
+		$iniciar = 0;
+		$ordercol = 'cod_tasa';
+		$sorting = 'ASC';
+		$countall = TRUE;
+		$currency_list_dbarraycou = $this->dbcm->readCurrenciesHistStored($parameters,$howmany,$iniciar,$ordercol,$sorting,$countall);
+		// case 2 get all the history for a specific date, first 100 rows, ordering by cod_tasa ascending
+		$parameters['fecha'] = '20230207';
+		$parameters['curDest'] = 'VES';
+		$howmany = 100;
+		$iniciar = 0;
+		$ordercol = 'cod_tasa';
+		$sorting = 'ASC';
+		$countall = NULL;
+		$currency_list_dbarrayhis = $this->dbcm->readCurrenciesHistStored($parameters,$howmany,$iniciar,$ordercol,$sorting,$countall);
 
-// how to call the models
-//		$currency_list_dbarray = $this->dbcm->readCurrenciesTodayStored('VES', NULL, 'USD'); // get VES bolivares currencies on assumed date today but using base USD dollar
-//		$currency_list_dbarray = $this->dbcm->readCurrenciesTodayStored('VES','20230201'); // get VES bolivares currencies fro the give date string, YYYYMMDDHH+XXXX the last X are a fouth digit id
-//		$currency_list_dbarray = $this->dbcm->readCurrenciesTodayStored(NULL,'20230201'); // get all the currencies fro the give date string, YYYYMMDDHH+XXXX the last X are a fouth digit id
-//		$currency_list_dbarray = $this->dbcm->getTasas(array('cod_tasa'=>'2023020110')); // againt table retrieve all the columns get only the currencies fro the give date string, YYYYMMDDHH+XXXX the last X are a fouth digit id
+		$totalcount = 0;
+		if(is_array($currency_list_dbarrayhis))
+		{
+			$totalcount = count($currency_list_dbarrayhis);
+		}
+		if(is_array($currency_list_dbarraycou))
+		{
+			if(count($currency_list_dbarraycou))
+				$totalcount = $currency_list_dbarraycou[0]['cod_tasa'];
+		}
 
+		$data['totalcount'] = $totalcount;
 		$data['currency_list_dbarrayhis'] = $currency_list_dbarrayhis;
 		$data['currenturl'] = $this->currenturl;
 
@@ -67,10 +92,18 @@ class Currency_History extends CP_Controller {
 
 	}
 
-	// public function search($id = NULL)
-	// {
-		
-	// }
+	/**
+	 * fix the format using, set number to decimal with two digits
+	 *
+	 * @access	public
+	 * @param	none
+	 * @return	boolean FALSE on errors
+	 */
+	public function _numerosgente($value, $row)
+	{
+		$formateado = number_format($row->mon_tasa_moneda, 2, ',', '.');
+		return $formateado;
+	}
 }
 
 /* End of file currency_manager.php */

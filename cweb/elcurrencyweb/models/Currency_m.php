@@ -57,7 +57,7 @@ class Currency_m extends CI_Model
 	 * @param	array  $paramnames ('columname'=>'value'[,'columname'=>'value',..])
 	 * @return	mixed FALSE on errors
 	 */
-	public function readCurrenciesTodayStored($curDest = NULL, $fecha = NULL, $curBase = NULL)
+	public function readCurrenciesTodayStored($curDest = NULL, $fecha = NULL, $curBase = NULL, $howmany = NULL, $iniciar = NULL, $ordercol = NULL, $sorting = NULL)
 	{
 		log_message('debug', __METHOD__ .' parametros received: cd ' . var_export($curDest, TRUE) . ' cb ' . var_export($curBase, TRUE) . ' date ' . var_export($curBase, TRUE));
 		$curDestlen = strlen($curDest);
@@ -72,7 +72,11 @@ class Currency_m extends CI_Model
 			$paramfilters['fecha'] = date('Ymd');
 		if( $curDestlen >= 3 )
 			$paramfilters['curDest'] = $curDest;
-		$arraydata = $this->readTasas($paramfilters, TRUE);
+		$limiters['howmany'] = $howmany; // limit
+		$limiters['iniciar'] = $iniciar; // offset
+		$limiters['ordercol'] = $ordercol; // colum
+		$limiters['sorting'] = $sorting; // order
+		$arraydata = $this->readTasas($paramfilters, TRUE, $limiters);
 		return $arraydata;
 	}
 
@@ -87,9 +91,16 @@ class Currency_m extends CI_Model
 	 * @param	array  $paramnames ('columname'=>'value'[,'columname'=>'value',..])
 	 * @return	mixed FALSE on errors
 	 */
-	public function readCurrenciesHistStored()
+	public function readCurrenciesHistStored($parameters = NULL, $howmany = NULL, $iniciar = NULL, $ordercol = NULL, $sorting = NULL, $countall = NULL)
 	{
-		$arraydata = $this->readTasas(NULL, TRUE);
+		if(!is_array($parameters))
+			$parameters = array();
+		$limiters['howmany'] = $howmany; // limit
+		$limiters['iniciar'] = $iniciar; // offset
+		$limiters['ordercol'] = $ordercol; // colum
+		$limiters['sorting'] = $sorting; // order
+		$limiters['countall'] = $countall; // get total table rows
+		$arraydata = $this->readTasas($parameters, FALSE, $limiters);
 		log_message('debug', __METHOD__ .' data from DB received for history');
 		return $arraydata;
 	}
@@ -102,11 +113,10 @@ class Currency_m extends CI_Model
 	 * @param	array  $paramnames ('columname'=>'value'[,'columname'=>'value',..])
 	 * @return	mixed FALSE on errors
 	 */
-	public function readTasas($paramfilters = NULL, $limited = FALSE)
+	public function readTasas($paramfilters = NULL, $limited = FALSE, $limiters = NULL)
 	{
-		log_message('debug', __METHOD__ .' parametros received:  ' . var_export($paramfilters, TRUE) );
+		log_message('debug', __METHOD__ .' parametros received:  ' . var_export($paramfilters, TRUE). ' limiters ' . var_export($limiters, TRUE) );
 
-		
 		$columnssql = 'cod_tasa,moneda_base,mon_tasa_moneda,moneda_destino,cod_tasa_tipo,cod_moneda_base,cod_moneda_destino,sessionflag,sessionficha';
 		$paramnames =  explode(',',$columnssql);
 		$queryfiltro = '  ';
@@ -115,7 +125,7 @@ class Currency_m extends CI_Model
 			$columnssql = 'cod_tasa,moneda_base,mon_tasa_moneda,moneda_destino';
 			log_message('debug', __METHOD__ .' retrieve history from DB !' );
 		}
-		if(is_array($paramfilters) )
+		if(is_array($paramfilters) ) // TODO made scaped strings and security proptection ( as EVOKE suggests)
 		{
 			foreach($paramnames as $key=>$namecolumn )
 			{
@@ -147,6 +157,48 @@ class Currency_m extends CI_Model
 						$queryfiltro .= ' OR moneda_destino="'.$curdesval.'"';
 					}
 					$queryfiltro .= ' )';
+				}
+			}
+		}
+		if(is_array($limiters) ) // TODO made scaped strings and security proptection ( as EVOKE suggests)
+		{
+			if( array_key_exists('countall', $limiters) )
+			{
+				$countall = $limiters['countall'];
+				if( is_null($countall) !== TRUE AND empty($countall) !== TRUE )
+				$columnssql = 'count(cod_tasa) as cod_tasa ';
+			}
+			if( array_key_exists('ordercol', $limiters) )
+			{
+				$ordercol = $limiters['ordercol'];
+				if( is_null($ordercol) === TRUE OR empty($ordercol) === TRUE )
+					$ordercol = 'cod_tasa';
+				$queryfiltro .= ' ORDER BY '.$ordercol;
+				if( array_key_exists('sorting', $limiters) )
+				{
+					$sorting = $limiters['sorting'];
+					if( is_null($sorting) === TRUE OR empty($sorting) === TRUE )
+						$sorting = ' DESC';
+					$queryfiltro .= ' '.$sorting;
+				}
+				else
+					$queryfiltro .= ' DESC';
+			}
+			if( array_key_exists('howmany', $limiters) )
+			{
+				$howmany = $limiters['howmany'];
+				if( is_null($howmany) !== TRUE AND empty($howmany) !== TRUE )
+				{
+					$queryfiltro .= ' LIMIT '.$howmany;
+					if( array_key_exists('iniciar', $limiters) )
+					{
+						$iniciar = $limiters['iniciar'];
+						if( is_null($iniciar) === TRUE OR empty($iniciar) === TRUE )
+							$iniciar = 0;
+						if($iniciar < $howmany)
+							$howmany = 50;
+						$queryfiltro .= ' OFFSET '.$iniciar;
+					}
 				}
 			}
 		}
@@ -282,6 +334,7 @@ class Currency_m extends CI_Model
 			if( array_key_exists($nombre, $paramfilters) )
 			{
 				$$nombre = $paramfilters[$nombre];
+				// TODO made scaped strings and security protection ( as EVOKE suggests)
 				$sqlfilter .= ' AND '.$nombre.'="'.$$nombre.'"';
 			}
 		}
