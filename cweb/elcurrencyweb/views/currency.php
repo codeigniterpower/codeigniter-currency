@@ -94,6 +94,7 @@
                     button.innerHTML ='<i class="bi bi-check-circle" style="font-size: 25px;"></i>';
                     button.addEventListener('click',function(){
                       $('.alert').alert('close')
+                      location.reload()
                     })
                   }
                 },
