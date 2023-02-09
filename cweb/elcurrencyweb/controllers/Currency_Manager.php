@@ -23,7 +23,7 @@ class Currency_Manager extends CP_Controller {
 
 	/**
 	 * index que muestra vista con instrucciones, las instrucciones estan en la vista indexinput
-	 * 
+	 *
 	 * @name: index
 	 * @param void
 	 * @return void
@@ -34,7 +34,7 @@ class Currency_Manager extends CP_Controller {
 	}
 
 	/**
-	 * this controler is the URI call to set the currency and stored into DB, 
+	 * this controler is the URI call to set the currency and stored into DB,
 	 * it also has a button or trick to request a call to api and get lasted currency from api
 	 * mean can also have a form to request a specific currency conversion
 	 *
@@ -44,16 +44,17 @@ class Currency_Manager extends CP_Controller {
 	{
 		// $data = array();
 		// $data['menu'] = $this->genmenu();
+		// $this->load->library('userlib');
+
 		$this->load->model('Usuario_m','users');
 		$this->load->model('Currency_m','dbcm');
-		$user_preferences = $this->users->getUserData("gonzalez_angel");
+		$user_preferences = $this->users->getUserData("lenz_geSDrardo");
 		// $user_preferences = $this->users->getUserData("lenz_gerardo");
 		//echo print_r( $user,TRUE);
-		
+
 		$currency_list_dbarraynow = array();
 		$currency_list_dbarraypre = array();
 
-		//  echo print_r(count($user_preferences));
 		if(count($user_preferences)){
 			$currency_list_dbarraypre = $this->dbcm->readCurrenciesTodayStored($user_preferences[0]['cur_monedas_dest'],NULL,$user_preferences[0]['cur_monedas_base']);
 		}
@@ -106,7 +107,7 @@ class Currency_Manager extends CP_Controller {
 
 		$result = $this->dbcm->updateCurrencyMount($cod_tasa, $mon_tasa_moneda);
 		log_message('error', __METHOD__ .' POST : ' . print_r($result, TRUE) . ' why: '.print_r("Ocurrio un error al guardar", TRUE));
-		
+
 		echo json_encode(array('result' =>$result));
 		// TODO: use this only with desesperate end of time : $this->listcurrencies();
 	}
@@ -117,41 +118,32 @@ class Currency_Manager extends CP_Controller {
 	 * @access	public
 	 * @param   $codkey mixed and authentication string key to check api
 	 */
-	public function callapitodb(
-		$codkey = NULL
-		)
+	public function callapitodb($codkey = NULL)
 	{
-		if($codkey != $this->config->item('codkey') ){
-			log_message('error', __METHOD__ .' unauthorized access, missing key api');
-		 	return json_encode(array('result'=>'unauthorized access'));
-		}
+		$this->load->model('Usuario_m','users');
+
+
+		log_message('info', __METHOD__ .' calltoapi codkey argument method '.print_r($codkey, TRUE));
 		if($codkey == NULL)
 		{
-			log_message('error', __METHOD__ .' unauthorized access, missing key api');
-		 	return json_encode(array('result'=>'unauthorized access'));
+			log_message('error', __METHOD__ .' missing codkey, checking POST');
+			$codkey = $this->input->get_post('codkey', FALSE);
+			if( is_null($codkey) OR empty($codkey) )
+				return json_encode(array('result'=>'unauthorized access'));
 		}
-		log_message('error', __METHOD__ .' GET : ' . ' from parameter: '.print_r($codkey, TRUE));
 		$this->load->config('currencyweb');
-		$codKey = $this->config->item('codkey');
-		log_message('error', __METHOD__ .' GET : ' . ' from config: '.print_r($codkey, TRUE));
-		if(ENVIRONMENT !== 'production')
-		{
-			if($codKey == 'sha256-EXAMPLE');
-		}
-	  	else
-	  	{
-			//TODO  DEVELOPT A METHOD TO CHECK
-	  	}
+		$codkeyconf = $this->config->item('codkey');
+		if( $codkey == $codkeyconf)
+			log_message('error', __METHOD__ .' invalid codkey ' .print_r($codkey,TRUE). ' from config: '.print_r($codkeyconf, TRUE));
 
 		$config['language']     = 'spanish';
 		$data = array();
-		$data['menu'] = $this->genmenu();
 		// example invokation http://localhost/~general/codeigniter-currencylib/cweb/index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD
 		// example shot base "index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD"
 		$currencyDate = $this->input->get_post('dateapi', FALSE);
 		$currencyBase = $this->input->get_post('curbase', FALSE);
 		$currencyDest = $this->input->get_post('curdest', FALSE);
-		
+
 		$this->load->library('form_validation');
 		$missdest = $this->form_validation->required($currencyDest);
 		$validcurren = $this->form_validation->min_length($currencyDest,3);
@@ -180,20 +172,19 @@ class Currency_Manager extends CP_Controller {
 		}
 
 
-		log_message('debug', __METHOD__ .' save?1 :  '.print_r($currencyDate, TRUE));
+		log_message('debug', __METHOD__ .' getting the data from internet API for :  '.print_r($currencyDate, TRUE));
 		$currency_list_apiarray = array();
 		$this->load->library('Currencylib');
-		log_message('debug', __METHOD__ .' save?2 :  '.print_r($currencyDate, TRUE));
 		$currencyDate = date('Y-m-d',strtotime($currencyDate));
 		$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi($currencyBase,$currencyDest,$currencyDate);
-		log_message('debug', __METHOD__ .' save?3 :  '.print_r($currencyDate, TRUE));
+		log_message('debug', __METHOD__ .' API already called, now try to store the result into DB for :  '.print_r($currencyDate, TRUE));
 		$this->load->model('Currency_m','dbcm');
 		$currencyDate = date('Ymd',strtotime($currencyDate)).date('H');
 		$createdbresult = $this->dbcm->createCurrencyFromApi($currency_list_apiarray, $currencyDate, $currencyBase);
-		log_message('debug', __METHOD__ .' save? : ' .print_r($createdbresult,TRUE). ' from parameter: '.print_r($currencyDate, TRUE));
+		log_message('debug', __METHOD__ .' saved? : ' .print_r($createdbresult,TRUE). ' from parameter: '.print_r($currencyDate, TRUE));
 		return json_encode(array('result'=>$createdbresult));
 	// }
-		
+
 
 	}
 
