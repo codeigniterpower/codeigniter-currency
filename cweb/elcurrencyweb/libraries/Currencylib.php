@@ -3,9 +3,9 @@
 /**
  * elcurrency Currencylib Class for requestinig to apilayer using marketshare currency conversion
  *
- * @author      PICCORO Lenz McKAY
+ * @author     @mckaygerhard PICCORO Lenz McKAY
  * @copyright Copyright (c) 2023
- * @version ab - 1.0
+ * @version ab - 1.0.1
  */
 class Currencylib
 {
@@ -36,7 +36,7 @@ class Currencylib
 
 	/**
 	 * @author      PICCORO Lenz McKAY
-	 * name: descondefault constructor
+	 * name: default constructor
 	 */
 	public function __construct()
 	{
@@ -51,10 +51,16 @@ class Currencylib
 		log_message('error', __CLASS__ .' Api key URL request '.$this->currencyApiUrl );
 	}
 
-	// TODO init and document tthe lib
+	/**
+	 * initialize the API using the config stored values from the currencylib config file
+	 * @author      PICCORO Lenz McKAY
+	 */ 
 	public function initialize()
 	{
-		// TODO init the amount, destino, base and date using array parameters
+		$this->currencyApiKey = $this->CI->config->item('currency_api_key', 'currencylib');
+		log_message('error', __CLASS__ .' Api key configured ' .$this->currencyApiKey);
+		$this->currencyApiUrl = $this->CI->config->item('currency_api_url', 'currencylib');
+		log_message('error', __CLASS__ .' Api key URL request '.$this->currencyApiUrl );
 	}
 
 	/**
@@ -129,11 +135,11 @@ class Currencylib
 
 		$urlrequested = $this->currencyApiUrl."/".$this->dateCurrency."?symbols=".$this->destiCurrency."&base=".$this->baseCurrency;
 
-		log_message('debug', __CLASS__ .'URL: '.print_r($urlrequested,TRUE) );
+		log_message('debug', __CLASS__ .' URL: '.print_r($urlrequested,TRUE) );
 		$this->converted = 0;
 
 		$curl = curl_init();
-
+		// TODO : use socket and async calls .. this take too much time and its not good for request sync
 		curl_setopt_array($curl, array(
 			CURLOPT_URL => $urlrequested,
 			CURLOPT_HTTPHEADER => array(
@@ -178,15 +184,14 @@ class Currencylib
 		}
 
 		$rates = $conversion['rates'];
-		$this->converted = $rates;
 
 		foreach($rates as $destiCurrency => $valueCurrency)
 		{
 			$valueCurrency = floatval($valueCurrency)*floatval($this->amountCurrency);
 			$rates[$destiCurrency] = $valueCurrency;
-
-			$this->converted = $rates;
 		}
+
+		$this->converted = $rates;
 
 		$currency_list_apiarray = array();
 		foreach( $this->converted as $keyc => $valc)
@@ -194,8 +199,7 @@ class Currencylib
 			$currency_list_apiarray[] = array('moneda' => $keyc, 'mon_tasa_moneda' => $valc);
 		}
 
-		log_message('info', __CLASS__ .': converted rates: '. print_r($currency_list_apiarray,TRUE) );
-		log_message('debug', __CLASS__ .': converted rates: '. print_r($this->converted,TRUE) );
+		log_message('debug', __CLASS__ .': converted rates: '. print_r($currency_list_apiarray,TRUE) );
 		$this->converted = $currency_list_apiarray;
 		return $this->converted;
 
