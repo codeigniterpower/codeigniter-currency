@@ -1,35 +1,45 @@
   <!-- TODO: moved to currency history, this view will be for marketing -->
       <div class="col py-0 px-0">
         <div class="contain-image">
-            <ul class="nav justify-content-center">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
-                  <button type="button" class="btn btn-outline-success">¿Quienes somos?</button>
-                </a>
-            </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link" href="#">
-                <button type="button" class="btn btn-outline-success">Donaciones</button>
-              </a>
-            </li> -->
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <button type="button" class="btn btn-outline-success">Documentacion</button>
-              </a>
-            </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link" href="#">
-                <button type="button" class="btn btn-outline-success">Sugerencias</button>
-              </a>
-            </li> -->
-          </ul>
+          <div class="card-deck d-flex justify-content-around  flex-wrap">
+            <div class="card m-3" style="width: 300px;">
+              <img class="card-img-top" src="..." alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
+              </div>
+            </div>
+            <div class="card m-3" style="width: 300px;">
+              <img class="card-img-top" src="..." alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
+              </div>
+            </div>
+            <div class="card m-3" style="width: 300px;">
+              <img class="card-img-top" src="..." alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
+              </div>
+            </div>
+          </div>
         </div>    
         <br>
 
         <section class="descriptions-contains">
-                <div class="whoUs" style="width: 95%; margin: auto;">
+                <!-- <div class="whoUs" style="width: 95%; margin: auto;">
                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus odit id, quidem temporibus distinctio quae consequuntur provident autem perferendis! Distinctio delectus enim provident asperiores obcaecati recusandae commodi molestias at ex!</p>
-                </div>
+                </div> -->
                 <div class="documentation">
                   <div class="contain-toggle">
                     <button class="btn text-start btn-outline-success w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
@@ -104,26 +114,11 @@
               <span class="material-icons">Contact us</span>
             </div>
           </div>
-          <!-- <div class="sub-button shadow">
-            <a href="google.com" target="_blank">
-              <span class="material-icons">phone</span>
-            </a>
-          </div> -->
-          <!-- <div class="sub-button shadow">
-            <a href="google.com" target="_blank">
-              <span class="material-icons">mail_outline</span>
-            </a>
-          </div> -->
           <div class="sub-button shadow">
             <a href="google.com" target="_blank">
               <span class="material-icons"><i class="bi bi-envelope"></i></span>
             </a>
           </div>
-          <!-- <div class="sub-button shadow">
-            <a href="google.com" target="_blank">
-              <span class="material-icons">help_outline</span>
-            </a>
-          </div> -->
       </div>
 
       </div>
