@@ -110,7 +110,7 @@ class Currency_m extends CI_Model
 	 * this is a sepcial CURD read from table cur_tasas_moneda
 	 * 
 	 * @access	public
-	 * @param	array  $paramnames ('columname'=>'value'[,'columname'=>'value',..])
+	 * @param	array  $paramfilters ('columname'=>'value'[,'columname'=>'value',..])
 	 * @return	mixed FALSE on errors
 	 */
 	public function readTasas($paramfilters = NULL, $limited = FALSE, $limiters = NULL)
@@ -241,9 +241,12 @@ class Currency_m extends CI_Model
 
 		log_message('debug', __METHOD__ .' query db: ' . print_r($querysql, TRUE) );
 		$querysqlrs = $this->dbc->query($querysql);
+		if($querysqlrs === FALSE)
+		{
+			log_message('error', __METHOD__ . ' error detection: '. print_r($currency_result,TRUE) );
+			return FALSE;
+		}
 		$currency_result = $querysqlrs->result_array();
-
-		log_message('info', __METHOD__ . ' error detection: '. print_r($currency_result,TRUE) ); // mysql oly
 		$this->closedb();
 		return $currency_result;
 	}
@@ -304,10 +307,10 @@ class Currency_m extends CI_Model
 		log_message('debug', __METHOD__ .' parameters  t:'.print_r($tablename,TRUE).' f:' . var_export($paramfilters, TRUE) );
 		$querysql1 = "SELECT * FROM ".$tablename;
 		$sqlrs = $this->dbc->query($querysql1);
-		if($sqlrs == FALSE AND $paramfilters == NULL)
+		if($sqlrs == FALSE)
 		{
-			log_message('debug', __METHOD__ .' invalid data or DB error for '. print_r($tablename,TRUE));
-			return $sqldata;
+			log_message('error', __METHOD__ .' invalid data or DB error for '. print_r($tablename,TRUE));
+			return FALSE;
 		}
 		$sqldata = $sqlrs->result_array();
 		if( $columns == NULL)
@@ -323,7 +326,7 @@ class Currency_m extends CI_Model
 		}
 		if(!is_array($paramfilters) OR $paramfilters == NULL)
 		{
-			log_message('debug', __METHOD__ .' invalid or no filters on '. print_r($tablename,TRUE).' paramfilter'. print_r($sqldata,TRUE));
+			log_message('debug', __METHOD__ .' no filters provided for '. print_r($tablename,TRUE));
 			return $sqldata;
 		}
 		log_message('debug', __METHOD__ .' double query prepare for filtering on '. print_r($tablename,TRUE));
@@ -340,6 +343,11 @@ class Currency_m extends CI_Model
 		}
 		$querysql1 = "SELECT ".$columns." FROM ".$tablename." WHERE 1=1 ".$sqlfilter ;
 		$sqlrs = $this->dbp->query($sqlfichadata1);
+		if($sqlrs == FALSE)
+		{
+			log_message('error', __METHOD__ .' invalid filters, column or DB error for '. print_r($tablename,TRUE));
+			return FALSE;
+		}
 		$arreglo_data = $sqlrs->result_array();
 		log_message('debug', __METHOD__ .' return '.$tablename.' data '. print_r($arreglo_data,TRUE));
 		$this->closedb();
@@ -360,7 +368,7 @@ class Currency_m extends CI_Model
 	 */
 	public function createCurrencyFromApi($curDest = NULL, $curFecha = NULL, $curBase = NULL)
 	{
-		log_message('debug', __METHOD__ .' parametros received: cd ' . var_export($curDest, TRUE) . ' cb ' . var_export($curBase, TRUE) . ' date ' . var_export($curFecha, TRUE));
+		log_message('debug', __METHOD__ .' try to update DB with new currency for today...');
 
 		if( is_array($curDest) )
 		{
@@ -372,23 +380,23 @@ class Currency_m extends CI_Model
 				}
 			if( count($curDest) < 1) 
 			{
-				log_message('debug', __METHOD__ .' no currencies to update seems array empty: ' . var_export($curDest, TRUE));
+				log_message('debug', __METHOD__ .' no currencies to update seems array empty ( 0[YYY,ZZZ] 1[YYY,ZZZ] .. ');
 				return FALSE;
 			}
 		}
 		if( !is_array($curDest) )
 		{
-			log_message('debug', __METHOD__ .' parametros received: not in array ( 0[YYY,ZZZ] 1[YYY,ZZZ] .. ) ' . var_export($curDest, TRUE));
+			log_message('error', __METHOD__ .' parametros received: not in array ( 0[YYY,ZZZ] 1[YYY,ZZZ] .. ');
 			return FALSE;
 		}
-		if( mb_strlen($curBase) < 3 )
+		if( mb_strlen($curBase) < 3 OR mb_strlen($curBase) > 3 )
 		{
-			log_message('debug', __METHOD__ .' parametros received: not a 3 key code cb (XXX) ' . var_export($curBase, TRUE));
+			log_message('error', __METHOD__ .' parametros received: not a 3 key code cb (XXX) ' . var_export($curBase, TRUE));
 			return FALSE;
 		}
-		if( mb_strlen($curFecha) < 8 AND mb_strlen($curFecha) > 8 )
+		if( mb_strlen($curFecha) < 8 OR mb_strlen($curFecha) > 8 )
 		{
-			log_message('debug', __METHOD__ .' parametros received: date seems not valid (YYYYmmddHHmm) ' . var_export($curFecha, TRUE));
+			log_message('error', __METHOD__ .' parametros received: defaults cos date seems not valid (YYYYmmddHHmm) ' . var_export($curFecha, TRUE));
 			$curFecha = date('YmdH');
 		}
 
@@ -422,27 +430,27 @@ class Currency_m extends CI_Model
 			$strsqlc1 = "SELECT count(cod_tasa) as cuantos FROM ".$this->tablect." WHERE cod_tasa = '".$cod_tasa."'";
 			$queryrs = $this->dbc->query($strsqlc1);
 			$rowcheck = $queryrs->row_array();
-			log_message('debug', __METHOD__ .' cod tasa check for ' . print_r($cod_moneda_destino, TRUE).' cod_tasa ' . print_r($cod_tasa, TRUE));
+			//log_message('debug', __METHOD__ .' cod tasa check for ' . print_r($cod_moneda_destino, TRUE).' cod_tasa ' . print_r($cod_tasa, TRUE));
 			if(is_array($rowcheck))
 			{
 				$wehave = $rowcheck['cuantos'];
-				log_message('debug', __METHOD__ .' we have ' . print_r($cod_moneda_destino, TRUE).' at least ' . print_r($wehave, TRUE));
+				//log_message('debug', __METHOD__ .' we have ' . print_r($cod_moneda_destino, TRUE).' at least ' . print_r($wehave, TRUE));
 				if( $wehave > 0 )
 				{
-					log_message('debug', __METHOD__ .' cod tasa skiped, we already have a rate for this hour over ' . print_r($cod_moneda_destino, TRUE));
+					//log_message('debug', __METHOD__ .' cod tasa skiped, we already have a rate for this hour over ' . print_r($cod_moneda_destino, TRUE));
 					continue; // we already have at leas one register with this currency code registered, by pass and skip it
 				}
 			}
 			$strsqlc1 = "SELECT count(cod_moneda) as cuantos FROM ".$this->tablecm." WHERE iso4217a3 = '".$cod_moneda_destino."' LIMIT 1 OFFSET 0 ";
 			$queryrs = $this->dbc->query($strsqlc1);
 			$rowcheck = $queryrs->row_array();
-			log_message('debug', __METHOD__ .' cod moneda check for ' . print_r($cod_moneda_destino, TRUE));
+			//log_message('debug', __METHOD__ .' cod moneda check for ' . print_r($cod_moneda_destino, TRUE));
 			if(is_array($rowcheck))
 			{
 				$wehave = $rowcheck['cuantos'];
 				if( $wehave == 0)
 				{
-					log_message('debug', __METHOD__ .' cod moneda skiped, we do not have such curency registered : ' . print_r($cod_moneda_destino, TRUE));
+					//log_message('debug', __METHOD__ .' cod moneda skiped, we do not have such curency registered : ' . print_r($cod_moneda_destino, TRUE));
 					continue; // we do not have a 3 letter code registered of this currency, skip it
 				}
 			}
@@ -450,15 +458,18 @@ class Currency_m extends CI_Model
 			$id += 1;
 			$cod_tasa += 1;
 		}
-		log_message('debug', __METHOD__ .' SQL: ' . print_r($strsqli, TRUE));
 
 		if( count($strsqli) == 0 )
+		{
+			log_message('info', __METHOD__ .' DB : ' . print_r($id, TRUE) . ' registers not inserted from API currency ');
+			$this->closedb();
 			return 0;
+		}
 
 		$this->dbc->trans_start();
-		foreach ($strsqli as $value)
+		foreach ($strsqli as $sqlinserttorun)
 		{
-			$this->dbc->query($value);
+			$this->dbc->query($sqlinserttorun);
 		}
 		$this->dbc->trans_complete();
 
