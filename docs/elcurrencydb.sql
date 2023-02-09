@@ -87,6 +87,17 @@ COMMENT = 'acceso, entra o no entra segun aparezca, autentica es con el mta';
 
 
 -- -----------------------------------------------------
+-- Table `cur_session`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cur_session` (
+  `user_id` VARCHAR(40) NOT NULL COMMENT 'username or user mail',
+  `user_extra` VARCHAR(45) NULL COMMENT 'reserved column for extra data',
+  `sessionuser` VARCHAR(40) NOT NULL COMMENT 'YYYYMMDDHHmmss.ip.XXXXXXXX',
+  PRIMARY KEY (`sessionuser`))
+COMMENT = 'stored the current sesions active';
+
+
+-- -----------------------------------------------------
 -- Data for table `cur_tasas_moneda`
 -- -----------------------------------------------------
 INSERT INTO `cur_tasas_moneda` (`cod_tasa`, `cod_moneda_base`, `mon_tasa_moneda`, `cod_moneda_destino`, `cod_tasa_tipo`, `sessionflag`, `sessionficha`) VALUES ('20201211080000', '928', 0.00000092576231029539, '840', 'INTERNA', 'NULL', 'NULL');
