@@ -9,7 +9,7 @@
                   <?php 
                     if($active){
                       echo ' <div class="d-flex justify-content-end">';
-                      echo '<button type="button" class="btn btn-outline-success" id="button-call">Llamar a la api</button>';
+                      echo '<button type="button" class="btn btn-outline-success" id="button-call"><i class="bi bi-currency-exchange" style="font-size: 30px;"></i></button>';
                       echo '</div>';
                     }
                   ?>
@@ -192,7 +192,7 @@
                 url: "<?php echo site_url() ?>" + '/Currency_Manager/callapitodb/'+"<?php $this->load->config('currencyweb');echo $this->config->item('codkey');?>",
                 success: function(result) {
                    buttonGetData.innerHTML=[
-                      'Llamar a la api',
+                      '<i class="bi bi-currency-exchange" style="font-size: 30px;"></i>',
                   ]
                   location.reload()
                },
