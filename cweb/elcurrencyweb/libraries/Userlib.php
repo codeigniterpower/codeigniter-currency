@@ -65,7 +65,7 @@ class Userlib
 	 */
 	public function getStatus()
 	{
-		if(!$this-usersetup)
+		if(!$this->usersetup)
 			$this->getUserDataAndSetup($this->user_id);
 		return $this->status;
 	}
@@ -77,7 +77,7 @@ class Userlib
 	 */
 	public function isActive()
 	{
-		if(!$this-usersetup)
+		if(!$this->usersetup)
 			$this->getUserDataAndSetup($this->user_id);
 		return $this->active;
 	}
@@ -89,7 +89,7 @@ class Userlib
 	 */
 	public function getName()
 	{
-		if(!$this-usersetup)
+		if(!$this->usersetup)
 			$this->getUserDataAndSetup($this->user_id);
 		return $this->username;
 	}
@@ -111,7 +111,7 @@ class Userlib
 	 */
 	public function getBaseCurrency()
 	{
-		if(!$this-usersetup)
+		if(!$this->usersetup)
 			$this->getUserDataAndSetup($this->user_id);
 		return $this->cur_monedas_base;
 	}
@@ -123,7 +123,7 @@ class Userlib
 	 */
 	public function getDestCurrency()
 	{
-		if(!$this-usersetup)
+		if(!$this->usersetup)
 			$this->getUserDataAndSetup($this->user_id);
 		return $this->cur_monedas_dest;
 	}
@@ -136,7 +136,7 @@ class Userlib
 	 */
 	public function getSessionFlag()
 	{
-		if(!$this-usersetup)
+		if(!$this->usersetup)
 			$this->getUserDataAndSetup($this->user_id);
 		return $this->sessionflag;
 	}
@@ -148,7 +148,7 @@ class Userlib
 	 */
 	public function getSessionFicha()
 	{
-		if(!$this-usersetup)
+		if(!$this->usersetup)
 			$this->getUserDataAndSetup($this->user_id);
 		return $this->sessionficha;
 	}
@@ -160,7 +160,7 @@ class Userlib
 	 */
 	public function getSessionUser()
 	{
-		if(!$this-usersetup)
+		if(!$this->usersetup)
 			$this->getUserDataAndSetup($this->user_id);
 		return $this->sessionuser;
 	}
