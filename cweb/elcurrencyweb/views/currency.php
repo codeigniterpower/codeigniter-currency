@@ -6,15 +6,18 @@
         </section>
         <br>
         <div class="contain-table">
-        <div class="d-flex justify-content-end">
-          <button type="button" class="btn btn-outline-success" id="button-call">Llamar a la api</button>
-        </div>
-
+                  <?php 
+                    if($active){
+                      echo ' <div class="d-flex justify-content-end">';
+                      echo '<button type="button" class="btn btn-outline-success" id="button-call">Llamar a la api</button>';
+                      echo '</div>';
+                    }
+                  ?>
           <?php 
               echo br(2);
               if(is_array($currency_list_dbarraypre) )
               {
-                if(count($currency_list_dbarraypre) && $user_preferences[0]['user_status'] === 'ACTIVO')
+                if(count($currency_list_dbarraypre))
                 {
                   echo '<h1 style="text-align: center;">Your preferences currencies</h1>';
                   $this->table->clear();
@@ -22,9 +25,6 @@
                   $this->table->set_heading(array_keys($currency_list_dbarraypre[0]));
                   echo $this->table->generate($currency_list_dbarraypre);
                 }
-                // else
-                // <h1 style="text-align: center;">History of your coins rate</h1>
-                  // echo "There's not data stored today, check if your system already call the api in backend, or check if your DB is configured.";
               }
               echo br(2);
 
@@ -38,9 +38,6 @@
                   $this->table->set_heading(array_keys($currency_list_dbarraynow[0]));
                   echo $this->table->generate($currency_list_dbarraynow);
                 }
-                // else
-                // <h1 style="text-align: center;">History of your coins rate</h1>
-                  // echo "There's not data stored today, check if your system already call the api in backend, or check if your DB is configured.";
               }
 
 
@@ -54,12 +51,15 @@
       $(document).ready( function () {
       
         // ---------------------------------------------------------------------------
-      
+        let activeUser = "<?php echo $active ?>"
+
         table1 = $('#table_id').DataTable(
           {
             "order": [0]
           }
         );
+
+      if(activeUser){
         $('#table_id tbody').on('click', 'tr', function () {
           var data = table1.row(this).data()
           alert(data,'primary')
@@ -111,15 +111,19 @@
           
           
         });
+      }
         
         
         // ---------------------------------------------------------------------------
+
 
         table2 = $('#table_id2').DataTable(
           {
             "order": [0]
           }
         );
+      if(activeUser){
+
         $('#table_id2 tbody').on('click', 'tr', function () {
           var data = table2.row(this).data()
           alert(data,'primary')
@@ -168,10 +172,9 @@
             });
           
           })
-          
-          
         });
 
+      }
 
 
 
