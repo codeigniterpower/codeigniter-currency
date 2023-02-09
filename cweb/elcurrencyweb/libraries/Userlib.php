@@ -218,7 +218,7 @@ class Userlib
 		$this->username = str_replace('_',' ',$user_data['user_id']);
 		$this->user_id = str_replace('_',' ',$user_data['user_id']);
 		$this->status = $user_data['user_status'];
-		if($this->status == 'ACTIVE')
+		if($this->status == 'ACTIVO')
 		$this->active = TRUE;
 		$this->cur_monedas_base = $user_data['cur_monedas_base'];
 		$this->cur_monedas_dest = $user_data['cur_monedas_dest'];
@@ -234,10 +234,16 @@ class Userlib
 		if( count($dbarray) == 0 )
 		{
 			log_message('info', ' DB data.. seems no session for this user');
+			$this->sessionuser = FALSE;
+			$this->active = FALSE;
+			$this->userextra = FALSE;
 		}
-		$user_data = $dbarray[0];
-		$this->sessionuser = $user_data['sessionuser'];
-		$this->userextra = $user_data['user_extra'];
+		else
+		{
+			$user_data = $dbarray[0];
+			$this->sessionuser = $user_data['sessionuser'];
+			$this->userextra = $user_data['user_extra'];
+		}
 
 		$userarray['username'] = $this->username ;
 		$userarray['user_id'] = $this->user_id ;
