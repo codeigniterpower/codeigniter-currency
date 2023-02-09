@@ -168,4 +168,38 @@ class Usuario_m extends CI_Model
 		return $usuarios_result;	// devuelve un arreglo y el primer elemento del elemento '0' es 'cuantos'
 	}
 
+
+	/**
+	 * returns all the user data of the session
+	 * 
+	 * @access	public
+	 * @param	string  $username
+	 * @param	string  $userstatus
+	 * @return	boolean ARRAY with user if user are listed
+	 */
+	public function getUserSession($username = NULL)
+	{
+
+		log_message('debug', __METHOD__ .' parametros received: u ' . var_export($username, TRUE) );
+
+		$queryfilter = '1=1';
+
+		if ( trim($username) != '*' AND trim($username) != '' AND $username != NULL)
+			$queryfilter .= " AND `user_id`='".$username."' ";
+
+		log_message('debug', __METHOD__ .' filter query ' . var_export($queryfilter, TRUE) );
+
+		$sqldbusuarios1c = "
+			SELECT * 
+			FROM `cur_session` 
+			WHERE ( ".$queryfilter." ) AND `user_id` <> '' ORDER BY sessionuser DESC";
+
+		log_message('debug', __METHOD__ .' query db: ' . var_export($sqldbusuarios1c, TRUE) );
+		$querydbusuarios1c = $this->db1->query($sqldbusuarios1c);
+		$usuarios_result = $querydbusuarios1c->result_array();
+
+		log_message('info', __METHOD__ . ' error detection: '. var_export($querydbusuarios1c, TRUE) );
+		return $usuarios_result;
+	}
+
 }

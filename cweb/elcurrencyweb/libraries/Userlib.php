@@ -8,71 +8,249 @@
  */
 class Userlib
 {
-	/** session active  */
+	protected $CI; // CodeIgniter object
+
+	/** session origin  */
+	private $sessionficha;
+	/** session last  */
 	private $sessionflag;
+	/** session user  */
+	private $sessionuser;
 
-	/** user   */
-	private $user = array();
+	/** user data but as array  */
+	private $user = NULL;
 
+	/** user status as string */
+	private $status = 'INACTIVO';
+	/** user status as boolean  */
+	private $active = FALSE;
+	/** user id or the email  */
+	private $user_id = NULL;
+	/** user name or the email  */
+	private $username = 'invalid';
+	/** user currency monedas base  */
+	private $cur_monedas_base = FALSE;
+	/** user currency monedas dest  */
+	private $cur_monedas_dest = FALSE;
+	/** user extra  */
+	private $userextra = FALSE;
+
+	/** flag to get status of the class user initialize  */
+	private $usersetup = FALSE;
 
 	public function __construct()
 	{
-        $this->CI =& get_instance();
-    }
+		$this->CI =& get_instance();
+	}
+
 	// TODO init and document tthe lib
-	public function initialize()
-	{}
-
-    /**
-     * This is to work the user's session among other things related to the user
-	 * name: User
-	 * @author    Radioactive99 Angel Gonzalez
-	 * @param array user_preferences
-	 * @return
-	 */
-    public function keepUser($dataUser = NULL){
-			if(count($dataUser)){
-				$user = $dataUser[0];
-				if(array_key_exists('user_id',$user)){
-					$this->$user['user_id'] = $user['user_id'];
-				}else{
-					log_message('error', __CLASS__ .' missing key user_id' .  print_r($user,TRUE) );
-					$this->$user['user_id'] = NULL;
-				}
-				if(array_key_exists('user_status',$user)){
-					$this->$user['user_status'] = $user['user_status'];	
-				}else{
-					log_message('error', __CLASS__ .' missing key user_status' .  print_r($user,TRUE) );
-					$this->$user['user_status'] = 'INACTIVO';	
-				}
-				if(array_key_exists('cur_monedas_base',$user)){
-					$this->$user['cur_monedas_base'] = $user['cur_monedas_base'];	
-				}else{
-					log_message('error', __CLASS__ .' missing key cur_monedas_base' .  print_r($user,TRUE) );
-					$this->$user['cur_monedas_base'] = 'USD';						
-				}
-				if(array_key_exists('cur_monedas_dest',$user)){
-					$this->$user['cur_monedas_dest'] = $user['cur_monedas_dest'];	
-				}else{
-					log_message('error', __CLASS__ .' missing key cur_monedas_dest' .  print_r($user,TRUE) );
-				}
-				if(array_key_exists('sessionflag',$user)){
-					$this->$user['sessionflag'] = $user['sessionflag'];	
-				}else{
-					log_message('error', __CLASS__ .' missing key sessionflag' .  print_r($user,TRUE) );
-				}
-				if(array_key_exists('sessionficha',$user)){
-					$this->$user['sessionficha'] = $user['sessionficha'];	
-				}else{
-					log_message('error', __CLASS__ .' missing key sessionficha' .  print_r($user,TRUE) );
-				}
-			}else{
-				log_message('error', __CLASS__ .' No is array' .  print_r($dataUser,TRUE) );				
+	public function initialize($user_id = NULL)
+	{
+		if(is_null($user_id) !== TRUE and empty($user_id) !== TRUE )
+		{
+			if($this->user_id != $user_id)
+			{
+				$this->user_id = $user_id;
+				$this->usersetup = FALSE;
 			}
-			return $user;
-    }
+		}
+		if(!$this->usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+	}
 
-	public function logout($dataUser = NULL){
-	
+	/**
+	 * get status as string of user, same as if get if user is active or not
+	 * 
+	 * @return string $status 'ACTIVE' OR 'INACTIVE'
+	 */
+	public function getStatus()
+	{
+		if(!$this-usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+		return $this->status;
+	}
+
+	/**
+	 * get status as FLAG of user, same as if get if user is active or not
+	 * 
+	 * @return bool $status TRUE or FALSE
+	 */
+	public function isActive()
+	{
+		if(!$this-usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+		return $this->active;
+	}
+
+	/**
+	 * get username as string of user
+	 * 
+	 * @return string $username
+	 */
+	public function getName()
+	{
+		if(!$this-usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+		return $this->username;
+	}
+
+	/**
+	 * get user id as string of user, same as user name but using mail
+	 * 
+	 * @return string $user_id
+	 */
+	public function getID()
+	{
+		return $this->user_id;
+	}
+
+	/**
+	 * get user base currencies as comma separated strings
+	 * 
+	 * @return string $cur_monedas_base
+	 */
+	public function getBaseCurrency()
+	{
+		if(!$this-usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+		return $this->cur_monedas_base;
+	}
+
+	/**
+	 * get user rate currencies as comma separated strings
+	 * 
+	 * @return string $cur_monedas_dest
+	 */
+	public function getDestCurrency()
+	{
+		if(!$this-usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+		return $this->cur_monedas_dest;
+	}
+
+
+	/**
+	 * get user session flag that means last session mark for this user
+	 * 
+	 * @return string $sessionflag YYYYMMDDHHmmss.userid.ip
+	 */
+	public function getSessionFlag()
+	{
+		if(!$this-usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+		return $this->sessionflag;
+	}
+
+	/**
+	 * get user session ficha that means first session in system for this user
+	 * 
+	 * @return string $sessionficha YYYYMMDDHHmmss.creator.ip
+	 */
+	public function getSessionFicha()
+	{
+		if(!$this-usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+		return $this->sessionficha;
+	}
+
+	/**
+	 * get user session at request that means current running session in system for this user
+	 * 
+	 * @return string $sessionuser YYYYMMDDHHmmss.userid.ip.XXXXXX
+	 */
+	public function getSessionUser()
+	{
+		if(!$this-usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+		return $this->sessionuser;
+	}
+
+	/**
+	 * This configure the data for user fromthe panel preferences if and admin invokes
+	 * name: getUser
+	 * @author    Radioactive99 Angel Gonzalez
+	 * @param string user_id
+	 * @return array user_preferences
+	 */
+	public function getUser($user_id = NULL)
+	{
+		if(is_null($user_id) !== TRUE and empty($user_id) !== TRUE )
+		{
+			if($this->user_id != $user_id)
+			{
+				$this->user_id = $user_id;
+				$this->usersetup = FALSE;
+			}
+		}
+		if(!$this->usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+		return $this->user;
+	}
+
+	/**
+	 * setup and get all the user info into the class
+	 *
+	 * @author  mckaygerhard PICCORO Lenz McKAY
+	 * @access	public
+	 * @param	string  $user_email : Opcional
+	 * @return	string  tabla HTML con la info formateada
+	 */
+	function getUserDataAndSetup($user_email = null) 
+	{
+
+		if(is_null($user_email) !== TRUE and empty($user_email) !== TRUE )
+			$this->user_id = $user_email;
+		$user_email = $this->user_id;
+		log_message('info', ' getting data from DB for' . $user_email);
+		$this->CI->load->model('Usuario_m');
+		$dbarray = $this->CI->Usuario_m->getUserData($user_email);
+		if( !is_array($dbarray) OR $dbarray === FALSE )
+		{
+			log_message('error', ' DB problem.. check settings');
+			return FALSE;
+		}
+		if( count($dbarray) < 1 OR count($dbarray) > 1 )
+		{
+			log_message('error', ' DB data.. seems hacked user settings');
+			return FALSE;
+		}
+		$user_data = $dbarray[0];
+		$this->username = str_replace('_',' ',$user_data['user_id']);
+		$this->user_id = str_replace('_',' ',$user_data['user_id']);
+		$this->status = $user_data['user_status'];
+		if($this->status == 'ACTIVE')
+		$this->active = TRUE;
+		$this->cur_monedas_base = $user_data['cur_monedas_base'];
+		$this->cur_monedas_dest = $user_data['cur_monedas_dest'];
+		$this->sessionficha = $user_data['sessionficha'];
+		$this->sessionflag = $user_data['sessionflag'];
+		log_message('info', ' getting session from DB for' . $user_email);
+		$dbarray = $this->CI->Usuario_m->getUserSession($user_email);
+		if( !is_array($dbarray) OR $user_data === FALSE )
+		{
+			log_message('error', ' DB problem.. check user session');
+			return FALSE;
+		}
+		if( count($dbarray) == 0 )
+		{
+			log_message('info', ' DB data.. seems no session for this user');
+		}
+		$user_data = $dbarray[0];
+		$this->sessionuser = $user_data['sessionuser'];
+		$this->userextra = $user_data['user_extra'];
+
+		$userarray['username'] = $this->username ;
+		$userarray['user_id'] = $this->user_id ;
+		$userarray['status'] = $this->status ;
+		$userarray['active'] = $this->active ;
+		$userarray['cur_monedas_base'] = $this->cur_monedas_base ;
+		$userarray['cur_monedas_dest'] = $this->cur_monedas_dest ;
+		$userarray['sessionficha'] = $this->sessionficha ;
+		$userarray['sessionflag'] = $this->sessionflag ;
+		$userarray['sessionuser'] = $this->sessionuser ;
+		$userarray['userextra'] = $this->userextra ;
+		$this->user = $userarray;
+		$this->usersetup = TRUE;
+		return $userarray;
 	}
 }

@@ -42,22 +42,19 @@ class Currency_Manager extends CP_Controller {
 	 */
 	public function listcurrencies()
 	{
-		// $data = array();
-		// $data['menu'] = $this->genmenu();
-		$this->load->model('Usuario_m','users');
+		// load user preferences, lib must be init after loading
+		$this->load->library('Userlib');
+		$this->userlib->initialize('gonzalez_angel');
+		$this->userlib->getID();
 		$this->load->model('Currency_m','dbcm');
-		$user_preferences = $this->users->getUserData("gonzalez_angel");
-		// $user_preferences = $this->users->getUserData("lenz_gerardo");
-		//echo print_r( $user,TRUE);
-		
+		$user_preferences = $this->userlib->getUser();
+		$cur_monedas_base = $this->userlib->getBaseCurrency();
+		$cur_monedas_dest = $this->userlib->getDestCurrency();
+		// tambien puedes consultart aparte de $this->userlib->isActive(); tambien $this->userlib->getStatus();
 		$currency_list_dbarraynow = array();
 		$currency_list_dbarraypre = array();
-
-		//  echo print_r(count($user_preferences));
-		if(count($user_preferences)){
-			$currency_list_dbarraypre = $this->dbcm->readCurrenciesTodayStored($user_preferences[0]['cur_monedas_dest'],NULL,$user_preferences[0]['cur_monedas_base']);
-		}
-		// $currency_list_apiarray = array();
+		// ver si id y status es valido ejemplo $this->userlib->isActive(); solo edita si esta activo
+		$currency_list_dbarraypre = $this->dbcm->readCurrenciesTodayStored($cur_monedas_base,NULL,$cur_monedas_dest);
 		$currency_list_dbarraynow = $this->dbcm->readCurrenciesTodayStored();
 		$data['user_preferences'] = $user_preferences;
 		$data['currency_list_dbarraynow'] = $currency_list_dbarraynow;
