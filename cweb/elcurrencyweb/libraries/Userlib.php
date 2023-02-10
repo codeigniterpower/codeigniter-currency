@@ -166,6 +166,34 @@ class Userlib
 	}
 
 	/**
+	 * save user running session in system for this user, into the database
+	 * 
+	 * @return string $sessionuser YYYYMMDDHHmmss.userid.ip.XXXXXX
+	 */
+	public function setSessionUser()
+	{
+		if(!$this->usersetup)
+			$this->getUserDataAndSetup($this->user_id);
+
+		$user_email = $this->user_id;
+		log_message('info', ' setting data to DB for' . $user_email);
+		$this->CI->load->model('Usuario_m');
+		$userarray['username'] = $this->username ;
+		$userarray['user_id'] = $this->user_id ;
+		$userarray['status'] = $this->status ;
+		$userarray['active'] = $this->active ;
+		$userarray['cur_monedas_base'] = $this->cur_monedas_base ;
+		$userarray['cur_monedas_dest'] = $this->cur_monedas_dest ;
+		$userarray['sessionficha'] = $this->sessionficha ;
+		$userarray['sessionflag'] = $this->sessionflag ;
+		$userarray['sessionuser'] = $this->sessionuser ;
+		$userarray['userextra'] = $this->userextra ;
+		$this->user = $userarray;
+		$this->usersetup = TRUE;
+		return $this->sessionuser;
+	}
+
+	/**
 	 * This configure the data for user fromthe panel preferences if and admin invokes
 	 * name: getUser
 	 * @author    Radioactive99 Angel Gonzalez

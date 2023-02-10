@@ -67,7 +67,7 @@ class Usuario_m extends CI_Model
 	}
 
 	/**
-	 * updates removes user from db, 
+	 * updates OR creates user sesion on DB
 	 * if a user is listed in the table are able to login in the web, if not just rejected
 	 * the credentials are managed by mail api not by database storage.. 
 	 *
@@ -76,13 +76,13 @@ class Usuario_m extends CI_Model
 	 * @param	array  filter  campos de parte "where" del query con los filtros
 	 * @return	boolean TRUE on sucess, FALSE on any error that will be logged in CI log
 	 */
-	public function setusuariodb($parametros=NULL, $filter=NULL)
+	public function setSessionUser($parametros=NULL, $filter=NULL)
 	{
 
 		log_message('debug', __METHOD__ .' parametros received: ' . var_export($parametros, TRUE) );
 
 		$datauser = array();
-		$columnas = array('user_id', 'user_status', 'sessionflag', 'sessionficha');
+		$columnas = array('user_id', 'user_extra', 'sessionuser');
 
 		if($parametros == NULL)
 			return FALSE;
@@ -122,7 +122,7 @@ class Usuario_m extends CI_Model
 		}
 
 		if( !isset($datauser['user_id']) )
-			$datauser['user_id'] = $datauser['username'];
+			$datauser['user_id'] = $parametros['username'];
 
 		log_message('debug', __METHOD__ .' datauser to query: ' . var_export($datauser, TRUE) );
 
