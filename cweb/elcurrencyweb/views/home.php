@@ -5,31 +5,40 @@
             <div class="card m-3" style="width: 300px;">
               <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <h5 class="card-title">Manager Module</h5>
+                <p class="card-text">This module allows you to see the rates of your preference, and its conversion but only for current day (if the system is property configured).</p>
               </div>
               <div class="card-footer">
-                <small class="text-muted">Last updated 3 mins ago</small>
+                <small class="text-muted"><a href="<?php echo site_url() . "/Currency_Manager"  ?>" class="nav-link px-0 align-middle links-menu">
+                                <i class="fs-4 bi-table links-menu"></i>
+                                <span class="ms-1 d-none d-sm-inline links-menu">Currency</span>  </a>
+                </small>
               </div>
             </div>
             <div class="card m-3" style="width: 300px;">
               <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                <h5 class="card-title">History Module</h5>
+                <p class="card-text">This module allows you to review all conversion rates starting from the day you installed the module to the current day.</p>
               </div>
               <div class="card-footer">
-                <small class="text-muted">Last updated 3 mins ago</small>
+                <small class="text-muted"><a href="<?php echo site_url() . "/Currency_History"  ?>" class="nav-link px-0 align-middle links-menu">
+                                <i class="fs-4 bi-speedometer2 links-menu"></i>
+                                <span class="ms-1 d-none d-sm-inline links-menu">History</span>  </a>
+                </small>
               </div>
             </div>
             <div class="card m-3" style="width: 300px;">
               <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                <h5 class="card-title">About Currency</h5>
+                <p class="card-text">This project was born from a requirement to keep the conversions between currencies synchronized in an intranet, but open source.</p>
               </div>
               <div class="card-footer">
-                <small class="text-muted">Last updated 3 mins ago</small>
+                <small class="text-muted"><a href="https://gitlab.com/codeigniterpower/codeigniter-currencylib" class="nav-link px-0 align-middle links-menu">
+                                <i class="fs-4 bi-people links-menu"></i>
+                                <span class="ms-1 d-none d-sm-inline links-menu">Our Project</span>  </a>
+                </small>
               </div>
             </div>
           </div>
@@ -115,7 +124,7 @@
             </div>
           </div>
           <div class="sub-button shadow">
-            <a href="google.com" target="_blank">
+            <a href="https://gitlab.com/groups/codeigniterpower/" target="_blank">
               <span class="material-icons"><i class="bi bi-envelope"></i></span>
             </a>
           </div>

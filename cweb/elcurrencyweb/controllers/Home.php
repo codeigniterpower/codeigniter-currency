@@ -15,35 +15,35 @@ class Home extends CP_Controller {
 	 * @param
 	 * @return
 	 */
-    function __construct()
-    {
-        parent::__construct();
-	$this->load->helper(array('form', 'url','html'));
-	$this->output->enable_profiler(ENVIRONMENT !== 'production');
+	function __construct()
+	{
+		parent::__construct();
+		$this->load->helper(array('form', 'url','html'));
+		$this->output->enable_profiler(ENVIRONMENT !== 'production');
 
-    }
+	}
 
-    /**
-     * index that shows the presentation, or login 
-     * 
-     * @name: index
-     * @param void
-     * @return void
-     */
-    public function index()
-    {
-        $data = array();
+	/**
+	 * index that shows the presentation, or login 
+	 * 
+	 * @name: index
+	 * @param void
+	 * @return void
+	 */
+	public function index()
+	{
+		$data = array();
 		$data['menu'] = $this->genmenu();
 		$data['currentctr'] = $this->currentctr;
 		$data['currentinx'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;
-		$this->load->view('header.php',$data);
-        $this->load->view('menu');
-		$this->load->view('home.php',$data);
+		$this->load->view('header',$data);
+		$this->load->view('menu',$data);
+		$this->load->view('home',$data);
 		// $this->load->view('footer.php',$data);
-    }
+	}
 
 }
 
-/* End of file currency_manager.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file Home.php */
+/* Location: ./application/controllers/Home.php */

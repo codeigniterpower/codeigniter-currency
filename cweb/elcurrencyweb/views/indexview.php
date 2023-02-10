@@ -5,39 +5,55 @@
 	?>
 
 <!-- PROMOTION CURRENCYMANAGER BLOCK-->
-	<section id="content-4col" class="dark-bg bg-color1">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-3"> <img src="<?php echo base_url();?>/elcurrencyfiles/media/post-img-3.jpg" alt="" class="screen">
-					<div class="editContent">
-						<h3>Currency Manager</h3>
-						<p class="desc-text">A simple web based currency rate manager for your own currency rate history.</p>
-					</div>
-					<a class="btn btn-default btn-outline-success" href="<?php echo site_url();?>/Login"><i class="icon icon-screen-desktop"></i>Login!</a>
-				</div>
-				<div class="col-md-3"> 
-					<img src="<?php echo base_url();?>/elcurrencyfiles/media/post-img-1.jpg" alt="" class="screen">
-					<div class="editContent">
-						<h3>Open source</h3>
-						<p class="desc-text">Dowdload and setup this, help us or join at gitlab..</p>
-					</div>
-					<a class="btn btn-default btn-outline-success" href="https://gitlab.com/codeigniterpower/codeigniter-currencylib/tree/main/docs"><i class="icon icon-screen-desktop"></i>Sources!</a>
-				</div>
-				<div class="col-md-3"> <img src="<?php echo base_url();?>/elcurrencyfiles/media/post-img-2.jpg" alt="" class="screen">
-					<div class="editContent">
-						<h3>Exchangerate integrated</h3>
-						<p class="desc-text">No fluff, just setup your API key We stored into DB if you dont have paid key.</p>
-					</div>
-					<a class="btn btn-default btn-outline-success" href="https://apilayer.com/marketplace/exchangerates_data-api#pricing"><i class="icon icon-screen-desktop"></i> Try Now!</a>
-				</div>
-				<div class="col-md-3"> <img src="<?php echo base_url();?>/elcurrencyfiles/media/post-img-4.jpg" alt="" class="screen">
-					<div class="editContent">
-						<h3>Documentation</h3>
-						<p class="desc-text">The detailed documentation will help you in adjusting the project.</p>
-					</div>
-					<a class="btn btn-default btn-outline-success" href="../../docs"><i class="icon icon-screen-desktop"></i>Read it!</a>
-				</div>
+		<div class="contain-image">
+		  <div class="card-deck d-flex justify-content-around  flex-wrap">
+			<div class="card m-4" style="width: 300px;">
+			  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+			  <div class="card-body">
+				<h3 class="card-title">Currency Manager</h3>
+				<p class="card-text">A simple web based currency rate manager for your own currency rate history.</p>
+			  </div>
+			  <div class="card-footer">
+				<small class="text-muted">
+					<a class="btn btn-default btn-outline-success" href="<?php echo site_url();?>/Login"><i class="icon icon-screen-desktop"></i>Try it!</a>
+				</small>
+			  </div>
 			</div>
+			<div class="card m-4" style="width: 300px;">
+			  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+			  <div class="card-body">
+				<h3 class="card-title">Free & Self-hosted</h3>
+				<p class="card-text">Liberate your software from proprietary shackles. Currency Manager offers to save rates to a platform you own..</p>
+			  </div>
+			  <div class="card-footer">
+				<small class="text-muted">
+					<a class="btn btn-default btn-outline-success" href="<?php echo site_url();?>/Login"><i class="icon icon-screen-desktop"></i>Login!</a>
+				</small>
+			  </div>
+			</div>
+			<div class="card m-4" style="width: 300px;">
+			  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+			  <div class="card-body">
+				<h3 class="card-title">Exchangerate API!</h3>
+				<p class="card-text">It check international rates using <strong>Exchangerate API</strong>, just setup your API key and will be stored in DB.</p>
+			  </div>
+			  <div class="card-footer">
+				<small class="text-muted">
+					<a class="btn btn-default btn-outline-success" href="https://apilayer.com/marketplace/exchangerates_data-api#pricing"><i class="icon icon-screen-desktop"></i>Get a key!</a>
+				</small>
+			  </div>
+			</div>
+			<div class="card m-4" style="width: 300px;">
+			  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+			  <div class="card-body">
+				<h3 class="card-title">Open source! Get In!</h3>
+				<p class="card-text">Currency Manager its open source, consists of motivated people, and we are looking forward to your contribution.</p>
+			  </div>
+			  <div class="card-footer">
+				<small class="text-muted">
+					<a class="btn btn-default btn-outline-success" href="https://gitlab.com/codeigniterpower/codeigniter-currencylib/tree/main/docs"><i class="icon icon-screen-desktop"></i>Sources!</a>
+				</small>
+			  </div>
+			</div>
+		  </div>
 		</div>
-	</section>
-	
