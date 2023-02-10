@@ -25,6 +25,7 @@ class Currency_m extends CI_Model
 	private $tablecp;
 	private $tablecb;
 	private $tablecm;
+	private $CI; // CodeIgniter object
 
 	public function __construct() 
 	{
@@ -34,6 +35,8 @@ class Currency_m extends CI_Model
 		$this->tablecp = 'cur_pais';
 		$this->tablecb = 'cur_banco';
 		$this->tablecm = 'cur_moneda';
+		$this->CI =& get_instance();
+		$this->CI->load->library('form_validation');
 	}
 
 	/** auto close db on production */
@@ -59,19 +62,34 @@ class Currency_m extends CI_Model
 	 */
 	public function readCurrenciesTodayStored($curDest = NULL, $fecha = NULL, $curBase = NULL, $howmany = NULL, $iniciar = NULL, $ordercol = NULL, $sorting = NULL)
 	{
-		log_message('debug', __METHOD__ .' parametros received: cd ' . var_export($curDest, TRUE) . ' cb ' . var_export($curBase, TRUE) . ' date ' . var_export($curBase, TRUE));
+		log_message('debug', __METHOD__ .' parametros received: cd ' . var_export($curDest, TRUE) . ' cb ' . var_export($curBase, TRUE) . ' date ' . var_export($fecha, TRUE));
+
+		$validcbr = $this->form_validation->required($curBase);
+		$validcdr = $this->form_validation->required($curDest);
+		$validcfr = $this->form_validation->required($fecha);
+
+		$validcbl = $this->form_validation->exact_length($curBase,3);
+		$validcdl = $this->form_validation->min_length($curDest,3);
+		$validcfl = $this->form_validation->min_length($fecha,8);
+
+		$validcbs = $this->form_validation->alpha($curBase);
+		$validcds = preg_match('/^[a-zA-Z,]{3,}+$/i', $curDest);
+		$validcfn = $this->form_validation->numeric($fecha);
+
 		$curDestlen = strlen($curDest);
 		$curBaselen = strlen($curBase);
 		$fechalen = strlen($fecha);
+
 		$paramfilters = array();
-		if( $curBaselen == 3 )
-			$paramfilters['curBase'] = $curBase;
-		if( $fechalen >= 8 )
+		if( $validcfr AND $validcfl AND $validcfn)
 			$paramfilters['fecha'] = $fecha;
-		if( $fecha == NULL )
+		else
 			$paramfilters['fecha'] = date('Ymd');
-		if( $curDestlen >= 3 )
+		if( $validcbr AND $validcbl AND $validcbs)
+			$paramfilters['curBase'] = $curBase;
+		if( $validcdr AND $validcdl AND $validcds)
 			$paramfilters['curDest'] = $curDest;
+
 		$limiters['howmany'] = $howmany; // limit
 		$limiters['iniciar'] = $iniciar; // offset
 		$limiters['ordercol'] = $ordercol; // colum
@@ -125,14 +143,19 @@ class Currency_m extends CI_Model
 			$columnssql = 'cod_tasa,moneda_base,mon_tasa_moneda,moneda_destino';
 			log_message('debug', __METHOD__ .' retrieve history from DB !' );
 		}
-		if(is_array($paramfilters) ) // TODO made scaped strings and security proptection ( as EVOKE suggests)
+		if(is_array($paramfilters) )
 		{
 			foreach($paramnames as $key=>$namecolumn )
 			{
 				if( array_key_exists($namecolumn, $paramfilters) )
 				{
 					$$namecolumn = $paramfilters[$namecolumn];
-					$queryfiltro .= ' AND '.$namecolumn.'="'.$$namecolumn.'"';
+					// DB security https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/issues/5#note_1274873229
+					$validvalue = preg_match('/^[a-zA-Z0-9]{3,}+$/i', $$namecolumn);
+					if( $validvalue != FALSE )
+						$queryfiltro .= ' AND '.$namecolumn.'="'.$$namecolumn.'"';
+					else
+						log_message('info', __METHOD__ .' detected invalid input or injection attack: '.var_export($validvalue,TRUE).' for '.$$namecolum);
 				}
 			}
 			if( array_key_exists('fecha', $paramfilters) )
@@ -159,26 +182,32 @@ class Currency_m extends CI_Model
 					$queryfiltro .= ' )';
 				}
 			}
+			// curBase, curDest and fecha are already filtered in the parser funtion origin
 		}
-		if(is_array($limiters) ) // TODO made scaped strings and security proptection ( as EVOKE suggests)
+		if(is_array($limiters) ) // for DBMS security read 
 		{
 			if( array_key_exists('countall', $limiters) )
 			{
 				$countall = $limiters['countall'];
-				if( is_null($countall) !== TRUE AND empty($countall) !== TRUE )
+				if( is_null($countall) !== TRUE AND empty($countall) !== TRUE ) // no need to spaced, we just detect if present
 				$columnssql = 'count(cod_tasa) as cod_tasa ';
 			}
 			if( array_key_exists('ordercol', $limiters) )
 			{
 				$ordercol = $limiters['ordercol'];
-				if( is_null($ordercol) === TRUE OR empty($ordercol) === TRUE )
+				$validvalue = preg_match('/^[a-zA-Z0-9]{1,40}+$/i', $ordercol);
+				if( $validvalue == FALSE)
 					$ordercol = 'cod_tasa';
+				// DB security https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/issues/5#note_1274873229
 				$queryfiltro .= ' ORDER BY '.$ordercol;
+
 				if( array_key_exists('sorting', $limiters) )
 				{
 					$sorting = $limiters['sorting'];
-					if( is_null($sorting) === TRUE OR empty($sorting) === TRUE )
+					$validvalue = preg_match('/^[a-zA-Z0-9]{1,40}+$/i', $sorting);
+					if( $validvalue == FALSE)
 						$sorting = ' DESC';
+					// DB security https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/issues/5#note_1274873229
 					$queryfiltro .= ' '.$sorting;
 				}
 				else
@@ -187,18 +216,20 @@ class Currency_m extends CI_Model
 			if( array_key_exists('howmany', $limiters) )
 			{
 				$howmany = $limiters['howmany'];
-				if( is_null($howmany) !== TRUE AND empty($howmany) !== TRUE )
+				$validvalue = preg_match('/^[0-9]{1,}+$/i', $howmany);
+				if( $validvalue )
 				{
-					$queryfiltro .= ' LIMIT '.$howmany;
 					if( array_key_exists('iniciar', $limiters) )
 					{
 						$iniciar = $limiters['iniciar'];
-						if( is_null($iniciar) === TRUE OR empty($iniciar) === TRUE )
+						$validvalue = preg_match('/^[0-9]{1,}+$/i', $howmany);
+						if( $validvalue == FALSE )
 							$iniciar = 0;
 						if($iniciar < $howmany)
 							$howmany = 50;
-						$queryfiltro .= ' OFFSET '.$iniciar;
 					}
+					$queryfiltro .= ' LIMIT '.$howmany;
+					$queryfiltro .= ' OFFSET '.$iniciar;
 				}
 			}
 		}
@@ -332,13 +363,17 @@ class Currency_m extends CI_Model
 		log_message('debug', __METHOD__ .' double query prepare for filtering on '. print_r($tablename,TRUE));
 		$paramnames =  explode(',',$columns);
 		$sqlfilter = '  ';
-		foreach ($paramnames as $indicecolumnas=>$nombre)
+		foreach ($paramnames as $indicecolumnas=>$namecolum)
 		{
-			if( array_key_exists($nombre, $paramfilters) )
+			if( array_key_exists($namecolum, $paramfilters) )
 			{
-				$$nombre = $paramfilters[$nombre];
-				// TODO made scaped strings and security protection ( as EVOKE suggests)
-				$sqlfilter .= ' AND '.$nombre.'="'.$$nombre.'"';
+				$$namecolum = $paramfilters[$namecolum];
+				// DB security https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/issues/5#note_1274873229
+				$validvalue = preg_match('/^[a-zA-Z0-9]{3,}+$/i', $$namecolumn);
+				if( $validvalue != FALSE )
+					$sqlfilter .= ' AND '.$namecolum.'="'.$$namecolum.'"';
+				else
+					log_message('info', __METHOD__ .' detected invalid input or injection attack: '.var_export($validvalue,TRUE).' for '.$$namecolum);
 			}
 		}
 		$querysql1 = "SELECT ".$columns." FROM ".$tablename." WHERE 1=1 ".$sqlfilter ;
@@ -375,12 +410,12 @@ class Currency_m extends CI_Model
 			if( count($curDest) > 0) 
 				if( array_key_exists('ERR', $curDest[0]) )
 				{
-					log_message('debug', __METHOD__ .' parametros received: ERRROR from api ( 0[ERR,0] ) ' . var_export($curDest, TRUE));
+					log_message('error', __METHOD__ .' parametros received: ERRROR from api ( 0[ERR,0] ) ' . var_export($curDest, TRUE));
 					return FALSE;
 				}
 			if( count($curDest) < 1) 
 			{
-				log_message('debug', __METHOD__ .' no currencies to update seems array empty ( 0[YYY,ZZZ] 1[YYY,ZZZ] .. ');
+				log_message('error', __METHOD__ .' no currencies to update seems array empty ( 0[YYY,ZZZ] 1[YYY,ZZZ] .. ');
 				return FALSE;
 			}
 		}
@@ -389,16 +424,24 @@ class Currency_m extends CI_Model
 			log_message('error', __METHOD__ .' parametros received: not in array ( 0[YYY,ZZZ] 1[YYY,ZZZ] .. ');
 			return FALSE;
 		}
-		if( mb_strlen($curBase) < 3 OR mb_strlen($curBase) > 3 )
+		if( mb_strlen($curFecha) < 8 OR mb_strlen($curFecha) > 10 )
 		{
-			log_message('error', __METHOD__ .' parametros received: not a 3 key code cb (XXX) ' . var_export($curBase, TRUE));
-			return FALSE;
-		}
-		if( mb_strlen($curFecha) < 8 OR mb_strlen($curFecha) > 8 )
-		{
-			log_message('error', __METHOD__ .' parametros received: defaults cos date seems not valid (YYYYmmddHHmm) ' . var_export($curFecha, TRUE));
+			log_message('error', __METHOD__ .' invalid date lenght (YYYYmmdd) ' . var_export($curFecha, TRUE));
 			$curFecha = date('YmdH');
 		}
+		$validvalue = preg_match('/^[0-9]{10}+$/i', $curFecha);
+		if( $validvalue == FALSE )
+		{
+			log_message('error', __METHOD__ .' invalid input cos date seems not valid (YYYYmmddHHmm) ' . var_export($curFecha, TRUE));
+			$curFecha = date('YmdH');
+		}
+		$validvalue = preg_match('/^[a-zA-Z]{3}+$/i', $curBase);
+		if( $validvalue == FALSE )
+		{
+			log_message('error', __METHOD__ .' invalid input or injection attack: not a 3 key code cb (XXX) ' . var_export($curBase, TRUE));
+			return FALSE;
+		}
+		// DB security https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/issues/5#note_1274873229
 
 		$strsqli = array();
 		$strsqlc1 = '';
@@ -426,6 +469,20 @@ class Currency_m extends CI_Model
 			$cod_tasa_tipo = 'INTERNA';
 			$mon_tasa_moneda = $keyc['mon_tasa_moneda'];
 			$cod_moneda_destino = $keyc['moneda'];
+
+			$validvalue = preg_match('/^[a-zA-Z]{3}+$/i', $cod_moneda_destino);
+			if( $validvalue == FALSE )
+			{
+				log_message('error', __METHOD__ .' skiped cos invalid or injection attack: not a 3 key code cod moneda dest (XXX) ' . var_export($cod_moneda_destino, TRUE));
+				continue;
+			}
+			$validvalue = preg_match('/^[0-9\.]{3,}+$/i', $mon_tasa_moneda);
+			if( $validvalue == FALSE )
+			{
+				log_message('error', __METHOD__ .' skiped cos invalid or injection attack: not valid amount (NN.NN) for cod_dest ' . var_export($mon_tasa_moneda, TRUE).':'.$cod_moneda_destino);
+				continue;
+			}
+			// DB security https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/issues/5#note_1274873229
 
 			$strsqlc1 = "SELECT count(cod_tasa) as cuantos FROM ".$this->tablect." WHERE cod_tasa = '".$cod_tasa."'";
 			$queryrs = $this->dbc->query($strsqlc1);
@@ -498,16 +555,18 @@ class Currency_m extends CI_Model
 	{
 		log_message('debug', __METHOD__ .' parametros received: cd ' . var_export($cod_tasa, TRUE) . ' mount ' . var_export($mon_tasa_moneda, TRUE));
 
-		$codcurrencylen = strlen($cod_tasa);
-
-		if( $codcurrencylen < 14 OR  $codcurrencylen > 14 )
+		$validct = $this->form_validation->required($cod_tasa);
+		$validmt = $this->form_validation->required($mon_tasa_moneda);
+		$validcl = $this->form_validation->exact_length($cod_tasa,14);
+		// DB security https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/issues/5#note_1274873229
+		if( $validcl == FALSE )
 		{
-			log_message('debug', __METHOD__ .' parametros received: ERROR cod_tasa ' . var_export($codcurrencylen, TRUE));
+			log_message('error', __METHOD__ .' parametros received: ERROR cod_tasa ' . var_export($codcurrencylen, TRUE));
 			return FALSE;
 		}
-		if( !is_numeric(trim($mon_tasa_moneda)) )
+		if( !is_numeric(trim($mon_tasa_moneda)) OR $validmt == FALSE )
 		{
-			log_message('debug', __METHOD__ .' parametros received: ERROR not numeric ' . var_export($mon_tasa_moneda, TRUE));
+			log_message('error', __METHOD__ .' parametros received: ERROR not numeric ' . var_export($mon_tasa_moneda, TRUE));
 			return FALSE;
 		}
 

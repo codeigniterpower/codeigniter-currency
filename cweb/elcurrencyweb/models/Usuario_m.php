@@ -46,7 +46,7 @@ class Usuario_m extends CI_Model
 		$validu = $this->form_validation->max_length($username,40);
 		$valids = $this->form_validation->required($userstatus);
 		$valids = $this->form_validation->alpha($userstatus);
-		
+
 		if ( $validu != FALSE)
 			$queryfiltro1 .= " AND `user_id`='".$username."' ";
 
@@ -109,7 +109,13 @@ class Usuario_m extends CI_Model
 				{
 					if( isset($parametros[$namecolum]) )
 					{
-						$datauser[$namecolum] = $parametros[$namecolum];
+						$validvalue = preg_match('/^[a-zA-Z0-9,.]{3,}+$/i', $parametros[$namecolum]);
+						// DB security https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/issues/5#note_1274873229
+						if( $validvalue )
+							$datauser[$namecolum] = $parametros[$namecolum];
+						else
+							log_message('info', __METHOD__ .' detected invalid input or injection attack: '.var_export($validvalue,TRUE).' for '.$datauser[$namecolum]);
+						
 					}
 				}
 			}
