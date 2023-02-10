@@ -14,10 +14,14 @@
 class Usuario_m extends CI_Model 
 {
 
+	private $CI; // CodeIgniter object
+
 	public function __construct() 
 	{
 		parent::__construct();
+		$this->CI =& get_instance();
 		$this->db1 = $this->load->database('elcurrencydb', TRUE);
+		$this->CI->load->library('form_validation');
 	}
 
 	/**
@@ -35,31 +39,31 @@ class Usuario_m extends CI_Model
 
 		log_message('debug', __METHOD__ .' parametros received: u ' . var_export($username, TRUE) . ' c ' . var_export($userstatus, TRUE) );
 
-		$clavelen = strlen($userstatus);
 		$queryfiltro1 = '1=1';
 
-		// determino que es lo que se pide un usuario en todo perfil o todos los usuarios
-		if ( trim($username) != '*' AND trim($username) != '' AND $username != NULL)
+		$validu = $this->form_validation->required($username);
+		$validu = $this->form_validation->alpha_dash($username);
+		$validu = $this->form_validation->max_length($username,40);
+		$valids = $this->form_validation->required($userstatus);
+		$valids = $this->form_validation->alpha($userstatus);
+		
+		if ( $validu != FALSE)
 			$queryfiltro1 .= " AND `user_id`='".$username."' ";
 
-		if ( trim($userstatus) != '*' AND trim($userstatus) != '' AND $userstatus != NULL)
+		if ( $valids != FALSE)
 			$queryfiltro1 .= " AND `user_status` = '".$userstatus. "'";
 
 		log_message('debug', __METHOD__ .' filter query ' . var_export($queryfiltro1, TRUE) );
 
-		$cuantos = 0;
-		// primero cuento cuantos hay en la misma entidad // TODO hacer join con las entidades asociadas
-		$sqldbusuarios1c = "
-			SELECT count(*) as cuantos 
-			FROM `cur_usuarios` 
-			WHERE ( ".$queryfiltro1." ) AND `user_id` <> '' LIMIT 1 OFFSET 0";
+		$sqldbusuarios1c = "SELECT * FROM cur_usuarios WHERE ( ".$queryfiltro1." ) AND `user_id` <> ''";
 
 		log_message('debug', __METHOD__ .' query db: ' . var_export($sqldbusuarios1c, TRUE) );
 		$querydbusuarios1c = $this->db1->query($sqldbusuarios1c);
+		if($querydbusuarios1c == FALSE)
+			return $querydbusuarios1c;
 		$usuarios_result = $querydbusuarios1c->result_array();
-
-		log_message('info', __METHOD__ . ' error detection: '. print_r($querydbusuarios1c, TRUE )); // mysql oly
-		return $usuarios_result;	// devuelve un arreglo y el primer elemento del elemento '0' es 'cuantos'
+		log_message('debug', __METHOD__ .' query rs: ' . var_export($usuarios_result, TRUE) );
+		return $usuarios_result;
 	}
 
 	/**
@@ -87,10 +91,15 @@ class Usuario_m extends CI_Model
 			return FALSE;
 
 		if ( ! array_key_exists('username',$parametros) )	// aqui verifica si esta username
-			return FALSE;
-
-		if( empty($parametros['username']) )	// aqui verifica que no este vacio username
-			return FALSE;
+		{
+			if ( ! array_key_exists('user_id',$parametros) )
+				return FALSE;
+		}
+		else
+		{
+			if( empty($parametros['username']) )	// aqui verifica que no este vacio username
+				return FALSE;
+		}
 
 		if (is_array($parametros) ) 
 		{
@@ -117,9 +126,9 @@ class Usuario_m extends CI_Model
 			return FALSE;
 
 		if( is_array($filter) )
-			$sqluser = $this->db1->update_string('usuario', $datauser, $filter);
+			$sqluser = $this->db1->update_string('cur_usuarios', $datauser, $filter);
 		else
-			$sqluser = $this->db1->insert_string('usuario', $datauser);
+			$sqluser = $this->db1->insert_string('cur_usuarios', $datauser);
 
 		log_message('debug', __METHOD__ .' query db: ' . var_export($sqluser, TRUE) );
 		$queryrst = $this->db1->query($sqluser);
@@ -133,39 +142,33 @@ class Usuario_m extends CI_Model
 	 * 
 	 * @access	public
 	 * @param	string  $username
-	 * @param	string  $userstatus
 	 * @return	boolean ARRAY with user if user are listed
 	 */
-	public function getUserData($username = NULL, $usersfilter = NULL)
+	public function getUserData($username = NULL)
 	{
 
-		log_message('debug', __METHOD__ .' parametros received: u ' . var_export($username, TRUE) . ' c ' . var_export($usersfilter, TRUE) );
+		log_message('debug', __METHOD__ .' parametros received: u ' . var_export($username, TRUE) );
 
-		$clavelen = strlen($usersfilter);
 		$queryfilter = '1=1';
 
-		// determino que es lo que se pide un usuario en todo perfil o todos los usuarios
-		if ( trim($username) != '*' AND trim($username) != '' AND $username != NULL)
+		$validu = $this->form_validation->required($username);
+		$validu = $this->form_validation->alpha_dash($username);
+		$validu = $this->form_validation->max_length($username,40);
+		
+		if ( $validu != FALSE)
 			$queryfilter .= " AND `user_id`='".$username."' ";
-
-		if ( trim($usersfilter) != '*' AND trim($usersfilter) != '' AND $usersfilter != NULL)
-			$queryfilter .= " AND `user_status` = '".$usersfilter. "'";
 
 		log_message('debug', __METHOD__ .' filter query ' . var_export($queryfilter, TRUE) );
 
-		$cuantos = 0;
-		// primero cuento cuantos hay en la misma entidad // TODO hacer join con las entidades asociadas
-		$sqldbusuarios1c = "
-			SELECT * 
-			FROM `cur_usuarios` 
-			WHERE ( ".$queryfilter." ) AND `user_id` <> '' LIMIT 1 OFFSET 0";
+		$sqldbusuarios1c = "SELECT * FROM cur_usuarios WHERE ( ".$queryfilter." ) AND `user_id` <> ''";
 
 		log_message('debug', __METHOD__ .' query db: ' . var_export($sqldbusuarios1c, TRUE) );
 		$querydbusuarios1c = $this->db1->query($sqldbusuarios1c);
+		if($querydbusuarios1c == FALSE)
+			return $querydbusuarios1c;
 		$usuarios_result = $querydbusuarios1c->result_array();
-
-		log_message('info', __METHOD__ . ' error detection: '. var_export($querydbusuarios1c, TRUE) ); // mysql oly
-		return $usuarios_result;	// devuelve un arreglo y el primer elemento del elemento '0' es 'cuantos'
+		log_message('debug', __METHOD__ .' query rs: ' . var_export($usuarios_result, TRUE) );
+		return $usuarios_result;
 	}
 
 
@@ -189,16 +192,14 @@ class Usuario_m extends CI_Model
 
 		log_message('debug', __METHOD__ .' filter query ' . var_export($queryfilter, TRUE) );
 
-		$sqldbusuarios1c = "
-			SELECT * 
-			FROM `cur_session` 
-			WHERE ( ".$queryfilter." ) AND `user_id` <> '' ORDER BY sessionuser DESC";
+		$sqldbusuarios1c = "SELECT * FROM cur_session WHERE ( ".$queryfilter." ) AND `user_id` <> ''";
 
 		log_message('debug', __METHOD__ .' query db: ' . var_export($sqldbusuarios1c, TRUE) );
 		$querydbusuarios1c = $this->db1->query($sqldbusuarios1c);
+		if($querydbusuarios1c == FALSE)
+			return $querydbusuarios1c;
 		$usuarios_result = $querydbusuarios1c->result_array();
-
-		log_message('info', __METHOD__ . ' error detection: '. var_export($querydbusuarios1c, TRUE) );
+		log_message('debug', __METHOD__ .' query rs: ' . var_export($usuarios_result, TRUE) );
 		return $usuarios_result;
 	}
 
