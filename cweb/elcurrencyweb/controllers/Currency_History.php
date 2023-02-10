@@ -111,7 +111,7 @@ class Currency_History extends CP_Controller {
 		$data['js_files'] = $output->js_files;
 		*/
 		$this->load->view('header.php',$data);
-		$this->load->view('menu');
+		$this->load->view('menu',$data);
 		$this->load->view('history',$data);
 
 	}
@@ -130,5 +130,5 @@ class Currency_History extends CP_Controller {
 	}
 }
 
-/* End of file currency_manager.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file Currency_History.php */
+/* Location: ./application/controllers/Currency_History.php */

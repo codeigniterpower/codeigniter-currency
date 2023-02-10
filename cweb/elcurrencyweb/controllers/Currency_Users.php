@@ -17,9 +17,8 @@ class Currency_Users extends CP_Controller {
 	function __construct()
 	{
 		parent::__construct();
-	$this->load->helper(array('form', 'url','html'));
-	$this->output->enable_profiler(ENVIRONMENT !== 'production');
-
+		$this->load->helper(array('form', 'url','html'));
+		$this->output->enable_profiler(ENVIRONMENT !== 'production');
 	}
 
 	/**
@@ -48,11 +47,11 @@ class Currency_Users extends CP_Controller {
 		$data['currency_list_dbarray'] = $this->currentctr;
 		$data['currency_list_apiarray'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;
-		$this->load->view('header.php',$data);
+		$this->load->view('header',$data);
 		$this->load->view('menu');
 		$this->load->view('empty',$data);
 	}
 }
 
-/* End of file currency_manager.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file Currency_Users.php */
+/* Location: ./application/controllers/Currency_Users.php */

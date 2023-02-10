@@ -16,9 +16,8 @@ class Currency_Manager extends CP_Controller {
 	function __construct()
 	{
 		parent::__construct();
-	$this->load->helper(array('form', 'url','html'));
-	$this->output->enable_profiler(ENVIRONMENT !== 'production');
-
+		$this->load->helper(array('form', 'url','html'));
+		$this->output->enable_profiler(ENVIRONMENT !== 'production');
 	}
 
 	/**
@@ -66,12 +65,13 @@ class Currency_Manager extends CP_Controller {
 		$data['currency_list_dbarraypre'] = $currency_list_dbarraypre;
 		$data['currenturl'] = $this->currenturl;
 
-		$this->load->view('header.php',$data);
+		$this->load->view('header',$data);
 		$this->load->view('menu',$data);
-		$this->load->view('currency.php',$data);
+		$this->load->view('currency',$data);
 	}
 
-	public function updatecurrency(){
+	public function updatecurrency()
+	{
 		$this->load->library('Userlib');
 		$this->userlib->initialize('lenz_gerardo');
 
@@ -115,8 +115,8 @@ class Currency_Manager extends CP_Controller {
 
 		log_message('error', __METHOD__ .' POST : ' . print_r($result, TRUE) . ' why: '.print_r("Ocurrio un error al guardar", TRUE));
 
-		echo json_encode(array('result' =>$result));
 		// TODO: use this only with desesperate end of time : $this->listcurrencies();
+		echo json_encode(array('result' =>$result));
 	}
 
 	/**
@@ -131,76 +131,73 @@ class Currency_Manager extends CP_Controller {
 		$this->load->library('Userlib');
 		$this->userlib->initialize('lenz_gerardo');
 		
-		if($this->userlib->isActive()){
+		if(!$this->userlib->isActive())
+		{
+			log_message('debug', __METHOD__ .' saved? : ' .' Not authorized  ');
+			return json_encode(array('result'=>'unauthorized access, user must be a valid activated user'));
+		}
 
-			log_message('info', __METHOD__ .' calltoapi codkey argument method '.print_r($codkey, TRUE));
-			if($codkey == NULL)
+		log_message('info', __METHOD__ .' calltoapi codkey argument method '.print_r($codkey, TRUE));
+		if($codkey == NULL)
+		{
+			log_message('error', __METHOD__ .' missing codkey, checking POST');
+			$codkey = $this->input->get_post('codkey', FALSE);
+			if( is_null($codkey) OR empty($codkey) )
+				return json_encode(array('result'=>'unauthorized access'));
+		}
+
+		$this->load->config('currencyweb');
+		$codkeyconf = $this->config->item('codkey');
+		if( $codkey == $codkeyconf)
+			log_message('error', __METHOD__ .' invalid codkey ' .print_r($codkey,TRUE). ' from config: '.print_r($codkeyconf, TRUE));
+		$config['language']     = 'spanish';
+		$data = array();
+		// example invokation http://localhost/~general/codeigniter-currencylib/cweb/index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD
+		// example shot base "index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD"
+		$currencyDate = $this->input->get_post('dateapi', FALSE);
+		$currencyBase = $this->input->get_post('curbase', FALSE);
+		$currencyDest = $this->input->get_post('curdest', FALSE);
+		$this->load->library('form_validation');
+		$missdest = $this->form_validation->required($currencyDest);
+		$validcurren = $this->form_validation->min_length($currencyDest,3);
+		$missdate = $this->form_validation->required($currencyDate);
+		$validfields = $this->form_validation->exact_length($currencyDate,10);
+		$missbase = $this->form_validation->required($currencyBase);
+		$validfields = $this->form_validation->exact_length($currencyBase,3);
+		if($missdate == FALSE)
+		$currencyDate = date('Y-m-d');
+		if($missbase == FALSE)
+			$currencyBase = 'USD';
+		if($validfields == FALSE)
+			$currencyBase = 'USD';
+		if($validcurren == FALSE OR $missdest == FALSE)
+		{
+			log_message('info', __METHOD__ .' missing currency rates to convert, we will use all availables from api results ');
+			$currencyDest = NULL;
+		}
+		if(mb_strlen($currencyDest) > 3)
+		{
+			if(stripos($currencyDest,',') == FALSE)
 			{
-				log_message('error', __METHOD__ .' missing codkey, checking POST');
-				$codkey = $this->input->get_post('codkey', FALSE);
-				if( is_null($codkey) OR empty($codkey) )
-					return json_encode(array('result'=>'unauthorized access'));
-			}
-			$this->load->config('currencyweb');
-			$codkeyconf = $this->config->item('codkey');
-			if( $codkey == $codkeyconf)
-				log_message('error', __METHOD__ .' invalid codkey ' .print_r($codkey,TRUE). ' from config: '.print_r($codkeyconf, TRUE));
-
-			$config['language']     = 'spanish';
-			$data = array();
-			// example invokation http://localhost/~general/codeigniter-currencylib/cweb/index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD
-			// example shot base "index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD"
-			$currencyDate = $this->input->get_post('dateapi', FALSE);
-			$currencyBase = $this->input->get_post('curbase', FALSE);
-			$currencyDest = $this->input->get_post('curdest', FALSE);
-
-			$this->load->library('form_validation');
-			$missdest = $this->form_validation->required($currencyDest);
-			$validcurren = $this->form_validation->min_length($currencyDest,3);
-			$missdate = $this->form_validation->required($currencyDate);
-			$validfields = $this->form_validation->exact_length($currencyDate,10);
-			$missbase = $this->form_validation->required($currencyBase);
-			$validfields = $this->form_validation->exact_length($currencyBase,3);
-			if($missdate == FALSE)
-			$currencyDate = date('Y-m-d');
-			if($missbase == FALSE)
-				$currencyBase = 'USD';
-			if($validfields == FALSE)
-				$currencyBase = 'USD';
-			if($validcurren == FALSE OR $missdest == FALSE)
-			{
-				log_message('info', __METHOD__ .' missing currency rates to convert, we will use all availables from api results ');
+				log_message('error', __METHOD__ .' invalid currency set, more than one but missing separator, we will use all');
 				$currencyDest = NULL;
 			}
-			if(mb_strlen($currencyDest) > 3)
-			{
-				if(stripos($currencyDest,',') == FALSE)
-				{
-					log_message('error', __METHOD__ .' invalid currency set, more than one but missing separator, we will use all');
-					$currencyDest = NULL;
-				}
-			}
-
-
-			log_message('debug', __METHOD__ .' getting the data from internet API for :  '.print_r($currencyDate, TRUE));
-			$currency_list_apiarray = array();
-			$this->load->library('Currencylib');
-			$currencyDate = date('Y-m-d',strtotime($currencyDate));
-			$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi($currencyBase,$currencyDest,$currencyDate);
-			log_message('debug', __METHOD__ .' API already called, now try to store the result into DB for :  '.print_r($currencyDate, TRUE));
-			$this->load->model('Currency_m','dbcm');
-			$currencyDate = date('Ymd',strtotime($currencyDate)).date('H');
-			$createdbresult = $this->dbcm->createCurrencyFromApi($currency_list_apiarray, $currencyDate, $currencyBase);
-			log_message('debug', __METHOD__ .' saved? : ' .print_r($createdbresult,TRUE). ' from parameter: '.print_r($currencyDate, TRUE));
-			return json_encode(array('result'=>$createdbresult));
 		}
-		log_message('debug', __METHOD__ .' saved? : ' .' Not authorized  ');
-
-
+		log_message('debug', __METHOD__ .' getting the data from internet API for :  '.print_r($currencyDate, TRUE));
+		$currency_list_apiarray = array();
+		$this->load->library('Currencylib');
+		$currencyDate = date('Y-m-d',strtotime($currencyDate));
+		$currency_list_apiarray = $this->currencylib->getAllCurrencyByApi($currencyBase,$currencyDest,$currencyDate);
+		log_message('debug', __METHOD__ .' API already called, now try to store the result into DB for :  '.print_r($currencyDate, TRUE));
+		$this->load->model('Currency_m','dbcm');
+		$currencyDate = date('Ymd',strtotime($currencyDate)).date('H');
+		$createdbresult = $this->dbcm->createCurrencyFromApi($currency_list_apiarray, $currencyDate, $currencyBase);
+		log_message('debug', __METHOD__ .' saved? : ' .print_r($createdbresult,TRUE). ' from parameter: '.print_r($currencyDate, TRUE));
+		return json_encode(array('result'=>$createdbresult));
 	}
 
 
 }
 
-/* End of file currency_manager.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file Currency_Manager.php */
+/* Location: ./application/controllers/Currency_Manager.php */
