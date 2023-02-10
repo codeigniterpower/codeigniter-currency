@@ -32,15 +32,23 @@
                                 <i class="fs-4 bi-people links-menu"></i>
                                 <span class="ms-1 d-none d-sm-inline links-menu">Users</span>  </a>
                         </li>
+                        <li>
+                            <a href="<?php echo site_url()."/Login/logout"?>" class="nav-link px-0 align-middle links-menu">
+                                <i class="bi bi-box-arrow-in-right" style="font-size: 21px;"></i>
+                                <span class="ms-1 d-none d-sm-inline links-menu">Logout</span>  </a>
+                        </li>
                     </ul>
                     <hr>
 
                     <div class="dropdown pb-4 position-fixed  bottom-0">
-                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle"> 
+                        <!-- <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false"> -->
+                            <!-- <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">  -->
                             <!-- add class  css custom width image user -->
-                            <span class="d-none d-sm-inline mx-1">Name user</span>
-                        </a>
+                        <!-- </a>  href=""  -->
+                        <!-- <button type="button" class="btn btn-outline-success" > -->
+                            <!-- <span class="d-none d-sm-inline mx-1"></span> -->
+                        <!-- </button> -->
+
 
 
                         
