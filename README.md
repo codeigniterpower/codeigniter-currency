@@ -9,6 +9,11 @@ the exchangerate.io api for codeigniter** and **a currency conversion rate manag
 its big difference is that you can change the base currency at any time 
 regardless of whether it was already deployed.
 
+<figure class="video_container">
+  <iframe src="docs/currency-manager-desktop-preliminary.mp4" frameborder="0" allowfullscreen="true"> 
+</iframe>
+</figure>
+
 #### Artifacs
 
 * **The library** as in [clib](clib) its just two files, the config 
