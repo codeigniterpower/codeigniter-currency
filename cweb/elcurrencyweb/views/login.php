@@ -27,5 +27,12 @@ echo div_open('class="contain-login d-flex"');
 			echo form_submit('makelogin', 'Get me in' , array('class'=>'btn btn-outline-success w-100'));
 		echo form_close();
 	echo div_close();
+	echo '<footer class="footer pb-4 position-fixed  bottom-0" >';
+		echo '<small class="d-flex align-items-center text-decoration-none d-sm-inline mx-1"><p style="display: flex; justify-content: center;">';
+		echo '</p class="ms-1 d-none d-sm-inline">';
+		echo anchor('https://gitlab.com/codeigniterpower','Powered by VenenuX CI'), PHP_EOL;
+		echo '</p>'. PHP_EOL;
+		echo '</small>'. PHP_EOL;
+	echo '</footer>'.PHP_EOL;
 echo div_close();
 ?>

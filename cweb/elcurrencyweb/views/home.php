@@ -52,63 +52,29 @@
                 <div class="documentation">
                   <div class="contain-toggle">
                     <button class="btn text-start btn-outline-success w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
-                      Get
+                      Convert currency
                     </button>
                   </div>
                   <div>
                     <div class="collapse collapse-horizontal" id="collapse1">
                       <div class="card card-body">
-                        This is some placeholder content for a horizontal collapse. It's hidden by default and shown when triggered.
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="contain-toggle">
-                    <button class="btn text-start btn-outline-success w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                      Get
-                    </button>
-                  </div>
-                  <div >
-                    <div class="collapse collapse-horizontal" id="collapse2">
-                      <div class="card card-body">
-                        This is some placeholder content for a horizontal collapse. It's hidden by default and shown when triggered.
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="contain-toggle">
-                    <button class="btn text-start btn-outline-success w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                      GET
-                    </button>
-                  </div>
-                  <div >
-                    <div class="collapse collapse-horizontal" id="collapse3">
-                      <div class="card card-body">
-                        This is some placeholder content for a horizontal collapse. It's hidden by default and shown when triggered.
-                      </div>
-                    </div>
-                  </div>
-                  <div class="contain-toggle">
-                    <button class="btn text-start btn-outline-success w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                      POST                      
-                    </button>
-                  </div>
-                  <div >
-                    <div class="collapse collapse-horizontal" id="collapse4">
-                      <div class="card card-body">
-                        This is some placeholder content for a horizontal collapse. It's hidden by default and shown when triggered.
+                        <p>
+							PLACEHOLDER TODO: put here all the view result and logic of the currency converter, the get curerncy today methos in currency manager already provide amount by class, read the code
+                        </p>
                       </div>
                     </div>
                   </div>
                   <div class="contain-toggle">
                     <button class="btn text-start btn-outline-success w-100" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                      UPDATE
+                      Telegram network
                     </button>
                   </div>
                   <div class="contain-toggle">
                     <div class="collapse collapse-horizontal" id="collapse5">
                       <div class="card card-body">
-                        This is some placeholder content for a horizontal collapse. It's hidden by default and shown when triggered.
+                        <p>
+                            PUT HERE and iframe witged of telegram, using the channel link config file from currencyweb.php
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -129,12 +95,3 @@
             </a>
           </div>
       </div>
-
-      </div>
-        
-    </div>  
-      <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
-        echo link_js("https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js", 'integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"  crossorigin="anonymous"');
-      ?>
-  </body>
-</html>

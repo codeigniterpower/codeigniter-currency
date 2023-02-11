@@ -113,6 +113,7 @@ class Currency_History extends CP_Controller {
 		$this->load->view('header.php',$data);
 		$this->load->view('menu',$data);
 		$this->load->view('history',$data);
+		$this->load->view('footer',$data);
 
 	}
 

@@ -26,3 +26,6 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		// TODO : here the CSS and JS links use HTTP urls or just the name of the file
 	echo '</head>'. PHP_EOL;
 	echo '<body>'.PHP_EOL;
+
+echo '<div class="container-fluid">'.PHP_EOL;
+echo '<div class="row flex-nowrap">'.PHP_EOL;

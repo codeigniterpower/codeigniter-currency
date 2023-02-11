@@ -1,7 +1,6 @@
 <?php
 
 	$userurl = $this->input->get_post('userurl');
-	echo $userurl;
 	?>
 
 <!-- PROMOTION CURRENCYMANAGER BLOCK-->
@@ -57,3 +56,11 @@
 			</div>
 		  </div>
 		</div>
+<?php
+	echo '<footer class="footer pb-4 position-fixed  bottom-0" >';
+		echo '<small class="d-flex align-items-center text-decoration-none d-sm-inline mx-1"><p style="display: flex; justify-content: center;">';
+		echo '</p class="ms-1 d-none d-sm-inline">';
+		echo anchor('https://gitlab.com/codeigniterpower','Powered by VenenuX CI'), PHP_EOL;
+		echo '</p>'. PHP_EOL;
+		echo '</small>'. PHP_EOL;
+	echo '</footer>'.PHP_EOL;

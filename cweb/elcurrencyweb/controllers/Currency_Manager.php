@@ -68,6 +68,7 @@ class Currency_Manager extends CP_Controller {
 		$this->load->view('header',$data);
 		$this->load->view('menu',$data);
 		$this->load->view('currency',$data);
+		$this->load->view('footer',$data);
 	}
 
 	public function updatecurrency()
@@ -113,7 +114,7 @@ class Currency_Manager extends CP_Controller {
 			$result = $this->dbcm->updateCurrencyMount($cod_tasa, $mon_tasa_moneda);
 		}
 
-		log_message('error', __METHOD__ .' POST : ' . print_r($result, TRUE) . ' why: '.print_r("Ocurrio un error al guardar", TRUE));
+		log_message('info', __METHOD__ .' DB result : ' . print_r($result, TRUE) );
 
 		// TODO: use this only with desesperate end of time : $this->listcurrencies();
 		echo json_encode(array('result' =>$result));
@@ -129,7 +130,7 @@ class Currency_Manager extends CP_Controller {
 	{
 		$this->load->model('Usuario_m','users');
 		$this->load->library('Userlib');
-		$this->userlib->initialize('lenz_gerardo');
+		$this->userlib->initialize('gonzalez_angel');
 		
 		if(!$this->userlib->isActive())
 		{
@@ -148,8 +149,11 @@ class Currency_Manager extends CP_Controller {
 
 		$this->load->config('currencyweb');
 		$codkeyconf = $this->config->item('codkey');
-		if( $codkey == $codkeyconf)
+		if( $codkey != $codkeyconf)
+		{
 			log_message('error', __METHOD__ .' invalid codkey ' .print_r($codkey,TRUE). ' from config: '.print_r($codkeyconf, TRUE));
+//			return json_encode(array('result'=>'unauthorized access'));
+		}
 		$config['language']     = 'spanish';
 		$data = array();
 		// example invokation http://localhost/~general/codeigniter-currencylib/cweb/index.php/Currency_Manager/callapitodb/SHAR265ql-23krjhnou2q34rhi2?dateapi=2023-02-03&curbase=USD

@@ -80,6 +80,7 @@ class Login extends CP_Controller {
 		$this->load->view('header',$data);
         $this->load->view('menu');
 		$this->load->view('home',$data);
+		$this->load->view('footer',$data);
 	}
 
 	/**

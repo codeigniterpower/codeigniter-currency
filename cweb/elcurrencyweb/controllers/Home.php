@@ -40,7 +40,7 @@ class Home extends CP_Controller {
 		$this->load->view('header',$data);
 		$this->load->view('menu',$data);
 		$this->load->view('home',$data);
-		// $this->load->view('footer.php',$data);
+		$this->load->view('footer',$data);
 	}
 
 }
