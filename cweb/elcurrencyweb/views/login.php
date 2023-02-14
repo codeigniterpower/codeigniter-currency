@@ -6,11 +6,11 @@ $idurl = 'userurl';
 
 echo div_open('class="contain-login d-flex"');
 	echo div_open('class="contain-fund d-flex justify-content-center align-items-center"');
-		echo '<h1 class="text-white display-1" style="font-family: cursive;">Currency Manager</h1>';
+		echo heading('Currency Manager',1,'class="text-white display-1" style="font-family: cursive;"');
 	echo div_close();
 	echo div_open('class="mx-auto my-auto"');
 		echo form_open($controllerlogin, array('method'=> 'post', 'class' => 'needs-validation'));
-			echo '<h1 class="text-dark display-1 text-center" style="font-family: cursive;">Please login</h1>';
+			echo heading('Please login',1,'class="text-dark display-1 text-center" style="font-family: cursive;"');
 			echo div_open('class="form-group"');
 				echo form_label('Email;', $idmail);
 				echo form_input(array('name'=>$idmail, 'id'=>$idmail, 'type'=>'email', 'class'=>'form-control', 'aria-describedby'=>'emailHelp', 'placeholder'=>'user_name@configuredomain.com', 'required') );
