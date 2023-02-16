@@ -51,7 +51,7 @@
 					</div>
 					<div class="card-footer">
 						<small class="text-muted">
-							<a href="<?php echo site_url() . "/Currency_Manager/currencyConverter"; ?>" class="nav-link px-0 align-middle links-menu">
+							<a href="<?php echo site_url() . "/Currency_Converter"; ?>" class="nav-link px-0 align-middle links-menu">
 								<i class="fs-4 bi-currency-exchange links-menu"></i>
 								<span class="ms-1 d-none d-sm-inline links-menu">
 									Convert
