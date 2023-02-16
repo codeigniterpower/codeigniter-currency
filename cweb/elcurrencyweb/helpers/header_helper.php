@@ -144,7 +144,7 @@ if (! function_exists('link_js')) {
 	 *
 	 * @param array|string $link       Script source or an array of scrits sources
 	 */
-	function link_js($link = '')
+	function link_js($link = '', $extra = '')
 	{
 		$nocache = '';
 		if ( strcmp(ENVIRONMENT, 'development') == 0 )
@@ -161,7 +161,60 @@ if (! function_exists('link_js')) {
 		$script = '';
 		$openscrjs = '<script type="text/javascript" ';
 		foreach ($linkssrc as $k => $v) {
-			$script .= $openscrjs . ' src="'.$v.$nocache.'" defer="defer" nonce=""></script>';
+			$script .= $openscrjs . ' src="'.$v.$nocache.'" defer="defer" nonce="" '.$extra.' ></script>';
+		}
+
+		return $script;
+	}
+}
+
+// ------------------------------------------------------------------------
+
+
+if (! function_exists('src_scrip')) {
+	/**
+	 * Script
+	 *
+	 * Generates piece of javascript sources to be inside tags
+	 *
+	 * @param array|string $code       Script source to around
+	 */
+	function src_scrip($script = '', $extra = '')
+	{
+		$openscrjs = '<script '.$extra.' >'.$script.'</script>';
+		return $openscrjs;
+	}
+}
+
+// ------------------------------------------------------------------------
+
+
+if (! function_exists('link_scrip')) {
+	/**
+	 * Script
+	 *
+	 * Generates link header tags of javascript sources
+	 *
+	 * @param array|string $link       Script source or an array of scrits sources
+	 */
+	function link_scrip($link = '', $extra = '')
+	{
+		$nocache = '';
+		if ( strcmp(ENVIRONMENT, 'development') == 0 )
+			$nocache = '?'.time();
+		$linkssrc = array();
+		//<script src="/assets/webpack/runtime.a33f0906.bundle.js" defer="defer" nonce=""></script>
+		if ( ! is_array($link)) {
+			if ( strripos($link, 'http') !== FALSE)
+				$linkssrc['src'] = $link;
+			else
+				$linkssrc['src'] = base_url().'elcurrencyfiles/js/'.$link;
+		}
+
+		$script = '';
+		$openscrjs = '<script ';
+		foreach ($linkssrc as $k => $v) {
+			$script .= $openscrjs . ' src="'.$v.$nocache.'" '.$extra.' ></script>';
 		}
 
 		return $script;

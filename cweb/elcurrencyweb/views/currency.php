@@ -20,10 +20,10 @@
 				{
 					$htmldisplaymessageapibutton .= ' You can press the coins button above to get a new coin rate code.';
 					echo div_open('class="d-flex justify-content-end"');
-						$contentbuttonapi = '<i class="bi bi-currency-exchange" style="font-size: 30px;"></i>';
-						echo form_button('button-call', $contentbuttonapi, 'class="btn btn-outline-success" id="button-call"');
+						echo form_button('button-call', $buttonicon, 'class="btn btn-outline-success" id="button-call"');
 					echo div_close();
 				}
+
 
 				$htmldatadisplaymycurrencies = 'There is no data today, yet ..'.$htmldisplaymessageapibutton;
 				if(is_array($currency_list_dbarraypre) )
@@ -36,10 +36,6 @@
 						$htmldatadisplaymycurrencies = $this->table->generate($currency_list_dbarraypre);
 					}
 				}
-				echo heading('Your preferred currency rates',2,'style="text-align: center"');
-				echo div_open('');
-					echo '<section>'.$htmldatadisplaymycurrencies.'</section>';
-				echo div_close();
 
 				$htmldatadisplayallcurrencies = 'The data of world currency rates today is not yet present.. '.$htmldisplaymessageapibutton;
 				if(is_array($currency_list_dbarraynow))
@@ -52,34 +48,45 @@
 						$htmldatadisplayallcurrencies = $this->table->generate($currency_list_dbarraynow);
 					}
 				}
+
+				echo heading('Your preferred currency rates',2,'style="text-align: center"');
+				echo div_open('');
+					echo '<section>'.$htmldatadisplaymycurrencies.'</section>';
+				echo div_close();
+
 				echo heading('Your today all currency rates',2,'style="text-align: center"');
 				echo div_open('');
 					echo '<section>'.$htmldatadisplayallcurrencies.'</section>';
 				echo div_close();
+
 				?>
 			</div>
 		</section>
 	</div>
 	<script>
-		let baseUrl = "<?php echo base_url(); ?>";
-		let activeUser = "<?php echo $active ?>"
+		let baseUrl = "<?php echo site_url(); ?>";
+		let uricall = baseUrl + '/Currency_Api';
+		let user_st = "<?php echo $active; ?>";
+		let user_id = "<?php $user_id = 'gonzalez_angel'; echo $user_id; ?>";
 
 		$(document).ready( function () 
 		{
 
 			table1 = $('#table_id').DataTable (
 				{
-					order: [0]
+					order: [0], paging:false, searching:false,
+					columnDefs: [ {title:'code',targets:0},{title:'base',targets:1},{title:'rate',targets:2},{title:'currency',targets:3} ]
 				}
 			);
 
 			table2 = $('#table_id2').DataTable(
 				{
-					order: [0]
+					order: [0], paging:true, searching:true,
+					columnDefs: [ {title:'code',targets:0},{title:'base',targets:1},{title:'rate',targets:2},{title:'currency',targets:3} ]
 				}
 			);
 
-			if(activeUser)
+			if(user_st)
 			{
 
 				/* table today prefered currencies data click on amount */
@@ -102,6 +109,7 @@
 								let monTasaMoneda = document.getElementById("mon_tasa_moneda");
 								let object = {
 										method:'post',
+										user_id:user_id,
 										cod_tasa:codTasa.value,
 										mon_tasa_moneda:monTasaMoneda.value
 									}
@@ -109,7 +117,7 @@
 
 								$.ajax({
 									type: 'post',
-									url: "<?php echo site_url() ?>" + '/Currency_Manager/updatecurrency',
+									url: uricall + '/updateRateAmount',
 									data: object,
 									success: function(result) 
 									{
@@ -159,6 +167,7 @@
 								let monTasaMoneda = document.getElementById("mon_tasa_moneda");
 								let object = {
 										method:'post',
+										user_id:user_id,
 										cod_tasa:codTasa.value,
 										mon_tasa_moneda:monTasaMoneda.value
 									}
@@ -166,7 +175,7 @@
 
 								$.ajax({
 									type: 'post',
-									url: "<?php echo site_url() ?>" + '/Currency_Manager/updatecurrency',
+									url: uricall + '/updateRateAmount',
 									data: object,
 									success: function(result)
 									{
@@ -207,23 +216,24 @@
 			{
 				let object = {
 						method:'post',
-						id_user:'lenz_gerardo-userplace',
-						codkey: "<?php $this->load->config('currencyweb');echo $this->config->item('codkey');?>"
+						user_id:user_id,
+						codkey:"<?php $this->load->config('currencyweb');echo $this->config->item('codkey');?>"
 					}
 								
 				buttonGetData.innerHTML=['<div class="spinner-border" role="status">','<span class="visually-hidden">Loading...</span>','</div>']
 
 				$.ajax({
 					type: 'get',
-					url: "<?php echo site_url() ?>" + '/Currency_Manager/callapitodb/',
+					url: uricall + '/callApisAndSaveDB',
 					data: object,
 					success: function(result) 
 						{
-							buttonGetData.innerHTML=['<i class="bi bi-currency-exchange" style="font-size: 30px;"></i>',]
+							buttonGetData.innerHTML=['<?php echo $buttonicon; ?>',]
 							location.reload()
 						},
 					error: function(result) 
 						{
+							buttonGetData.innerHTML=['<i class="bi bi-x-octagon-fill" style="font-size: 30px;"></i>',]
 							console.log(result)
 						}
 				});
@@ -239,21 +249,21 @@
 			wrapper.innerHTML = 
 				[
 					'<div class="alert alert-${type} alert-dismissible text-center custom-alerts" role="alert" style="   position: fixed; width: 55%; left: 30%; top: 30%; z-index: 10000000000;">',
-					'<br>',
-					'<form class="" method="POST" action="<?php echo site_url() ?>/Currency_Manager/updatecurrency" target="_self" id="edit-form">', 
-					'<div class="form-group">',
-					'<label for="cod_tasa">cod_tasa</label>',
-					'<input name="cod_tasa" type="number" class="form-control" id="cod_tasa" value='+message[0]+'  readonly>',
-					'</div>',
-					'<div class="form-group">',
-					'<label for="mon_tasa_moneda">mon_tasa_moneda</label>',
-					'<input name="mon_tasa_moneda" type="text" class="form-control" id="mon_tasa_moneda" placeholder='+ message[2] +' required>',
-					'</div>',
-					'<br>',
-					'<button type="submit" class="btn btn-outline-success" id="edit">Enviar</button>',
-					'</form>',
-					'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-					'<p id="error-message" style="color: red;font-size: 25px;"></p>',
+						'<br>',
+						'<form class="" method="POST" action="<?php echo site_url() ?>/Currency_Manager/updatecurrency" target="_self" id="edit-form">', 
+							'<div class="form-group">',
+								'<label for="cod_tasa">cod_tasa</label>',
+								'<input name="cod_tasa" type="number" class="form-control" id="cod_tasa" value='+message[0]+'  readonly>',
+							'</div>',
+							'<div class="form-group">',
+								'<label for="mon_tasa_moneda">mon_tasa_moneda</label>',
+								'<input name="mon_tasa_moneda" type="text" class="form-control" id="mon_tasa_moneda" placeholder='+ message[2] +' required>',
+							'</div>',
+							'<br>',
+							'<button type="submit" class="btn btn-outline-success" id="edit">Enviar</button>',
+						'</form>',
+						'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+						'<p id="error-message" style="color: red;font-size: 25px;"></p>',
 					'</div>'
 				].join('')
 

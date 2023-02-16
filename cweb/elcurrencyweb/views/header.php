@@ -21,6 +21,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		// loading of datatables for table presentation
 		echo link_js("https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js");
 		echo link_css("https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css");
+		// loading of jquery need
+		echo link_scrip('https://code.jquery.com/jquery-3.6.3.js','crossorigin="anonymous"');
 		// loadinig of bootstratps style and icons
 		echo link_css("https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css", 'integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"');
 		echo link_css("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
