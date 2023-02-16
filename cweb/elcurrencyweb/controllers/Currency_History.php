@@ -51,10 +51,11 @@ class Currency_History extends CP_Controller {
 		$currency_list_dbarrayhis = array();
 		$currency_list_dbarraycou = array();
 		$this->load->model('Currency_m','dbcm');
+		/*
+		// THOSE ARE EXAMPLES TO TUNE THE HISTORY VIEW
 		$parameters = array();
 		// case 1 only count all the history for a specific date, first 100 rows, ordering by cod_tasa ascending
 		$parameters['fecha'] = '20230207';
-		$parameters['curDest'] = 'VES';
 		$howmany = 100;
 		$iniciar = 0;
 		$ordercol = 'cod_tasa';
@@ -70,7 +71,8 @@ class Currency_History extends CP_Controller {
 		$sorting = 'ASC';
 		$countall = NULL;
 		$currency_list_dbarrayhis = $this->dbcm->readCurrenciesHistStored($parameters,$howmany,$iniciar,$ordercol,$sorting,$countall);
-
+		*/
+		$currency_list_dbarrayhis = $this->dbcm->readCurrenciesHistStored();
 		$totalcount = 0;
 		if(is_array($currency_list_dbarrayhis))
 		{

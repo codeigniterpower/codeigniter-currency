@@ -19,11 +19,25 @@
 						$htmlhistorydata = $this->table->generate($currency_list_dbarrayhis);
 					}
 					else
-						$htmlhistorydata = "There's not data stored today, check if your system already call the api in backend, or check if your DB is configured.";
+						$htmlhistorydata = 'There is not data stored today, check if your system already call the api in backend, or check if your DB is configured.';
 				}
 				echo $htmlhistorydata;
 		echo div_close();
 	echo div_close();
+	$srcscript1 = "
+		$(document).ready ( 
+			function () {
+				table1 = $('#table_id').DataTable (
+					{
+						order: [0], paging:true, searching:true,
+						columnDefs: [ {visible:false,targets:5},{visible:false,targets:6},{visible:false,targets:7},{title:'code',targets:0},{title:'base',targets:1},{title:'rate',targets:2},{title:'currency',targets:3} ]
+					}
+				);
+			}
+		)
+	";
+	echo src_scrip($srcscript1);
+
 /* 
  // GROCERYCRUP ONLY dont touch, this is same data but only if you used mysql
  // uncomment only if the controller uses grocery crud
@@ -35,16 +49,3 @@ foreach($js_files as $filejs){
 	echo link_js($filejs);
 }
 */
-?>
-	<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script> 
-	<script>
-		$(document).ready ( 
-			function () {
-				table1 = $('#table_id').DataTable (
-					{
-						"order": [0],
-					}
-				);
-			}
-		)
-	</script>
