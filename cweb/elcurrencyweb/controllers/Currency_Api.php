@@ -94,7 +94,7 @@ class Currency_Api extends CP_Controller {
 		$codkey = $this->input->post('codkey', FALSE);
 
 		$validfields = $this->form_validation->required($user_id);
-		$validfields = preg_match('/^[a-zA-Z0-9\.]{1,}+$/i', $user_id);
+		$validfields = preg_match('/^[a-zA-Z0-9_\.]{1,}+$/i', $user_id);
 		if($validfields == FALSE){
 			log_message('error', __METHOD__ .' POST : ' . print_r($user_id, TRUE) . ' user_id is not valid : '.print_r($validfields, TRUE));
 			$error = json_encode(array('result' =>'user_id is not valid'));
