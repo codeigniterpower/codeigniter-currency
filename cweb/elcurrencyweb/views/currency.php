@@ -1,5 +1,5 @@
 
-	<div class="col py-1">
+<div class="col py-1" style="background-color: #f9faff;">
 		<!-- <section>
 			<div id="contain-modal"> -->
 				<!-- HERE IS THE DIALOG PLACE -->
@@ -24,7 +24,7 @@
 				{
 					$htmldisplaymessageapibutton .= ' You can press the coins button above to get a new coin rate code.';
 					echo div_open('class="d-flex justify-content-end"');
-						echo form_button('button-call', $buttonicon, 'class="btn btn-outline-success" id="button-call"');
+						echo form_button('button-call', $buttonicon, 'class="btn btn-outline-success" id="button-call" ');
 					echo div_close();
 				}
 				$htmldatadisplaymycurrencies = 'There is no data today, yet ..'.$htmldisplaymessageapibutton;
@@ -33,7 +33,19 @@
 					if(count($currency_list_dbarraypre))
 					{
 						$this->table->clear();
-						$this->table->set_template( array( 'table_open' => '<table id="table_id">',) );
+						$this->table->set_template( array( 'table_open' => '
+						<table id="table_id">',
+						'heading_row_start'     => '<tr style="background-color:#ffffff00;">',
+						'heading_row_end'       => '</tr>',
+						'heading_cell_start' => '<th style="border-bottom:0">',
+						'heading_cell_end'      => '</th>',
+						'tbody_open'            => '<tbody>',
+						'tbody_close'           => '</tbody>',
+						'row_start'             => '<tr style="background-color:#ffffff00;border: 0px;">',
+						'row_end'               => '</tr>',
+						'cell_start'            => '<td style="background-color:#ffffff00;border: 0px;"">',
+						'cell_end'              => '</td>',
+						) );
 						$this->table->set_heading(array_keys($currency_list_dbarraypre[0]));
 						$htmldatadisplaymycurrencies = $this->table->generate($currency_list_dbarraypre);
 					}
@@ -44,23 +56,39 @@
 					if(count($currency_list_dbarraynow))
 					{
 						$this->table->clear();
-						$this->table->set_template( array( 'table_open' => '<table id="table_id2">',) );
+						$this->table->set_template( array( 
+							'table_open' => '<table id="table_id2">',
+							'heading_row_start'     => '<tr style="background-color:#ffffff00;">',
+							'heading_row_end'       => '</tr>',
+							'heading_cell_start' => '<th style="border-bottom:0">',
+							'heading_cell_end'      => '</th>',
+							'tbody_open'            => '<tbody>',
+							'tbody_close'           => '</tbody>',
+							'row_start'             => '<tr style="background-color:#ffffff00;border: 0px;">',
+							'row_end'               => '</tr>',
+							'cell_start'            => '<td style="background-color:#ffffff00;border: 0px;"">',
+							'cell_end'              => '</td>',
+						) );
 						$this->table->set_heading(array_keys($currency_list_dbarraynow[0]));
 						$htmldatadisplayallcurrencies = $this->table->generate($currency_list_dbarraynow);
 					}
 				}
-				echo heading('Your preferred currency rates',2,'style="text-align: center"');
+				// https://www.codeigniter.com/userguide3/libraries/uri.html
+				
+				echo heading('Your preferred currency rates',3,);
 				echo div_open('');
 					echo '<section>'.$htmldatadisplaymycurrencies.'</section>';
 				echo div_close();
-				echo heading('Your today all currency rates',2,'style="text-align: center"');
+				echo heading('Your today all currency rates',3,);
 				echo div_open('');
 					echo '<section>'.$htmldatadisplayallcurrencies.'</section>';
 				echo div_close();
 				?>
 			</div>
 		</section>
-	</div>
+		<div class="row">
+		
+	<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script> 
 	<script>
 		let baseUrl = "<?php echo site_url(); ?>";
 		let uricall = baseUrl + '/Currency_Api';
@@ -152,7 +180,6 @@
 						user_id:user_id,
 						codkey:"<?php $this->load->config('currencyweb');echo $this->config->item('codkey');?>"
 					}
-								
 				buttonGetData.innerHTML=['<div class="spinner-border" role="status">','<span class="visually-hidden">Loading...</span>','</div>']
 				$.ajax({
 					type: 'post',
@@ -163,7 +190,7 @@
 							let answer  = result.split('\n')
 							answer = JSON.parse(answer[0])
 							if(answer.result !== 1 ){
-								notificationError(answer.result,'danger')
+								return notificationError(answer.result,'danger')
 							}
 							buttonGetData.innerHTML=['<?php echo $buttonicon; ?>',]
 							location.reload()
@@ -182,7 +209,7 @@
 			const wrapper = document.createElement('div')
 			wrapper.innerHTML = 
 				[
-					`<div class="alert alert-${type} alert-dismissible text-center custom-alerts" role="alert" style="   position: fixed; width: 55%; left: 30%; top: 30%; z-index: 10000000000;">`,
+					`<div class="alert alert-${type} alert-dismissible text-center custom-alerts" role="alert" style="position: fixed; width: 55%; left: 30%; top: 30%; z-index: 10000000000;">`,
 						'<br>',
 						'<form class="" method="POST" action="<?php echo site_url() ?>/Currency_Manager/updatecurrency" target="_self" id="edit-form">', 
 							'<div class="form-group">',
@@ -196,9 +223,10 @@
 							'<br>',
 							'<button type="submit" class="btn btn-outline-success" id="edit">Enviar</button>',
 						'</form>',
-						'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+						'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"  ></button>',
 						'<p id="error-message" style="color: red;font-size: 25px;"></p>',
 					'</div>'
+					
 				].join('')
 				alertPlaceholder.append(wrapper)
 		}
@@ -218,4 +246,7 @@
 				alertError.append(wrapper)
 		}
 	</script>
+</div>  
+
+
 
