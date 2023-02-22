@@ -1,5 +1,4 @@
-        <div class="col py-3">
-
+      <div class="col py-3">
         <table class="table manage-candidates-top mb-0">
             <thead>
               <tr>
@@ -22,7 +21,6 @@
                       </div>
                     </div>
                   </td>
-
                   <td class="title" style="padding-top: 2rem;">
                       <h5 class="mb-0 h5-gmail">
                         <i class="bi bi-file-earmark-person"></i>
@@ -30,7 +28,6 @@
                       </h5>
                       <!-- <span class="candidate-list-time order-1">Shortlisted</span> -->
                   </td>
-
                   <td class="ul-access-icons">
                     <ul class="icons-list-users ul-access-icons list-unstyled d-flex justify-content-center">
                       <li><a href="#" class="text-primary" data-toggle="tooltip" title="" data-original-title="view"><i class="bi bi-pencil"></i></a></li>
@@ -38,8 +35,8 @@
                     </ul>
                   </td>
               </tr>
-
               
             </tbody>
           </table>
-        </div>
+      <div class="row">
+
