@@ -1,6 +1,7 @@
 # Development notes
 
-For general info check [README.md](README.md)
+For general info check [README.md](README.md), 
+remembered our [../CONTRIBUTING.md](../CONTRIBUTING.md) rules.
 
 ## Development Environment
 
@@ -18,6 +19,18 @@ and manage your own databases of currencies. This project also is a example
 of who usefully can be an web interface and also will provide your own apy 
 to gest history currency set by you. Usefully if you dont want to pay the 
 apilayer and wants an internal intranet currency manager.
+
+### Deploy in localhost
+
+The application does not used rewrite of the URLs, this for better compatibility, 
+also easy deploy, security its nto based in such stupid **index.php url hidding**, 
+its based in better deploy of the web application, by example a good deploy of 
+the api later.
+
+To deploy in localhost you only need a running php environment and a directory 
+were the files can be put to be interpreted with the web server.
+
+For further information about how to deploy read [README.md#deploy](README.md#deploy)
 
 ### Development framework choice
 
@@ -44,7 +57,7 @@ simple and easy to assimilate.. important key when we talk about money.
 This model just retrieve the data of a user, the user credentials are not 
 stored, login are managed agains IMAP or external source.. 
 
-The table stored the sesion and will check if are still valid, when time out, 
+The table stored the session and will check if are still valid, when time out, 
 will retry the login and refrsh the session into the table.
 
 The permission are simple: if are enabled, can make modifications, either 
@@ -114,8 +127,8 @@ The second method is the `readCurrenciesHistStored`, with support for server sid
 * Footer 
 * Menu 
 
-
-The header opens a general div container:
+A mayor detail .. first releases will need that 
+the header opens a general div container:
 
 ```
  <div class="container-fluid">
@@ -128,6 +141,8 @@ Those will and must be closed at the footer or/and menu:
     </div>
 </div>
 ```
+
+This will be not necesary in future development of views.
 
 #### If you uses menu view, dont use footer one
 

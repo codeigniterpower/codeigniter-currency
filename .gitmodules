@@ -1,3 +1,6 @@
 [submodule "cweb/vendor/codeigniterpower"]
 	path = cweb/vendor/codeigniterpower
 	url = https://gitlab.com/codeigniterpower/codeigniterpower
+[submodule "cweb/vendor/codeigniter3"]
+	path = cweb/vendor/codeigniter3
+	url = https://github.com/bcit-ci/CodeIgniter
