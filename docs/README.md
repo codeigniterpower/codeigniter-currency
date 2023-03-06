@@ -27,7 +27,13 @@ apilayer and wants an internal intranet currency manager. This is also an api it
 
 ## Deploy
 
-TODO
+We only support Alpine, VenenuX or Debian operating systems, and any web server, 
+also any DBMS, we at least hope sqlite are into your system (cheap ans used by firefox), 
+curently our CSS/JS are using CDN, but soon a local deploy request are in process.
+
+For instalation on local machine or development/test server, just read the 
+file [README-deploy.md](README-deploy.md), that will use Debian as base example, 
+but there's sections for others systems like Alpine.
 
 ## DB
 
