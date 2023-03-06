@@ -24,8 +24,8 @@ class Currency_Converter extends CP_Controller {
 	}
 
 	/**
-	 * index that shows the presentation, or login 
-	 * 
+	 * index that shows the presentation, or login
+	 *
 	 * @name: index
 	 * @param void
 	 * @return void
@@ -37,12 +37,16 @@ class Currency_Converter extends CP_Controller {
 		$data['currentctr'] = $this->currentctr;
 		$data['currentinx'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;
+		$this->load->model('Currency_m','dbcm');
+		$cod_currency_base_array = $this->dbcm->readCurrencyNames();
+		$exx = array('840'=>'VES','971'=>'USD');
+		$data['cod_base_currency_array'] = $exx;
+		$data['cod_base_currency'] = 'VES';
 		$this->load->view('header',$data);
 		$this->load->view('menu',$data);
 		$this->load->view('converter',$data);
 		$this->load->view('footer',$data);
 	}
-
 }
 
 /* End of file Home.php */

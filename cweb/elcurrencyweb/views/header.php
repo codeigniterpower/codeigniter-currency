@@ -14,6 +14,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		echo link_css('login.css').PHP_EOL;
 		echo link_css('table.css').PHP_EOL;
 		echo link_css('usersList.css').PHP_EOL;
+		echo link_css('converter.css').PHP_EOL;
 		echo link_css('home.css').PHP_EOL;// ::TODO USAR COMPILADOR SCSS 
 		echo link_js('currencyweb.js').PHP_EOL;
 		// compatibility of older browsers TODO: implement of the 

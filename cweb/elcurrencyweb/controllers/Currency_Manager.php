@@ -76,7 +76,7 @@ class Currency_Manager extends CP_Controller {
 		$this->load->view('header',$data);
 		$this->load->view('menu',$data);
 		$this->load->view('currency',$data);
-		$this->load->view('footer',$data);
+		$this->load->view('footer_internal',$data);
 	}
 
 }

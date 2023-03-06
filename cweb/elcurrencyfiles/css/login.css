@@ -1,19 +1,11 @@
-.contain-fund{
-    display: none;
-    width: 0;
-}
 .contain-login{
-    height: 85vh !important; 
+    height: 100vh !important; 
+    background-image: url('../media/bitcoin-moneda-activo-financiero-inflacción.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;   
 }
 @media screen and (min-width:800px) {
     .contain-login{
         height: 100vh !important; 
-    }
-
-    .contain-fund{
-        width: 50vw;
-        height: 100%;
-        background-color: #3BD671;
-        border-radius: 0px 50% 8px 50%;
     }
 }
