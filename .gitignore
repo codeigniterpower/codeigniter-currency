@@ -14,3 +14,5 @@ cweb/vendor/codeigniter3
 cweb/elcurrencyweb/config/database.php
 # ignore backup files of model DB
 docs/*.bak
+# sessions development
+cweb/vendor/sesions*
