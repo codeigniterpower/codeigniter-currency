@@ -56,9 +56,9 @@ Check [docs/README-developers.md](docs/README-developers.md)
 
 ## Authors and acknowledgment
 
-(c) angel gonzalez @radioactive99
-(c) PICCORO Lenz McKAY @mckaygerhard
-(c) Angel Gonzalez @Angel.Gonzalez.dev.front
+* (c) angel gonzalez @radioactive99
+* (c) PICCORO Lenz McKAY @mckaygerhard
+* (c) Angel Gonzalez @Angel.Gonzalez.dev.front
 
 ## License
 
