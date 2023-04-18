@@ -25,8 +25,14 @@ class CP_Controller extends CI_Controller
 	public $permite = FALSE;
 	/**  nombre de usuario tomado de la session activa */
 	public $username = FALSE;
+	/**  correos de usuario tomado de la session activa */
+	public $usermails = FALSE;
+	/**  estado de usuario tomado de la session activa */
+	public $userstatus = 'INACTIVO';
 	/** mecanismo barato para ver el controller que se denego desde la herencia*/
 	public $modulo = NULL;
+	/** objeto session del usuario */
+	private $sessobj = NULL;
 
 	/**
 	 * establece librerias de sesion y permisos asi como modulo si se especifica
@@ -65,19 +71,39 @@ class CP_Controller extends CI_Controller
 	}
 
 	/** revision de session, si invalidad redirige a login */
-	public function checku()
+	public function checksession()
 	{
 		$this->userurl = $this->input->get_post('userurl');
 		$this->currenturl = $this->uri->uri_string(); //$this->uri->segment(1).'/'.$this->uri->segment(2).'/'.$this->uri->segment(3).'/'.$this->uri->segment(4);
+		$this->sessobj = $this->session->userdata('userdata');
 
 		$userurl = str_replace('/','',$this->userurl);
 		$redirurl = $this->currenturl;
 		if( $userurl != '')
 			$redirurl = $this->userurl;
 
-		//$username = $_SESSION['username'];
+			if($this->sessobj == NULL)
+			{
+				redirect('Indexauth/auth/login?userurl='.$redirurl,'location');
+				return;
+			}
+			$this->datasession();
+	}
 
-		//$this->username = $username;
+	/** datos de session, si invalido genera invalidez */
+	public function datasession()
+	{
+		$userdata = $this->sessobj;
+		if( is_array($userdata) )
+		{
+			foreach($userdata as $variable => $varvalue)
+			{
+				if( $variable == 'userkey' )
+					continue;
+				if( array_key_exists($variable, $userdata) )
+					$this->$variable = $userdata[$variable];
+			}
+		}
 	}
 
 	/* 
@@ -95,9 +121,16 @@ class CP_Controller extends CI_Controller
 		$arraymodules = $this->arraymurls;        
 		$arraycontrls = $this->getcontrollers($modulename);
 
-		$user_loged = $this->session->userdata('username');
-		$user_email = $this->session->userdata('useraddress');
+		$user_loged = FALSE;
+		$userdata = $this->sessobj;
 
+		log_message('info','entrando objeto session '.print_r($userdata,TRUE));
+
+		if( is_array($userdata) )
+		{
+			if( array_key_exists('username', $userdata) )
+				$user_loged = $userdata['username'] OR FALSE;
+		}
 		$menumainstring = '';
 
 		if(($modulename == NULL OR $modulename == FALSE) AND $currentinx !== '')
@@ -106,14 +139,14 @@ class CP_Controller extends CI_Controller
 			$menuclasssubdi = '';
 			$menumainstring = '';
 
-/*			if( $user_email == NULL OR $user_loged == FALSE )
+			if( $user_loged == FALSE )
 			{
 				$menumainstring .= '</div>';
 				return $menumainstring;
 			}
 			else
-*/			{
-//				$menumainstring .= ' '.anchor('/',ucfirst(SYSDIR),'class="active" ');
+			{
+				$menumainstring .= ' '.anchor('/',ucfirst(SYSDIR),'class="active" ');
 				$menumainstring .= anchor('',' ');
 				$modulename = $arraymodules[0];
 				foreach($arraycontrls as $menuidex=>$menulink)
@@ -137,8 +170,11 @@ class CP_Controller extends CI_Controller
 						$menumainstring .= ' '.anchor($menulink,ucfirst($menuname),'class=" '.$menuitemactive.' " ');
 					}
 				}
-//				$menumainstring .= ' '.anchor('indexlogin/salirlogin','Salir','class="" ');
-			}
+				if( $user_loged == FALSE )
+					$menumainstring .= ' '.anchor('/Indexauth/auth/logauth','Inicio','class="active" ');
+				else
+					$menumainstring .= ' '.anchor('/Indexauth/auth/logout','Logout','class="active" ');
+				}
 		}
 		else
 		{
