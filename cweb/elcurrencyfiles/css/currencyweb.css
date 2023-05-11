@@ -38,3 +38,14 @@
 .dataTables_length{
     display: none;
 }
+.contain-index{
+    height: 100vh !important; 
+    background-image: url('../media/currency-coins-and-bank-image.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;   
+}
+@media screen and (min-width:800px) {
+    .contain-login{
+        height: 100vh !important; 
+    }
+}

@@ -1,10 +1,10 @@
 <?php
-
+echo div_open('class="contain-index d-flex"');
 	$userurl = $this->input->get_post('userurl');
 	?>
 
 <!-- PROMOTION CURRENCYMANAGER BLOCK-->
-		<div class="contain-image">
+		<div class="contain-image mx-auto my-auto py-3 px-3">
 		  <div class="card-deck d-flex justify-content-around  flex-wrap">
 			<div class="card m-4" style="width: 300px;">
 			  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
@@ -57,6 +57,7 @@
 		  </div>
 		</div>
 <?php
+echo div_close();
 	echo '<footer class="footer pb-4 position-fixed  bottom-0" >';
 		echo '<small class="d-flex align-items-center text-decoration-none d-sm-inline mx-1"><p style="display: flex; justify-content: center;">';
 		echo '</p class="ms-1 d-none d-sm-inline">';
