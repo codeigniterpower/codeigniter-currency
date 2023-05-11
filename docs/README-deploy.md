@@ -47,7 +47,7 @@ Note you can just install in same machine both sides of the sistem.
 
 ## Instalacion deploy
 
-We will use Debian 9 as example, but will just work for older or newer if 
+**We will use Debian 9 as example, but will just work for older or newer** if 
 you added VenenuX repositories
 
 First of all you need a valid OS as described before, later must setup common 
@@ -55,8 +55,7 @@ programs, later setup the database and finally tune up the webserver for instanc
 
 #### Use case install with debian 9 and mysql
 
-**1 - Instalatino of software** this will assume you already setup VenenuX repositories.
-
+**1 - Instalation of software**
 
 ```
 apt-get install git lighttpd mysql-server php7.3-cgi php7.3-gd php7.3-mysql php7.3-mcryp php7.3-curl php7.3-odbc lighttpd lighttpd-mod-openssl
@@ -65,21 +64,21 @@ apt-get install git lighttpd mysql-server php7.3-cgi php7.3-gd php7.3-mysql php7
 **2 - preparation of the place**
 
 ```
-mkdir -p /home/intranet/elcurrency
+mkdir -p /home/intranet/apps/elcurrency
 
 wget -t0 -O elcurrency.tar.gz https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/archive/main/codeigniter-currencylib-main.tar.gz
 
 mysql -u root -p -e "CREATE USER 'sysdbuser'@'localhost' IDENTIFIED BY  'sysdbuser.1';"
 
-nano  /home/intranet/elsistema/elcurrency/elcurrencyweb/config/database.php
+nano  /home/intranet/apps/elcurrency/elcurrencyweb/config/database.php
 
 mysql -u root -p -D elcurrencydb -e "CREATE DATABASE elcurrencydb;"
 
 mysql -u root -p -D elcurrencydb -e "GRANT ALL PRIVILEGES ON elcurrency% . * TO 'sysdbuser'@'localhost';"
 
-mysql -u sysdbuser -p -D elcurrencydb < /home/intranet/elsistema/elcurrency/elcurrencydb/elcurrencydb.sql
+mysql -u sysdbuser -p -D elcurrencydb < /home/intranet/apps/elcurrency/elcurrencydb/elcurrencydb.sql
 
-ln -s  /home/intranet/elsistema/elcurrency/elcurrencyfiles/99-elcurrency.conf /etc/lighttpd/conf-available/99-elcurrency.conf
+ln -s  /home/intranet/apps/elcurrency/elcurrencyfiles/99-elcurrency.conf /etc/lighttpd/conf-available/99-elcurrency.conf
 
 lighty-enable-mod alias elcurrency;/etc/init.d/lighttpd restart
 ```
@@ -113,7 +112,8 @@ that will be only valid for Debian 6, Debian 7, Debian 8, Debian 9 and Debian 12
 
 ### 2 Configure environment
 
-```
+
+``` bash
 git config --global status.submoduleSummary true
 git config --global diff.submodule log
 git config --global fetch.recurseSubmodules on-demand
@@ -142,7 +142,7 @@ exit
 ### 3 clone the sources
 
 
-``` 
+``` bash
 mkdir -p ~/Devel
 cd Devel
 git clone --recursive http://tijerazo.net/elgit/tijerazo/elcurrency.git
@@ -158,7 +158,6 @@ git submodule foreach git pull
 
 
 ``` bash
-su
 mysql -u root -p -e 'CREATE SCHEMA elcurrencydb'`
 mysql -u root -p elcurrencydb < elcurrencydb/elcurrencydb.sql
 ```

@@ -27,7 +27,7 @@ and manage your own databases of currencies. This project provides an api layer
 with enry points as `callRatesFromDB` and `convertCurrency`. Usefully if you 
 dont want to pay the apilayer and wants an internal intranet currency manager.
 
-* **The application** as in [capp](capp) its just a phone minimal inteface to the 
+* **The androitAP** as in [capk](capk) its just a phone minimal inteface to the 
 already provided currency web interface, you must provide the url ot the manager, 
 of who usefully can be an web interface and also will provide your own apy 
 to gest history currency set by you. Usefully if you dont want to pay the 
