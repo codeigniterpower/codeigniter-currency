@@ -15,7 +15,7 @@ echo div_open('class="contain-login d-flex"');
 		echo form_open($controllerlogin, array('method'=> 'post', 'class' => 'needs-validation w-75 mx-auto my-auto'));
 			echo div_open('class="form-group"');
 				echo form_label('Email;', $idmail);
-				echo form_input(array('name'=>$idmail, 'id'=>$idmail, 'type'=>'email', 'class'=>'form-control', 'aria-describedby'=>'emailHelp', 'placeholder'=>'user_name@configuredomain.com', 'required') );
+				echo form_input(array('name'=>$idmail, 'id'=>$idmail, 'type'=>'input', 'class'=>'form-control', 'placeholder'=>'user_name@configuredomain.com', 'required') );
 			echo div_close();
 			echo div_open('class="form-group"');
 				echo form_label('Pass:', $idpass);
