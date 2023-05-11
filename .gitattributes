@@ -31,3 +31,7 @@
 *.gif binary
 *.ico binary
 *.mo binary
+*.sqlite binary
+*.dbsqlite binary
+*.db binary
+
