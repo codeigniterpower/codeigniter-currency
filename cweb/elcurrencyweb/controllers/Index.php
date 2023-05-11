@@ -18,6 +18,8 @@ class Index extends CP_Controller {
 	function __construct()
 	{
 		parent::__construct();
+
+		$data = array();
 		$this->data = $data;
 	}
 
