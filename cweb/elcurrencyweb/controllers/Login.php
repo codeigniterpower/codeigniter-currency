@@ -19,7 +19,7 @@ class Login extends CP_Controller {
 		parent::__construct();
 		$this->load->helper(array('form', 'url','html'));
 		$this->output->enable_profiler(ENVIRONMENT !== 'production');
-		$this->load->library('encrypt');
+		//$this->load->library('encrypt');
 		$this->load->library('session');
 		$this->load->library('form_validation');
 	}
@@ -63,7 +63,6 @@ class Login extends CP_Controller {
 				return;
 			}
 		}
-		$this->session->sess_regenerate();
 		$usuario['userlogin'] = 1;
 		$usuario['usermail'] = $usermail;
 		$usuario['username'] = $username;
@@ -130,7 +129,6 @@ class Login extends CP_Controller {
 				$userpass = NULL;
 			}
 		}
-		$this->session->sess_regenerate();
 		$usuario['userlogin'] = 0;
 		$usuario['usermail'] = $usermail;
 		$usuario['username'] = $username;
