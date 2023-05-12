@@ -1,57 +1,51 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-
-class Indexauth extends YA_Controller {
+class Indexauth extends CP_Controller {
 
 	function __construct()
 	{
 		parent::__construct();
-		$data['menu'] = $this->genmenu();
-		$data['menusub'] = '';
-		$this->data = $data;
 	}
 
-	/**
-	 * index que muestra login para autenticacion, y verifica esta contra el modelo de datos
-	 * este controlador no necesita verirficar la session ya que este solo muestra si entra o no
-	 * 
-	 * @name: index
-	 * @param void
-	 * @return void
-	 */
-	public function index($data = NULL)
+	public function index($indexerror = NULL)
 	{
+		$data = array();
 		$message = 'Auth system prepared';
-
-		if(is_array($data))
+		if( !is_array($indexerror) AND $indexerror != NULL)
 		{
-		    array_merge($this->data,$data);
-		}
-		else
-		{
-		    if($data == 'autherror')
+		    if($indexerror == 'autherror')
 			    $message = 'Error login or invalid credentials';
-		    if($data == 'authcheck')
+		    if($indexerror == 'authcheck')
 			    $message = 'Invalid access or invalid credentials';
-		    if($data == 'logout')
+		    if($indexerror == 'logout')
 			    $message = 'Session closed';
-		    if($data == 'logauth')
-			    $message = 'Auth prepared to valid credentials';
-		    $data = $this->data;
+		    if($indexerror == 'logauth')
+			    $message = 'Ready again to valid credentials';
 		}
-
-		$this->config->load('imap');
-		$data['sitename'] = $this->config->item('imap_host');
-
 		$data['message'] = $message;
+		$data['currentctr'] = $this->currentctr;
+		$data['currentinx'] = $this->currentinx;
+		$data['currenturl'] = $this->currenturl;
+		$data['controllerlogin'] = 'Indexauth/auth/login';
+		$data['userurl'] = $this->input->get_post('userurl');
 		$this->load->view('header.php',$data);
-		$this->load->view('inicion.php',$data);
+		$this->load->view('login.php',$data);
 		$this->load->view('footer.php',$data);
 	}
 
+	/**
+	 * authenticator that uses action and user key credentials
+	 * 
+	 * @name: auth
+	 * @param string $action logout|login
+	 * @param string $username the user email or login name
+	 * @param string $userclave the user password or user key api access
+	 * @return
+	 * 
+	 */
 	public function auth($action = 'logout', $username = NULL, $userclave = NULL)
 	{
-		$typeerror = 'logout';
+		$typeerror = 'nologin';
 
 		if($username == NULL)
 			$username = $this->input->post('username');
@@ -63,29 +57,33 @@ class Indexauth extends YA_Controller {
 			$this->load->model('authmodel');
 			$im_access = $this->authmodel->authimap($username, $userclave);
 			$rs_access = $this->authmodel->authtable($username, $userclave);
+
 			if($im_access == FALSE)
 				$typeerror = 'autherror';
 			if($rs_access == FALSE)
 				$typeerror = 'authcheck';
 		}
 
-		if ( $action == 'logauth' )
-			$typeerror = 'logauth';
+		if ( $action == 'logauth' OR $action == 'logout' )
+			$typeerror = $action;
 
 		$data = array();
-		if($rs_access AND $im_access)
+		if($rs_access != FALSE AND $im_access != FALSE)
 		{
 			$this->session->set_userdata('userdata', $rs_access);
-			redirect('Index/vistainterna');
+			redirect('Home');
 		}
 		else
 		{
-			$this->session->sess_destroy(); sleep(3);
-			header('location:'.site_url('/Indexauth/index/'.$typeerror));
+			$this->session->sess_destroy();
+			if($action == 'logout')
+				redirect('Index');
+			else
+				header('location:'.site_url('/Indexauth/index/'.$typeerror));
 		}
 	}
 
 }
 
-/* End of file Indexauth.php */
-/* Location: ./application/controllers/Indexauth.php */
+/* End of file welcome.php */
+/* Location: ./application/controllers/welcome.php */

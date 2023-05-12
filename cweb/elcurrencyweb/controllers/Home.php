@@ -19,8 +19,7 @@ class Home extends CP_Controller {
 	{
 		parent::__construct();
 		$this->load->helper(array('form', 'url','html'));
-		$this->output->enable_profiler(ENVIRONMENT !== 'production');
-
+		$this->checksession();
 	}
 
 	/**
@@ -33,7 +32,6 @@ class Home extends CP_Controller {
 	public function index()
 	{
 		$data = array();
-		$data['menu'] = $this->genmenu();
 		$data['currentctr'] = $this->currentctr;
 		$data['currentinx'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;

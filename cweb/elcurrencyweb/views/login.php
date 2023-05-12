@@ -1,13 +1,10 @@
 <?php
 
-$idmail = 'usermail';
-$idpass = 'userpass';
+$idmail = 'username';
+$idpass = 'userclave';
 $idurl = 'userurl';
 
 echo div_open('class="contain-login d-flex"');
-	// echo div_open('class="contain-fund d-flex justify-content-center align-items-center"');
-	// 	echo heading('Currency Manager',1,'class="text-white display-1" style="font-family: cursive;"');
-	// echo div_close();
 	echo div_open('class="mx-auto my-auto py-3 px-3" style="    
 	border-radius: 11px;
 	background-color: #ffffffc4;"');

@@ -14,7 +14,7 @@ echo div_open('class="contain-index d-flex"');
 			  </div>
 			  <div class="card-footer">
 				<small class="text-muted">
-					<a class="btn btn-default btn-outline-success" href="<?php echo site_url();?>/Login"><i class="icon icon-screen-desktop"></i>Try it!</a>
+					<a class="btn btn-default btn-outline-success" href="<?php echo site_url();?>/Indexauth"><i class="icon icon-screen-desktop"></i>Try it!</a>
 				</small>
 			  </div>
 			</div>
@@ -26,7 +26,7 @@ echo div_open('class="contain-index d-flex"');
 			  </div>
 			  <div class="card-footer">
 				<small class="text-muted">
-					<a class="btn btn-default btn-outline-success" href="<?php echo site_url();?>/Login"><i class="icon icon-screen-desktop"></i>Login!</a>
+					<a class="btn btn-default btn-outline-success" href="<?php echo site_url();?>/Indexauth/index"><i class="icon icon-screen-desktop"></i>Login!</a>
 				</small>
 			  </div>
 			</div>

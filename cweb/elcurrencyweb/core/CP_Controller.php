@@ -29,10 +29,18 @@ class CP_Controller extends CI_Controller
 	public $usermails = FALSE;
 	/**  estado de usuario tomado de la session activa */
 	public $userstatus = 'INACTIVO';
+	/** variable to determine a valid api access with session */
+	public $userkey = NULL;
 	/** mecanismo barato para ver el controller que se denego desde la herencia*/
 	public $modulo = NULL;
 	/** objeto session del usuario */
 	private $sessobj = NULL;
+	/** variable to determine a valid user, if not is just an expectator */
+	public $currencywriter = FALSE;
+	/** creation time */
+	public $sessionficha = NULL;
+	/** modification time */
+	public $sessionflag = NULL;
 
 	/**
 	 * establece librerias de sesion y permisos asi como modulo si se especifica
@@ -44,7 +52,9 @@ class CP_Controller extends CI_Controller
 		parent::__construct();
 
 		$this->load->helper(array('form', 'url','html'));
-		$this->load->library(array('table','session'));
+		$this->load->library('table');
+		$this->load->library('session');
+		$this->load->library('form_validation');
 
 		$this->currentctr = $this->router->fetch_class();
 		$this->currentinx = $this->router->fetch_method();
@@ -52,6 +62,7 @@ class CP_Controller extends CI_Controller
 		$this->currenturl = $this->uri->uri_string();
 		$this->arraymurls = explode("/", $this->currenturl );
 		$this->currentmod = $this->arraymurls[0];
+		$this->sessionflag = date('YmdHis');
 
 		if($modulo !== NULL AND trim($modulo) !== '')
 			$this->module = $modulo;
@@ -82,28 +93,43 @@ class CP_Controller extends CI_Controller
 		if( $userurl != '')
 			$redirurl = $this->userurl;
 
-			if($this->sessobj == NULL)
-			{
-				redirect('Indexauth/auth/login?userurl='.$redirurl,'location');
-				return;
-			}
-			$this->datasession();
+		$currencywriter = TRUE;
+		if($this->sessobj == NULL)
+				$currencywriter = FALSE;
+
+		$this->datasession($currencywriter);
 	}
 
 	/** datos de session, si invalido genera invalidez */
-	public function datasession()
+	public function datasession($currencywriter = NULL)
 	{
 		$userdata = $this->sessobj;
+		$this->username = NULL;
+		$this->userstatus = 'INACTIVO';
+		$this->sessionficha = NULL;
+		$this->sessionflag = NULL;
+
 		if( is_array($userdata) )
 		{
 			foreach($userdata as $variable => $varvalue)
 			{
 				if( $variable == 'userkey' )
+				{
+					log_message('debug','Request, setting session data userkey as '.print_r($userdata[$variable],TRUE));
+					$this->$variable = 'user key TODO'; // TODO: retrieve a generated user key with i dont know .. md5() ?
 					continue;
+				}
 				if( array_key_exists($variable, $userdata) )
-					$this->$variable = $userdata[$variable];
+				{
+					$userdataval = $userdata[$variable];
+					log_message('debug','Request, setting session data '.print_r($variable,TRUE).' as '.print_r($userdataval,TRUE));
+					$this->$variable = $userdataval;
+				}
 			}
+			$this->currencywriter = $currencywriter;
+			$this->sessionflag = date('YmdHis');
 		}
+
 	}
 
 	/* 

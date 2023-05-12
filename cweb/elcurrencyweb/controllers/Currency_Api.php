@@ -17,7 +17,7 @@ class Currency_Api extends CP_Controller {
 	{
 		parent::__construct();
 		$this->load->helper(array('form', 'url','html'));
-		$this->output->enable_profiler(ENVIRONMENT !== 'production');
+		$this->output->enable_profiler(FALSE); // set to true only to debug the json results api
 	}
 
 

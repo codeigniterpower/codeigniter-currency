@@ -44,7 +44,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="<?php echo site_url() . "/Login/logout"?>" class="nav-link px-0 align-middle links-menu">
+						<a href="<?php echo site_url() . "/Indexauth/auth/logout"?>" class="nav-link px-0 align-middle links-menu">
 							<i class="bi bi-box-arrow-in-right" style="font-size: 21px;"></i>
 							<span class="ms-1 d-none d-sm-inline links-menu">
 								Logout

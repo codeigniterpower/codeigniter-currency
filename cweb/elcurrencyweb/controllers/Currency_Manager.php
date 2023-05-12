@@ -17,7 +17,7 @@ class Currency_Manager extends CP_Controller {
 	{
 		parent::__construct();
 		$this->load->helper(array('form', 'url','html'));
-		$this->output->enable_profiler(ENVIRONMENT !== 'production');
+		$this->checksession();
 	}
 
 	/**

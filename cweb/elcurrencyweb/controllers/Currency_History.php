@@ -16,8 +16,8 @@ class Currency_History extends CP_Controller {
 	function __construct()
 	{
 		parent::__construct();
-	$this->load->helper(array('form', 'url','html'));
-	$this->output->enable_profiler(ENVIRONMENT !== 'production');
+		$this->load->helper(array('form', 'url','html'));
+		$this->checksession();
 
 	}
 
