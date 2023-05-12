@@ -18,9 +18,6 @@ class Index extends CP_Controller {
 	function __construct()
 	{
 		parent::__construct();
-
-		$data = array();
-		$this->data = $data;
 	}
 
 	/**
@@ -32,7 +29,7 @@ class Index extends CP_Controller {
 	 */
 	public function index()
 	{
-		$data = $this->data;
+		$data = array();
 		$data['currentctr'] = $this->currentctr;
 		$data['currentinx'] = $this->currentinx;
 		$data['currenturl'] = $this->currenturl;
@@ -41,44 +38,6 @@ class Index extends CP_Controller {
 		$this->load->view('footer',$data);
 	}
 
-	/**
-	 * index que muestra vista con instrucciones, las instrucciones estan en la vista indexinput
-	 * esta vista revisa si es sesion activa y la muestra, sino redirige a login.
-	 * 
-	 * @name: vistainicio
-	 * @param void
-	 * @return void
-	 */
-	public function vistainterna()
-	{
-		$this->checksession();
-		$data = $this->data;
-		$data['currentctr'] = $this->currentctr;
-		$data['currentinx'] = $this->currentinx;
-		$data['currenturl'] = $this->currenturl;
-		$this->load->view('header',$data);
-		$this->load->view('vista_home',$data);
-		$this->load->view('footer',$data);
-	}
-
-	/**
-	 * vistasalida que muestra vista con instrucciones, las instrucciones estan en la vista indexinput
-	 * esta vista es publica por defecto, y no necesita revisarse por sesion activa
-	 * 
-	 * @name: vistasalida
-	 * @param void
-	 * @return void
-	 */
-	public function vistapublica()
-	{
-		$data = $this->data;
-		$data['currentctr'] = $this->currentctr;
-		$data['currentinx'] = $this->currentinx;
-		$data['currenturl'] = $this->currenturl;
-		$this->load->view('header',$data);
-		$this->load->view('vista_publica',$data);
-		$this->load->view('footer',$data);
-	}
 
 }
 
