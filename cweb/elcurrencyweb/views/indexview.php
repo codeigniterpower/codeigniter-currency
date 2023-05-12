@@ -1,5 +1,5 @@
 <?php
-echo div_open('class="contain-index d-flex"');
+echo div_open('class="contain-index d-flex contain-min"');
 	$userurl = $this->input->get_post('userurl');
 	?>
 
@@ -9,20 +9,20 @@ echo div_open('class="contain-index d-flex"');
 			<div class="card m-4" style="width: 300px;">
 			  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
 			  <div class="card-body">
-				<h3 class="card-title">Currency Manager</h3>
-				<p class="card-text">A simple web based currency rate manager for your own currency rate history.</p>
+				<h3 class="card-title">Currency Rates</h3>
+				<p class="card-text">A simple web based currency rate for your own currency rate history.</p>
 			  </div>
 			  <div class="card-footer">
 				<small class="text-muted">
-					<a class="btn btn-default btn-outline-success" href="<?php echo site_url();?>/Indexauth"><i class="icon icon-screen-desktop"></i>Try it!</a>
+					<a class="btn btn-default btn-outline-success" href="<?php echo site_url();?>/Currency_Manager"><i class="icon icon-screen-desktop"></i>Try it!</a>
 				</small>
 			  </div>
 			</div>
 			<div class="card m-4" style="width: 300px;">
 			  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
 			  <div class="card-body">
-				<h3 class="card-title">Free & Self-hosted</h3>
-				<p class="card-text">Liberate your software from proprietary shackles. Currency Manager offers to save rates to a platform you own..</p>
+				<h3 class="card-title">Currency Manager</h3>
+				<p class="card-text">Liberate your software from proprietary shackles! save rates to a platform you own..</p>
 			  </div>
 			  <div class="card-footer">
 				<small class="text-muted">
