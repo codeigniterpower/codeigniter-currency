@@ -2,7 +2,7 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	
 	// initialization of default meta tags
-	echo doctype('xhtml1-trans'), PHP_EOL,'<html xmlns="http://www.w3.org/1999/xhtml">', PHP_EOL;
+	echo doctype('xhtml1-trans'), PHP_EOL,'<html xmlns="http://www.w3.org/1999/xhtml" style="min-height: 600px;" >', PHP_EOL;
 	echo '<head>'. PHP_EOL;
 	// the header helper is a custom own project helper that already loads all the necesary headers meta tags
 		$this->load->helper('header');
@@ -30,5 +30,5 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	echo '</head>'. PHP_EOL;
 	echo '<body>'.PHP_EOL;
 echo '<!-- START MAIN CONTAINER AND MENU TAG CNTAINER , it ends in the footer view -->';
-echo '<div class="container-fluid">'.PHP_EOL;
+echo '<div class="container-fluid contain-min">'.PHP_EOL;
 echo '<div class="row flex-nowrap">'.PHP_EOL;

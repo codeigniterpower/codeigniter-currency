@@ -1,4 +1,4 @@
-<div class="col py-1 d-flex contain-converter">
+<div class="col py-1 d-flex contain-converter contain-min">
     <section>
 		<div id="alert-errors">
 			<!-- HERE IS THE NOTIFICATION -->

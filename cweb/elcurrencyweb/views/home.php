@@ -1,6 +1,6 @@
 
 	<!-- HOME BUTTONS CARD INI -->
-	<div class="col py-0 px-0 contain-homesession">
+	<div class="col py-0 px-0 contain-homesession contain-min">
 		<div class="contain-image">
 			<div class="card-deck d-flex justify-content-around  flex-wrap">
 				<div class="card m-3" style="width: 300px;">

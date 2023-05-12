@@ -38,6 +38,9 @@
 .dataTables_length{
     display: none;
 }
+.contain-min{
+	min-height: 600px; /* need by the ionic app, until we convert all to progressive app*/
+}
 .contain-index{
     height: 100vh !important; 
     background-image: url('../media/currency-coins-and-bank-image.jpg');
