@@ -34,4 +34,5 @@
 *.sqlite binary
 *.dbsqlite binary
 *.db binary
+*.mwb binary
 
