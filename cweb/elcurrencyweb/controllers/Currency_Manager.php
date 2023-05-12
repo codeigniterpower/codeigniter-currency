@@ -43,10 +43,8 @@ class Currency_Manager extends CP_Controller {
 	{
 		// load user preferences, lib must be init after loading
 		$this->load->library('Userlib');
-		$this->userlib->initialize('gonzalez_angel');
-		//$this->userlib->initialize('lenz_gerardo');
+		$this->userlib->initialize($this->username);
 
-		$this->userlib->getID();
 		$this->load->model('Currency_m','dbcm');
 		$user_preferences = $this->userlib->getUser();
 		$cur_monedas_base = $this->userlib->getBaseCurrency();
@@ -56,6 +54,7 @@ class Currency_Manager extends CP_Controller {
 		$currency_list_dbarraypre = array();
 		// ver si id y status es valido ejemplo $this->userlib->isActive(); solo edita si esta activo
 		$data['active'] = $active = $this->userlib->isActive();
+		$data['user_id'] = $active = $this->userlib->getID();
 		$currency_list_dbarraynow = $this->dbcm->readCurrenciesTodayStored();
 		if($active)
 		{
@@ -76,7 +75,7 @@ class Currency_Manager extends CP_Controller {
 		$this->load->view('header',$data);
 		$this->load->view('menu',$data);
 		$this->load->view('currency',$data);
-		$this->load->view('footer_internal',$data);
+		$this->load->view('footer',$data);
 	}
 
 }

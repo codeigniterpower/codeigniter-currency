@@ -1,5 +1,5 @@
 
-<div class="col py-1 d-flex contain-currency" style="background-color: #f9faff;">
+<div class="col py-1 d-flex contain-currency contain-min" style="background-color: #f9faff;">
 		<!-- <section>
 			<div id="contain-modal"> -->
 				<!-- HERE IS THE DIALOG PLACE -->
@@ -92,8 +92,8 @@
 	<script>
 		let baseUrl = "<?php echo site_url(); ?>";
 		let uricall = baseUrl + '/Currency_Api';
-		let user_st = "<?php echo $active; ?>";
-		let user_id = "<?php $user_id = 'gonzalez_angel'; echo $user_id; ?>";
+		let user_st = <?php echo $active; ?>;
+		let user_id = "<?php echo $user_id; ?>";
 		let tableId = '#table_id';
 		let tableId2 = '#table_id2';
 		let urlUpdateRateAmount = '/updateRateAmount'
@@ -165,7 +165,7 @@
 							})
 					});
 			}
-		if(user_st)
+		if(user_st > 0)
 		{
 			/* table today prefered currencies data click on amount */
 			addEventClickTable(tableId,table1,urlUpdateRateAmount)

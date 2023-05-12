@@ -26,6 +26,8 @@ class Userlib
 	private $active = FALSE;
 	/** user id or the email  */
 	private $user_id = NULL;
+	/** user full name and second name  */
+	private $usernape = 'invalid';
 	/** user name or the email  */
 	private $username = 'invalid';
 	/** user currency monedas base  */
@@ -216,6 +218,18 @@ class Userlib
 	}
 
 	/**
+	 * This check that the string does not being empty, null, or do not contains invalid chars
+	 * name: _checkinputsuser
+	 * @author    mckaygerhard
+	 * @param string user_id
+	 * @return array user_preferences
+	 */
+	private function _checkinputsuser($variable)
+	{
+		return preg_match('/^[0-9A-Za-z\-_]+$/', $variable);
+	}
+
+	/**
 	 * setup and get all the user info into the class
 	 *
 	 * @author  mckaygerhard PICCORO Lenz McKAY
@@ -226,13 +240,13 @@ class Userlib
 	function getUserDataAndSetup($user_email = null) 
 	{
 
-		if(is_null($user_email) !== TRUE and empty($user_email) !== TRUE )
-			$this->user_id = $user_email;
+		if( $this->_checkinputsuser($user_email) !== FALSE ) $this->user_id = $user_email;
+
 		$user_email = $this->user_id;
 		log_message('info', ' getting data from DB for' . $user_email);
 		$this->CI->load->model('Usuario_m');
 		$dbarray = $this->CI->Usuario_m->getUserData($user_email);
-		if( !is_array($dbarray) OR $dbarray === FALSE )
+		if( !is_array($dbarray) OR $dbarray == FALSE )
 		{
 			log_message('error', ' DB problem.. check settings');
 			return FALSE;
@@ -242,36 +256,39 @@ class Userlib
 			log_message('error', ' DB data.. seems hacked user settings');
 			return FALSE;
 		}
+
 		$user_data = $dbarray[0];
-		$this->username = str_replace('_',' ',$user_data['user_id']);
-		$this->user_id = str_replace('_',' ',$user_data['user_id']);
+		$this->usernape = str_replace('_',' ',$user_data['user_id']);
+		$this->user_id = $user_data['user_id'];
+		$this->username = $user_data['user_id'];
 		$this->status = $user_data['user_status'];
-		if($this->status == 'ACTIVO')
-		$this->active = TRUE;
+		if($this->status == 'ACTIVO') $this->active = TRUE; else $this->active = FALSE;
+			log_message('error', ' Dagtivo'.print_r($this->active,TRUE));
 		$this->cur_monedas_base = $user_data['cur_monedas_base'];
 		$this->cur_monedas_dest = $user_data['cur_monedas_dest'];
 		$this->sessionficha = $user_data['sessionficha'];
 		$this->sessionflag = $user_data['sessionflag'];
-		log_message('info', ' getting session from DB for' . $user_email);
-		$dbarray = $this->CI->Usuario_m->getUserSession($user_email);
-		if( !is_array($dbarray) OR $user_data === FALSE )
-		{
-			log_message('error', ' DB problem.. check user session');
-			return FALSE;
-		}
-		if( count($dbarray) == 0 )
-		{
-			log_message('info', ' DB data.. seems no session for this user');
-			$this->sessionuser = FALSE;
-			$this->active = FALSE;
-			$this->userextra = FALSE;
-		}
-		else
-		{
-			$user_data = $dbarray[0];
-			$this->sessionuser = $user_data['sessionuser'];
-			$this->userextra = $user_data['user_extra'];
-		}
+		
+		//log_message('info', ' getting session from DB for' . $user_email);
+		//$dbarray = $this->CI->Usuario_m->getUserSession($user_email);
+		//if( !is_array($dbarray) OR $user_data === FALSE )
+		//{
+			//log_message('error', ' DB problem.. check user session');
+			//return FALSE;
+		//}
+		//if( count($dbarray) == 0 )
+		//{
+			//log_message('info', ' DB data.. seems no session for this user');
+			//$this->sessionuser = FALSE;
+			//$this->active = FALSE;
+			//$this->userextra = FALSE;
+		//}
+		//else
+		//{
+			//$user_data = $dbarray[0];
+			//$this->sessionuser = $user_data['sessionuser'];
+			//$this->userextra = $user_data['user_extra'];
+		//}
 
 		$userarray['username'] = $this->username ;
 		$userarray['user_id'] = $this->user_id ;
