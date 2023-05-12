@@ -8,17 +8,28 @@ class Authmodel extends CI_Model
 		$this->load->library('form_validation');
 	}
 
+	private function _checkinputsuser($variable)
+	{
+		return preg_match('/^[0-9A-Za-z\-_]+$/', $variable);
+	}
+
 	public function authtable($username, $password)
 	{
 		log_message('info', __METHOD__ .' begin ');
 
-		$validu = $this->form_validation->required($username);
-		$validu = $this->form_validation->alpha_dash($username);
-		$validu = $this->form_validation->max_length($username,40);
-		$valids = $this->form_validation->required($password);
-		$valids = $this->form_validation->alpha($password);
+		$validu = $this->_checkinputsuser($username);
+		if($validu == FALSE)
+		{
+			log_message('info', __METHOD__ .' check input user, invalid user: '. print_r($username,TRUE));
+			return FALSE;
+		}
 
-		if($validu == FALSE OR $valids == FALSE) return FALSE;
+		$validu = $this->_checkinputsuser($password);
+		if($validu == FALSE)
+		{
+			log_message('info', __METHOD__ .' check input user, invalid key: '. print_r($password,TRUE));
+			return FALSE;
+		}
 
 		$this->load->database();
 		$query = $this->db->get_where('cur_usuarios', array('user_id'=>$username));
@@ -38,13 +49,19 @@ class Authmodel extends CI_Model
 	{
 		log_message('info', __METHOD__ .' begin ');
 
-		$validu = $this->form_validation->required($username);
-		$validu = $this->form_validation->alpha_dash($username);
-		$validu = $this->form_validation->max_length($username,40);
-		$valids = $this->form_validation->required($password);
-		$valids = $this->form_validation->alpha($password);
+		$validu = $this->_checkinputsuser($username);
+		if($validu == FALSE)
+		{
+			log_message('info', __METHOD__ .' check input user, invalid user: '. print_r($username,TRUE));
+			return FALSE;
+		}
 
-		if($validu == FALSE OR $valids == FALSE) return FALSE;
+		$validu = $this->_checkinputsuser($password);
+		if($validu == FALSE)
+		{
+			log_message('info', __METHOD__ .' check input user, invalid key: '. print_r($password,TRUE));
+			return FALSE;
+		}
 
 		$config = array('plain'=> TRUE, 'username' => $username, 'password' => $password);
 		$this->load->library('Imap', $config);
