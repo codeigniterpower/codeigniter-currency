@@ -44,8 +44,21 @@
     background-size: cover;
     background-repeat: no-repeat;   
 }
-@media screen and (min-width:800px) {
-    .contain-login{
-        height: 100vh !important; 
-    }
+.contain-currency{
+    height: 100vh !important; 
+    background-image: url('../media/currency-data-money-currency.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.contain-history{
+    height: 100vh !important; 
+    background-image: url('../media/currency-history-media.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.contain-homesession{
+    height: 100vh !important; 
+    background-image: url('../media/currencyhome.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
 }

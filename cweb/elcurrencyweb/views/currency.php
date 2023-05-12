@@ -1,5 +1,5 @@
 
-<div class="col py-1" style="background-color: #f9faff;">
+<div class="col py-1 d-flex contain-currency" style="background-color: #f9faff;">
 		<!-- <section>
 			<div id="contain-modal"> -->
 				<!-- HERE IS THE DIALOG PLACE -->

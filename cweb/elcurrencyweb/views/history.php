@@ -1,7 +1,7 @@
 <?php
 	$titleini = 'History of your coins rate';
 	$titlesub = 'Filtering total of ';
-	echo div_open('class="col py-3"');
+	echo div_open('class="col py-3 d-flex contain-history"');
 		echo '<section>';
 			echo div_open('id="liveAlertPlaceholder"');
 			echo div_close();
