@@ -242,7 +242,7 @@ class Currency_m extends CI_Model
 					t.cod_tasa,
 					t.mon_tasa_moneda,
 						(SELECT 
-								m1.iso4217a3 || \":\" || m1.nombre_moneda
+								CONCAT(m1.iso4217a3, \":\", m1.nombre_moneda)
 							FROM
 								".$this->tablecm." AS m1
 							WHERE
@@ -250,7 +250,7 @@ class Currency_m extends CI_Model
 							LIMIT 1 OFFSET 0) 
 					AS moneda_base,
 						(SELECT 
-								m1.iso4217a3 || \":\" || m1.nombre_moneda
+								CONCAT(m1.iso4217a3, \":\", m1.nombre_moneda)
 							FROM
 								".$this->tablecm." AS m1
 							WHERE
