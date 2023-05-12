@@ -3,7 +3,8 @@
     ?>	
 	<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script> 
 
-	<!-- FOOTER INI ON INTO-->
+	<!-- // TODO : FOOTER https://gitlab.com/codeigniterpower/codeigniter-currencylib/-/issues/7 -->
+	<!-- FOOTER INI ON INTO
         <footer class="footer pb-4" style="text-align: center;">
         	<small class="d-flex align-items-center text-white text-decoration-none d-sm-inline mx-1"><p style="display: flex; justify-content: center;  color: black;">
         		<?php if (ENVIRONMENT !== 'production') echo '<p class="ms-1 d-none d-sm-inline" style=" color: black;">DEVEL MODE: ON <br>(<strong>render: {elapsed_time}</strong> s).</p>'. PHP_EOL; ?>
@@ -12,5 +13,6 @@
         		</p>
         	</small>
         </footer>
+     -->
     </div>
 </div>

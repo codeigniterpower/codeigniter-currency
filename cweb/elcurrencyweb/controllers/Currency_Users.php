@@ -50,8 +50,7 @@ class Currency_Users extends CP_Controller {
 		$this->load->view('header',$data);
 		$this->load->view('menu');
 		$this->load->view('empty',$data);
-		// $this->load->view('footer',$data);
-		$this->load->view('footer_internal',$data);
+		$this->load->view('footer',$data);
 
 	}
 }
