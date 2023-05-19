@@ -27,6 +27,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		// loadinig of bootstratps style and icons
 		echo link_css("https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css", 'integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"');
 		echo link_css("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+		echo link_css("https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css");
 	echo '</head>'. PHP_EOL;
 	echo '<body>'.PHP_EOL;
 echo '<!-- START MAIN CONTAINER AND MENU TAG CNTAINER , it ends in the footer view -->';

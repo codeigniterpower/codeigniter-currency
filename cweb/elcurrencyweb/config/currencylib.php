@@ -5,5 +5,5 @@ Currency api integration lib
 
 */
 
-$config['currency_api_key'] = 'VTXSPXbScl9XeMHzetvJQS9a1DXU0YXj';//'YOUR_API_KEY X';
+$config['currency_api_key'] = 'VT8SP8bScl98eMHzetvJQS9a1D8U0Y8j';//'YOUR_API_KEY X';
 $config['currency_api_url'] = 'https://api.apilayer.com/exchangerates_data';
