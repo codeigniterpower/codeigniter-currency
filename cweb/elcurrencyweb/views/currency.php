@@ -27,7 +27,6 @@
 						echo form_button('button-call', $buttonicon, 'class="btn btn-outline-success" id="button-call" ');
 					echo div_close();
 				}
-				$htmldatadisplaymycurrencies = 'There is no data today, yet ..'.$htmldisplaymessageapibutton;
 				if(is_array($currency_list_dbarraypre) )
 				{
 					if(count($currency_list_dbarraypre))
@@ -47,7 +46,6 @@
 						'cell_end'              => '</td>',
 						) );
 						$this->table->set_heading(array_keys($currency_list_dbarraypre[0]));
-						$htmldatadisplaymycurrencies = $this->table->generate($currency_list_dbarraypre);
 					}
 				}
 				$htmldatadisplayallcurrencies = 'The data of world currency rates today is not yet present.. '.$htmldisplaymessageapibutton;
@@ -75,12 +73,72 @@
 				}
 				// https://www.codeigniter.com/userguide3/libraries/uri.html
 				
-				echo heading('Your preferred currency rates',3,);
-				echo div_open('');
-					echo '<section>'.$htmldatadisplaymycurrencies.'</section>';
-				echo div_close();
-				echo heading('Your today all currency rates',3,);
-				echo div_open('');
+				?>
+
+
+
+	<!-- HOME BUTTONS CARD INI -->
+		<div class="contain-image">
+			<div class="card-deck d-flex justify-content-around  flex-wrap">
+				<div class="card m-3" style="width: 300px;">
+					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+					<div class="card-body">
+						<h5 class="card-title">
+							<span class="fi fi-ve"></span> <span class="fi fi-ve fis"></span>
+						</h5>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">
+							<a href="<?php echo site_url() . "/Currency_Manager"; ?>" class="nav-link px-0 align-middle links-menu">
+								<i class="fs-4 bi-table links-menu"></i>
+								<span class="ms-1 d-none d-sm-inline links-menu">
+									Currency
+								</span>
+							</a>
+						</small>
+					</div>
+				</div>
+				<div class="card m-3" style="width: 300px;">
+					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+					<div class="card-body">
+						<h5 class="card-title">
+							<span class="fi fi-eu"></span> <span class="fi fi-eu fis"></span>
+						</h5>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">
+							<a href="<?php echo site_url() . "/Currency_History"; ?>" class="nav-link px-0 align-middle links-menu">
+								<i class="fs-4 bi-speedometer2 links-menu"></i>
+								<span class="ms-1 d-none d-sm-inline links-menu">
+									History
+								</span>
+							</a>
+						</small>
+					</div>
+				</div>
+				<div class="card m-3" style="width: 300px;">
+					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+					<div class="card-body">
+						<h5 class="card-title">
+							<span class="fi fi-cn"></span> <span class="fi fi-cn fis"></span>
+						</h5>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">
+							<a href="<?php echo site_url() . "/Currency_Converter"; ?>" class="nav-link px-0 align-middle links-menu">
+								<i class="fs-4 bi-currency-exchange links-menu"></i>
+								<span class="ms-1 d-none d-sm-inline links-menu">
+									Convert
+								</span>
+							</a>
+						</small>
+					</div>
+				</div>
+			</div>
+		<!-- HOME BUTTONS CARD END -->
+				<?php 
+					echo heading('Your today all currency rates',3,);
+					echo div_open('');
 					echo '<section>'.$htmldatadisplayallcurrencies.'</section>';
 				echo div_close();
 				?>
