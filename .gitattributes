@@ -35,4 +35,5 @@
 *.dbsqlite binary
 *.db binary
 *.mwb binary
+*.ttf binary
 
