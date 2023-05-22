@@ -90,7 +90,7 @@
 					<div class="card-footer">
 						<small class="text-muted">
 								<i class="fi fi-ve"></i>
-								<span class="ms-1 d-none d-sm-inline">
+								<span class="ms-1 d-sm-inline">
 									<?php
 									foreach($currency_list_dbarraynow as $index=>$currencyindex)
 									{
@@ -115,7 +115,7 @@
 					<div class="card-footer">
 						<small class="text-muted">
 								<i class="fi fi-eu"></i>
-								<span class="ms-1 d-none d-sm-inline">
+								<span class="ms-1 d-sm-inline">
 									<?php
 									foreach($currency_list_dbarraynow as $index=>$currencyindex)
 									{
@@ -140,7 +140,7 @@
 					<div class="card-footer">
 						<small class="text-muted">
 								<i class="fi fi-cn"></i>
-								<span class="ms-1 d-none d-sm-inline">
+								<span class="ms-1 d-sm-inline">
 									<?php
 									foreach($currency_list_dbarraynow as $index=>$currencyindex)
 									{
