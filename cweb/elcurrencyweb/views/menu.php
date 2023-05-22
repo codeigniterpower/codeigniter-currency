@@ -44,10 +44,15 @@
 						</a>
 					</li>
 					<li>
-						<a href="<?php echo site_url() . "/Indexauth/auth/logout"?>" class="nav-link px-0 align-middle links-menu">
+						<a href="<?php if(array_key_exists('userdata',$_SESSION)) echo site_url() . "/Indexauth/auth/logout"; else echo site_url()."/Indexauth/auth/login"; ?>" class="nav-link px-0 align-middle links-menu">
 							<i class="bi bi-box-arrow-in-right" style="font-size: 21px;"></i>
 							<span class="ms-1 d-none d-sm-inline links-menu">
-								Logout
+								<?php
+								if(array_key_exists('userdata',$_SESSION))
+									echo 'Logout';
+								else
+									echo 'Login';
+								?>
 							</span>
 						</a>
 					</li>
