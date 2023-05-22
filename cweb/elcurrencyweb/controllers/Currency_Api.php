@@ -102,8 +102,8 @@ class Currency_Api extends CP_Controller {
 		if($validfields == FALSE){
 			log_message('error', __METHOD__ .' POST : ' . print_r($user_id, TRUE) . ' user_id is not valid : '.print_r($validfields, TRUE));
 			$error = json_encode(array('result' =>'user_id is not valid'));
-			echo $error;
 			$this->output->set_status_header(401);
+			echo $error;
 			return $error;
 		}
 
@@ -112,8 +112,8 @@ class Currency_Api extends CP_Controller {
 		if($validfields == FALSE){
 			log_message('error', __METHOD__ .' POST : ' . print_r($codkey, TRUE) . ' codkey is not valid : '.print_r($validfields, TRUE));
 			$error = json_encode(array('result' =>'codkey is not valid'));
-			echo $error;
 			$this->output->set_status_header(401);
+			echo $error;
 			return $error;
 		}
 
@@ -168,8 +168,8 @@ class Currency_Api extends CP_Controller {
 		$data['currenturl'] = $this->currenturl;
 		log_message('debug', __METHOD__ .' saved? : ' .print_r($data,TRUE). ' from parameter: '.print_r($currencyDate, TRUE));
 		$result = json_encode($data);
-		echo $result;
 		$this->output->set_status_header(200);
+		echo $result;
 		return $result;
 	}
 
