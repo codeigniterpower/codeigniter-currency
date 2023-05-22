@@ -246,7 +246,7 @@
 		if(user_st > 0)
 		{
 			/* table today prefered currencies data click on amount */
-			addEventClickTable(tableId,table1,urlUpdateRateAmount)
+			//addEventClickTable(tableId,table1,urlUpdateRateAmount)
 			/* table today all currencies data click on amount */
 			addEventClickTable(tableId2,table2,urlUpdateRateAmount)
 		}
