@@ -2,6 +2,8 @@
 
 Currency converter library and also a manager interface for/using codeigniter and exchangerate.io
 
+> Warning: currently the auth is disabled and you can just put any password
+
 ## Description
 
 This project provides two things: a **library that integrates 
@@ -10,6 +12,10 @@ this last splited into an app for phones and a web interface to manage your
 currencies, its big difference is that you can change the base currency at any time 
 regardless of whether it was already deployed.
 
+The system is free view, authentication is only to get write permissions 
+and/or overwrited rate currencies. User management initially only indicates 
+whether or not you can alter the coin rates. In the future, access permissions 
+will be implemented.
 
 #### Artifacs
 
