@@ -74,10 +74,8 @@
 					}
 				}
 				// https://www.codeigniter.com/userguide3/libraries/uri.html
+
 				?>
-
-
-
 	<!-- HOME BUTTONS CARD INI -->
 		<div class="contain-image">
 			<div class="card-deck d-flex justify-content-around  flex-wrap">
@@ -86,14 +84,20 @@
 					<div class="card-body">
 						<h5 class="card-title d-flex justify-content-center" style="font-size: 4.25rem;" >
 							<span class="fi fi-ve"></span>
+							<span class="fi fi-us"></span>
 						</h5>
 					</div>
 					<div class="card-footer">
 						<small class="text-muted">
-							<a href="<?php echo site_url() . "/Currency_Manager"; ?>" class="nav-link px-0 align-middle links-menu">
-								<i class="fs-4 bi-table links-menu"></i>
-								<span class="ms-1 d-none d-sm-inline links-menu">
+								<i class="fi fi-ve"></i>
+								<span class="ms-1 d-none d-sm-inline">
 									<?php
+									foreach($currency_list_dbarraynow as $index=>$currencyindex)
+									{
+										$value = stripos($currencyindex['moneda_destino'], 'VES');
+										if( $value !== FALSE)
+											echo $currencyindex['mon_tasa_moneda'];
+									}
 									?>
 								</span>
 							</a>
@@ -105,16 +109,20 @@
 					<div class="card-body">
 						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
 							<span class="fi fi-eu"></span>
-							 <!-- <span class="fi fi-eu fis"></span> -->
+							<span class="fi fi-us"></span>
 						</h5>
 					</div>
 					<div class="card-footer">
 						<small class="text-muted">
-							<a href="<?php echo site_url() . "/Currency_History"; ?>" class="nav-link px-0 align-middle links-menu">
-								<i class="fs-4 bi-speedometer2 links-menu"></i>
-								<span class="ms-1 d-none d-sm-inline links-menu">
-									History
+								<i class="fi fi-eu"></i>
+								<span class="ms-1 d-none d-sm-inline">
 									<?php
+									foreach($currency_list_dbarraynow as $index=>$currencyindex)
+									{
+										$value = stripos($currencyindex['moneda_destino'], 'EUR');
+										if( $value !== FALSE)
+											echo $currencyindex['mon_tasa_moneda'];
+									}
 									?>
 								</span>
 							</a>
@@ -126,16 +134,20 @@
 					<div class="card-body">
 						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
 							<span class="fi fi-cn"></span> 
-							<!-- <span class="fi fi-cn fis"></span> -->
+							<span class="fi fi-us"></span>
 						</h5>
 					</div>
 					<div class="card-footer">
 						<small class="text-muted">
-							<a href="<?php echo site_url() . "/Currency_Converter"; ?>" class="nav-link px-0 align-middle links-menu">
-								<i class="fs-4 bi-currency-exchange links-menu"></i>
-								<span class="ms-1 d-none d-sm-inline links-menu">
-									Convert
+								<i class="fi fi-cn"></i>
+								<span class="ms-1 d-none d-sm-inline">
 									<?php
+									foreach($currency_list_dbarraynow as $index=>$currencyindex)
+									{
+										$value = stripos($currencyindex['moneda_destino'], 'CNY');
+										if( $value !== FALSE)
+											echo $currencyindex['mon_tasa_moneda'];
+									}
 									?>
 								</span>
 							</a>
