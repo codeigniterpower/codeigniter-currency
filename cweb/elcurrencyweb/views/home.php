@@ -13,9 +13,9 @@
 					</div>
 					<div class="card-footer">
 						<small class="text-muted">
-							<a href="<?php echo site_url() . "/Currency_Manager"; ?>" class="nav-link px-0 align-middle links-menu">
-								<i class="fs-4 bi-table links-menu"></i>
-								<span class="ms-1 d-none d-sm-inline links-menu">
+							<a href="<?php echo site_url() . "/Currency_Manager"; ?>" class="px-0 align-middle">
+								<i class="fs-4 bi-table"></i>
+								<span class="ms-1 d-none d-sm-inline">
 									Currency
 								</span>
 							</a>
@@ -32,9 +32,9 @@
 					</div>
 					<div class="card-footer">
 						<small class="text-muted">
-							<a href="<?php echo site_url() . "/Currency_History"; ?>" class="nav-link px-0 align-middle links-menu">
-								<i class="fs-4 bi-speedometer2 links-menu"></i>
-								<span class="ms-1 d-none d-sm-inline links-menu">
+							<a href="<?php echo site_url() . "/Currency_History"; ?>" class="px-0 align-middle">
+								<i class="fs-4 bi-speedometer2"></i>
+								<span class="ms-1 d-none d-sm-inline">
 									History
 								</span>
 							</a>
@@ -51,9 +51,9 @@
 					</div>
 					<div class="card-footer">
 						<small class="text-muted">
-							<a href="<?php echo site_url() . "/Currency_Converter"; ?>" class="nav-link px-0 align-middle links-menu">
-								<i class="fs-4 bi-currency-exchange links-menu"></i>
-								<span class="ms-1 d-none d-sm-inline links-menu">
+							<a href="<?php echo site_url() . "/Currency_Converter"; ?>" class="px-0 align-middle">
+								<i class="fs-4 bi-currency-exchange"></i>
+								<span class="ms-1 d-none d-sm-inline">
 									Convert
 								</span>
 							</a>
@@ -78,9 +78,9 @@
 							<p>
 								This project was born from a requirement to keep the conversions between currencies synchronized in an intranet, but open source. PLACE HERE LINKS TO GITLAB RSS feed
 								<small class="text-muted">
-									<a href="https://gitlab.com/codeigniterpower/codeigniter-currencylib" class="nav-link px-0 align-middle links-menu">
-										<i class="fs-4 bi-people links-menu"></i>
-										<span class="ms-1 d-none d-sm-inline links-menu">
+									<a href="https://gitlab.com/codeigniterpower/codeigniter-currencylib" class="px-0 align-middle ">
+										<i class="fs-4 bi-people"></i>
+										<span class="ms-1 d-none d-sm-inline">
 											Check the project!
 										</span>
 									</a>
