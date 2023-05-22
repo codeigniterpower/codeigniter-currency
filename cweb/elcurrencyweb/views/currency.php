@@ -96,7 +96,9 @@
 									{
 										$value = stripos($currencyindex['moneda_destino'], 'VES');
 										if( $value !== FALSE)
-											echo $currencyindex['mon_tasa_moneda'];
+										{
+											echo number_format((float)$currencyindex['mon_tasa_moneda'], 2, ',', ''); break;
+										}
 									}
 									?>
 								</span>
@@ -121,7 +123,9 @@
 									{
 										$value = stripos($currencyindex['moneda_destino'], 'EUR');
 										if( $value !== FALSE)
-											echo $currencyindex['mon_tasa_moneda'];
+										{
+											echo number_format((float)$currencyindex['mon_tasa_moneda'], 2, ',', ''); break;
+										}
 									}
 									?>
 								</span>
@@ -146,7 +150,9 @@
 									{
 										$value = stripos($currencyindex['moneda_destino'], 'CNY');
 										if( $value !== FALSE)
-											echo $currencyindex['mon_tasa_moneda'];
+										{
+											echo number_format((float)$currencyindex['mon_tasa_moneda'], 2, ',', ''); break;
+										}
 									}
 									?>
 								</span>
