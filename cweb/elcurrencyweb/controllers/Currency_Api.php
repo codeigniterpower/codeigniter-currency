@@ -247,15 +247,9 @@ class Currency_Api extends CP_Controller {
 		$active = $this->userlib->isActive();
 		if($active)
 		{
-			$currency_list_dbarraynow = $this->dbcm->readCurrenciesTodayStored($currencyDest,$currencyDate,$currencyBase);
-			$currency_list_dbarraypre = $this->dbcm->readCurrenciesTodayStored($cur_monedas_dest,NULL,$cur_monedas_base);
+			$currency_list_dbarraynow = $this->dbcm->readCurrenciesTodayStored($currencyDest,NULL,$currencyBase);
 		}
 		$result = 0;
-		if(is_array($currency_list_dbarraypre))
-		{
-			if(count($currency_list_dbarraypre) > 0 );
-				$result = 1;
-		}
 		if(is_array($currency_list_dbarraynow))
 		{
 			if(count($currency_list_dbarraynow) > 0 );
@@ -264,12 +258,11 @@ class Currency_Api extends CP_Controller {
 		$data = array();
 		$data['result'] = $result;
 		$data['currency_list_dbarraynow'] = $currency_list_dbarraynow;
-		$data['currency_list_dbarraypre'] = $currency_list_dbarraypre;
 		$data['currenturl'] = $this->currenturl;
 		log_message('debug', __METHOD__ .' saved? : ' .print_r($data,TRUE). ' from parameter: '.print_r($currencyDate, TRUE));
 		$result = json_encode($data);
-		echo $result;
 		$this->output->set_status_header(200);
+		echo $result;
 		return $result;
 	}
 
