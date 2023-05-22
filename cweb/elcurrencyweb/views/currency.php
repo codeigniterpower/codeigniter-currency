@@ -76,19 +76,12 @@
 				// https://www.codeigniter.com/userguide3/libraries/uri.html
 
 				?>
-	<!-- HOME BUTTONS CARD INI -->
+	<!-- RATE BUTTONS CARD INI -->
 		<div class="contain-image">
 			<div class="card-deck d-flex justify-content-around  flex-wrap">
 				<div class="card m-3" style="width: 300px;">
-					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
 					<div class="card-body">
 						<h5 class="card-title d-flex justify-content-center" style="font-size: 4.25rem;" >
-							<span class="fi fi-ve"></span>
-							<span class="fi fi-us"></span>
-						</h5>
-					</div>
-					<div class="card-footer">
-						<small class="text-muted">
 								<i class="fi fi-ve"></i>
 								<span class="ms-1 d-sm-inline">
 									<?php
@@ -102,20 +95,18 @@
 									}
 									?>
 								</span>
-							</a>
-						</small>
-					</div>
-				</div>
-				<div class="card m-3" style="width: 300px;">
-					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-					<div class="card-body">
-						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
-							<span class="fi fi-eu"></span>
-							<span class="fi fi-us"></span>
 						</h5>
 					</div>
 					<div class="card-footer">
 						<small class="text-muted">
+							<span class="fi fi-ve"></span>
+							<span class="fi fi-us"></span>
+						</small>
+					</div>
+				</div>
+				<div class="card m-3" style="width: 300px;">
+					<div class="card-body">
+						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
 								<i class="fi fi-eu"></i>
 								<span class="ms-1 d-sm-inline">
 									<?php
@@ -129,20 +120,18 @@
 									}
 									?>
 								</span>
-							</a>
-						</small>
-					</div>
-				</div>
-				<div class="card m-3" style="width: 300px;">
-					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-					<div class="card-body">
-						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
-							<span class="fi fi-cn"></span> 
-							<span class="fi fi-us"></span>
 						</h5>
 					</div>
 					<div class="card-footer">
 						<small class="text-muted">
+							<span class="fi fi-eu"></span>
+							<span class="fi fi-us"></span>
+						</small>
+					</div>
+				</div>
+				<div class="card m-3" style="width: 300px;">
+					<div class="card-body">
+						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
 								<i class="fi fi-cn"></i>
 								<span class="ms-1 d-sm-inline">
 									<?php
@@ -156,12 +145,42 @@
 									}
 									?>
 								</span>
-							</a>
+						</h5>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">
+							<span class="fi fi-cn"></span> 
+							<span class="fi fi-us"></span>
+						</small>
+					</div>
+				</div>
+				<div class="card m-3" style="width: 300px;">
+					<div class="card-body">
+						<h5 class="card-title d-flex justify-content-center" style="font-size: 4.25rem;" >
+								<i class="fi fi-cr"></i>
+								<span class="ms-1 d-sm-inline">
+									<?php
+									foreach($currency_list_dbarraynow as $index=>$currencyindex)
+									{
+										$value = stripos($currencyindex['moneda_destino'], 'CRC');
+										if( $value !== FALSE)
+										{
+											echo number_format((float)$currencyindex['mon_tasa_moneda'], 2, ',', ''); break;
+										}
+									}
+									?>
+								</span>
+						</h5>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">
+							<span class="fi fi-cr"></span>
+							<span class="fi fi-us"></span>
 						</small>
 					</div>
 				</div>
 			</div>
-		<!-- HOME BUTTONS CARD END -->
+		<!-- RATE BUTTONS CARD END -->
 				<?php 
 					echo heading('Your today all currency rates',3);
 					echo div_open('');
