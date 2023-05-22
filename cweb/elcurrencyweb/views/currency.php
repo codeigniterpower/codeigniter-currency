@@ -186,8 +186,8 @@
 				});
 				return table
 			}
-			let table1 = createDataTable(tableId)
-			// let table2 = createDataTable(tableId2)
+			//let table1 = createDataTable(tableId)
+			let table2 = createDataTable(tableId2)
 			// EVENT TABLE EDIT 
 			function addEventClickTable(id,table,url){
 				$(id+' tbody').on('click', 'tr', function () 
