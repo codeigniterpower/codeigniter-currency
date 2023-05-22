@@ -213,6 +213,8 @@ class Currency_m extends CI_Model
 				else
 					$queryfiltro .= ' DESC';
 			}
+			else
+				$queryfiltro .= ' ORDER BY cod_tasa DESC';
 			if( array_key_exists('howmany', $limiters) )
 			{
 				$howmany = $limiters['howmany'];
