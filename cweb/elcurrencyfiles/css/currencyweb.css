@@ -40,6 +40,7 @@
 }
 .contain-min{
 	min-height: 600px; /* need by the ionic app, until we convert all to progressive app*/
+    overflow-y: scroll;
 }
 .contain-index{
     height: 100vh !important; 
@@ -64,4 +65,7 @@
     background-image: url('../media/currencyhome.jpg');
     background-size: cover;
     background-repeat: no-repeat;
+}
+.width-95{
+    width: 95%;
 }

@@ -19,6 +19,7 @@
 *.xml text
 *.yml text
 .htaccess text
+*.ttf
 
 # Declare files that will always have LF line endings on checkout.
 *.pem eol=lf

@@ -1,4 +1,3 @@
-
 <div class="col py-1 d-flex contain-currency contain-min" style="background-color: #f9faff;">
 		<!-- <section>
 			<div id="contain-modal"> -->
@@ -23,11 +22,10 @@
 				if($active)
 				{
 					$htmldisplaymessageapibutton .= ' You can press the coins button above to get a new coin rate code.';
-					echo div_open('class="d-flex justify-content-end"');
+					echo div_open('class="d-flex justify-content-end width-95"');
 						echo form_button('button-call', $buttonicon, 'class="btn btn-outline-success" id="button-call" ');
 					echo div_close();
 				}
-				$htmldatadisplaymycurrencies = 'There is no data today, yet ..'.$htmldisplaymessageapibutton;
 				if(is_array($currency_list_dbarraypre) )
 				{
 					if(count($currency_list_dbarraypre))
@@ -45,9 +43,10 @@
 						'row_end'               => '</tr>',
 						'cell_start'            => '<td style="background-color:#ffffff00;border: 0px;"">',
 						'cell_end'              => '</td>',
+						'table_close'         => '</table>'
+
 						) );
 						$this->table->set_heading(array_keys($currency_list_dbarraypre[0]));
-						$htmldatadisplaymycurrencies = $this->table->generate($currency_list_dbarraypre);
 					}
 				}
 				$htmldatadisplayallcurrencies = 'The data of world currency rates today is not yet present.. '.$htmldisplaymessageapibutton;
@@ -68,21 +67,100 @@
 							'row_end'               => '</tr>',
 							'cell_start'            => '<td style="background-color:#ffffff00;border: 0px;"">',
 							'cell_end'              => '</td>',
+							'table_close'         => '</table>'
 						) );
 						$this->table->set_heading(array_keys($currency_list_dbarraynow[0]));
 						$htmldatadisplayallcurrencies = $this->table->generate($currency_list_dbarraynow);
 					}
 				}
 				// https://www.codeigniter.com/userguide3/libraries/uri.html
-				
-				echo heading('Your preferred currency rates',3,);
-				echo div_open('');
-					echo '<section>'.$htmldatadisplaymycurrencies.'</section>';
-				echo div_close();
-				echo heading('Your today all currency rates',3,);
-				echo div_open('');
-					echo '<section>'.$htmldatadisplayallcurrencies.'</section>';
-				echo div_close();
+
+				?>
+	<!-- HOME BUTTONS CARD INI -->
+		<div class="contain-image">
+			<div class="card-deck d-flex justify-content-around  flex-wrap">
+				<div class="card m-3" style="width: 300px;">
+					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+					<div class="card-body">
+						<h5 class="card-title d-flex justify-content-center" style="font-size: 4.25rem;" >
+							<span class="fi fi-ve"></span>
+							<span class="fi fi-us"></span>
+						</h5>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">
+								<i class="fi fi-ve"></i>
+								<span class="ms-1 d-none d-sm-inline">
+									<?php
+									foreach($currency_list_dbarraynow as $index=>$currencyindex)
+									{
+										$value = stripos($currencyindex['moneda_destino'], 'VES');
+										if( $value !== FALSE)
+											echo $currencyindex['mon_tasa_moneda'];
+									}
+									?>
+								</span>
+							</a>
+						</small>
+					</div>
+				</div>
+				<div class="card m-3" style="width: 300px;">
+					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+					<div class="card-body">
+						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
+							<span class="fi fi-eu"></span>
+							<span class="fi fi-us"></span>
+						</h5>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">
+								<i class="fi fi-eu"></i>
+								<span class="ms-1 d-none d-sm-inline">
+									<?php
+									foreach($currency_list_dbarraynow as $index=>$currencyindex)
+									{
+										$value = stripos($currencyindex['moneda_destino'], 'EUR');
+										if( $value !== FALSE)
+											echo $currencyindex['mon_tasa_moneda'];
+									}
+									?>
+								</span>
+							</a>
+						</small>
+					</div>
+				</div>
+				<div class="card m-3" style="width: 300px;">
+					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+					<div class="card-body">
+						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
+							<span class="fi fi-cn"></span> 
+							<span class="fi fi-us"></span>
+						</h5>
+					</div>
+					<div class="card-footer">
+						<small class="text-muted">
+								<i class="fi fi-cn"></i>
+								<span class="ms-1 d-none d-sm-inline">
+									<?php
+									foreach($currency_list_dbarraynow as $index=>$currencyindex)
+									{
+										$value = stripos($currencyindex['moneda_destino'], 'CNY');
+										if( $value !== FALSE)
+											echo $currencyindex['mon_tasa_moneda'];
+									}
+									?>
+								</span>
+							</a>
+						</small>
+					</div>
+				</div>
+			</div>
+		<!-- HOME BUTTONS CARD END -->
+				<?php 
+					echo heading('Your today all currency rates',3);
+					echo div_open('');
+						echo '<div>'.$htmldatadisplayallcurrencies.'</div>';
+					echo div_close();
 				?>
 			</div>
 		</section>
@@ -109,7 +187,7 @@
 				return table
 			}
 			let table1 = createDataTable(tableId)
-			let table2 = createDataTable(tableId2)
+			// let table2 = createDataTable(tableId2)
 			// EVENT TABLE EDIT 
 			function addEventClickTable(id,table,url){
 				$(id+' tbody').on('click', 'tr', function () 
