@@ -240,7 +240,7 @@ class Currency_m extends CI_Model
 			FROM
 				(SELECT 
 					t.cod_tasa,
-					t.mon_tasa_moneda,
+					ROUND(t.mon_tasa_moneda,4) as mon_tasa_moneda,
 						(SELECT 
 								CONCAT(m1.iso4217a3, \":\", m1.nombre_moneda)
 							FROM
