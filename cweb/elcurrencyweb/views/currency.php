@@ -1,4 +1,3 @@
-
 <div class="col py-1 d-flex contain-currency contain-min" style="background-color: #f9faff;">
 		<!-- <section>
 			<div id="contain-modal"> -->
@@ -23,7 +22,7 @@
 				if($active)
 				{
 					$htmldisplaymessageapibutton .= ' You can press the coins button above to get a new coin rate code.';
-					echo div_open('class="d-flex justify-content-end"');
+					echo div_open('class="d-flex justify-content-end width-95"');
 						echo form_button('button-call', $buttonicon, 'class="btn btn-outline-success" id="button-call" ');
 					echo div_close();
 				}
@@ -44,6 +43,8 @@
 						'row_end'               => '</tr>',
 						'cell_start'            => '<td style="background-color:#ffffff00;border: 0px;"">',
 						'cell_end'              => '</td>',
+						'table_close'         => '</table>'
+
 						) );
 						$this->table->set_heading(array_keys($currency_list_dbarraypre[0]));
 					}
@@ -66,13 +67,13 @@
 							'row_end'               => '</tr>',
 							'cell_start'            => '<td style="background-color:#ffffff00;border: 0px;"">',
 							'cell_end'              => '</td>',
+							'table_close'         => '</table>'
 						) );
 						$this->table->set_heading(array_keys($currency_list_dbarraynow[0]));
 						$htmldatadisplayallcurrencies = $this->table->generate($currency_list_dbarraynow);
 					}
 				}
 				// https://www.codeigniter.com/userguide3/libraries/uri.html
-				
 				?>
 
 
@@ -83,8 +84,8 @@
 				<div class="card m-3" style="width: 300px;">
 					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
 					<div class="card-body">
-						<h5 class="card-title">
-							<span class="fi fi-ve"></span> <span class="fi fi-ve fis"></span>
+						<h5 class="card-title d-flex justify-content-center" style="font-size: 4.25rem;" >
+							<span class="fi fi-ve"></span>
 						</h5>
 					</div>
 					<div class="card-footer">
@@ -92,7 +93,8 @@
 							<a href="<?php echo site_url() . "/Currency_Manager"; ?>" class="nav-link px-0 align-middle links-menu">
 								<i class="fs-4 bi-table links-menu"></i>
 								<span class="ms-1 d-none d-sm-inline links-menu">
-									Currency
+									<?php
+									?>
 								</span>
 							</a>
 						</small>
@@ -101,8 +103,9 @@
 				<div class="card m-3" style="width: 300px;">
 					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
 					<div class="card-body">
-						<h5 class="card-title">
-							<span class="fi fi-eu"></span> <span class="fi fi-eu fis"></span>
+						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
+							<span class="fi fi-eu"></span>
+							 <!-- <span class="fi fi-eu fis"></span> -->
 						</h5>
 					</div>
 					<div class="card-footer">
@@ -111,6 +114,8 @@
 								<i class="fs-4 bi-speedometer2 links-menu"></i>
 								<span class="ms-1 d-none d-sm-inline links-menu">
 									History
+									<?php
+									?>
 								</span>
 							</a>
 						</small>
@@ -119,8 +124,9 @@
 				<div class="card m-3" style="width: 300px;">
 					<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
 					<div class="card-body">
-						<h5 class="card-title">
-							<span class="fi fi-cn"></span> <span class="fi fi-cn fis"></span>
+						<h5 class="card-title d-flex justify-content-center"  style="font-size: 4.25rem;">
+							<span class="fi fi-cn"></span> 
+							<!-- <span class="fi fi-cn fis"></span> -->
 						</h5>
 					</div>
 					<div class="card-footer">
@@ -129,6 +135,8 @@
 								<i class="fs-4 bi-currency-exchange links-menu"></i>
 								<span class="ms-1 d-none d-sm-inline links-menu">
 									Convert
+									<?php
+									?>
 								</span>
 							</a>
 						</small>
@@ -137,10 +145,10 @@
 			</div>
 		<!-- HOME BUTTONS CARD END -->
 				<?php 
-					echo heading('Your today all currency rates',3,);
+					echo heading('Your today all currency rates',3);
 					echo div_open('');
-					echo '<section>'.$htmldatadisplayallcurrencies.'</section>';
-				echo div_close();
+						echo '<div>'.$htmldatadisplayallcurrencies.'</div>';
+					echo div_close();
 				?>
 			</div>
 		</section>
@@ -167,7 +175,7 @@
 				return table
 			}
 			let table1 = createDataTable(tableId)
-			let table2 = createDataTable(tableId2)
+			// let table2 = createDataTable(tableId2)
 			// EVENT TABLE EDIT 
 			function addEventClickTable(id,table,url){
 				$(id+' tbody').on('click', 'tr', function () 

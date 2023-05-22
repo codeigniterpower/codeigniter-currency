@@ -31,5 +31,5 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	echo '</head>'. PHP_EOL;
 	echo '<body>'.PHP_EOL;
 echo '<!-- START MAIN CONTAINER AND MENU TAG CNTAINER , it ends in the footer view -->';
-echo '<div class="container-fluid contain-min">'.PHP_EOL;
+echo '<div class="container-fluid contain-min" style="overflow-y: hidden;">'.PHP_EOL;
 echo '<div class="row flex-nowrap">'.PHP_EOL;
