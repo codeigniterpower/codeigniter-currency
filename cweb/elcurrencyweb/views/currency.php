@@ -176,7 +176,7 @@
 	<script>
 		let baseUrl = "<?php echo site_url(); ?>";
 		let uricall = baseUrl + '/Currency_Api';
-		let user_st = <?php echo $active; ?>;
+		let user_st = "<?php echo $active; ?>";
 		let user_id = "<?php echo $user_id; ?>";
 		let tableId = '#table_id';
 		let tableId2 = '#table_id2';
