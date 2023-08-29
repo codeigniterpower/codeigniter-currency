@@ -5,5 +5,5 @@ Currency api integration lib
 
 */
 
-$config['currency_api_key'] = 'YOUR_API_KEY';
-$config['currency_api_url'] = 'YOUR_API_URL';
+$config['currency_api_key'] = 'sl45WcIzEwDdMWoBtQyym7BHrIlBmbrg';
+$config['currency_api_url'] = 'https://api.yadio.io/exrates/';

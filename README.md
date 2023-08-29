@@ -7,8 +7,7 @@ Currency converter library and also a manager interface for/using codeigniter an
 ## Description
 
 This project provides two things: a **library that integrates 
-the exchangerate.io api for codeigniter** and **a currency conversion rate manager**, 
-this last splited into an app for phones and a web interface to manage your 
+the YADIO exchange api for codeigniter** and **a currency conversion rate manager**, 
 currencies, its big difference is that you can change the base currency at any time 
 regardless of whether it was already deployed.
 
@@ -42,9 +41,8 @@ as frontend to the api.
 
 #### API LAYER
 
-This project retrieve the currencies from https://apilayer.com/marketplace/exchangerates_data-api 
-using ApiLayer service, that provides a free play with 256 request per month that is enought for 
-any little service, for that the project also provide a web management inerface with option 
+This project retrieve the currencies from https://api.yadio.io/exrates 
+using ApiLayer service, that the project also provide a web management interface with option 
 to store into database. You must to have a free of charge api key and configure it.
 
 The idea and objective is to provide a multi API layer in a way that acts as a 

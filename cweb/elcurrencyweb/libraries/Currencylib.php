@@ -133,7 +133,7 @@ class Currencylib
 			$this->destiCurrency = '';
 		}
 
-		$urlrequested = $this->currencyApiUrl."/".$this->dateCurrency."?symbols=".$this->destiCurrency."&base=".$this->baseCurrency;
+		$urlrequested = $this->currencyApiUrl."/".$this->baseCurrency;
 
 		log_message('debug', __CLASS__ .' URL: '.print_r($urlrequested,TRUE) );
 		$this->converted = 0;
@@ -170,7 +170,7 @@ class Currencylib
 			$resulterr = array('ERR'=>2);
 			log_message('debug', __CLASS__ .':json ERROR validation: '. print_r($resulterr,TRUE) .' '. print_r($response,TRUE) );
 		}
-		else if(! array_key_exists('rates', $conversion))
+		else if(! array_key_exists('BTC', $conversion))
 		{
 			$resulterr = array('ERR'=>3);
 			log_message('debug', __CLASS__ .':json ERROR decode: '. print_r($resulterr,TRUE) .' '. print_r($response,TRUE));
@@ -183,7 +183,7 @@ class Currencylib
 			return $resulterr;
 		}
 
-		$rates = $conversion['rates'];
+		$rates = $conversion[$this->baseCurrency];
 
 		foreach($rates as $destiCurrency => $valueCurrency)
 		{
