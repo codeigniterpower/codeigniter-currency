@@ -156,7 +156,7 @@ In such cases you must close as:
 </html>
 ```
 
-## Database compatibility
+## Database dictionary
 
 **Currency manager is compatible with any database engine**, that's 
 another reason we choose Codeigniter 3 / Codeigniter 2 as framework 
@@ -184,6 +184,108 @@ the `COMMENT` part and you will get it).
 * `elcurrencydb.png` [elcurrencydb.png](elcurrencydb.png)
 * `elcurrencydb.mwb` [elcurrencydb.mwb](elcurrencydb.mwb)
 * `elcurrencydb.sql` [elcurrencydb.sql](elcurrencydb.sql)
+
+### Tables in general
+
+#### cur_banco
+
+Column name  | Type        | Comment                                                | Null | AI
+-------------|-------------|--------------------------------------------------------|------|---
+cod_banco    | varchar(40) | tres primeros numeros o identificador de sus cuentas   | No   | No
+cod_pais     | varchar(40) | pais codigo iso 3166 numerico de donde reside el banco | Yes  | No
+cod_swif     | varchar(40) | codigo SWIFT internacional                             | Yes  | No
+cod_bic      | varchar(45) |                                                        | Yes  | No
+nombre_banco | varchar(40) | nombre natural del banco por el que se le conoce       | Yes  | No
+estado       | varchar(40) | ACTIVO|INACTIVO                                        | No   | No
+sessionflag  | varchar(40) | quien modifico YYYYMMDDhhmmss + codger + . + ficha     | Yes  | No
+sessionficha | varchar(40) | codigo BIC internacional                               | Yes  | No
+
+#### cur_moneda
+
+Column name     | Type          | Comment                                            | Null | AI
+----------------|---------------|----------------------------------------------------|------|---
+cod_moneda      | varchar(40)   | moneda codigo interno                              | No   | No
+iso4217a3       | varchar(40)   | codigo iso 4217-1 de 3 letras                      | No   | No
+simbolo_unicode | varchar(40)   | simbolo unicode de moneda                          | No   | No
+nombre_moneda   | varchar(40)   | nombre moneda comun oficial                        | Yes  | No
+estado          | varchar(40)   | ACTIVO|INACTIVO                                    | No   | No
+notas_pais      | varchar(2000) | observaciones                                      | Yes  | No
+sessionflag     | varchar(40)   | quien modifico YYYYMMDDhhmmss + codger + . + ficha | Yes  | No
+sessionficha    | varchar(40)   | quien lo creo YYYYMMDDhhmmss + codger + . + ficha  | Yes  | No
+
+cod_moneda | iso4217a3 | simbolo_unicode | nombre_moneda          | estado | notas_pais                                      | sessionflag | sessionficha
+-----------|-----------|-----------------|------------------------|--------|-------------------------------------------------|-------------|-------------
+008        | ALL       | L               | Lek                    | ACTIVO | Albania                                         |             |             
+012        | DZD       | د.ج             | Algerian Dinar         | ACTIVO | Algeria                                         |             |             
+032        | ARS       | $               | Argentine Peso         | ACTIVO | Argentina                                       |             |             
+332        | HTG       | G               | Gourde                 | ACTIVO | Haiti                                           |             |             
+886        | YER       | ﷼               | Yemeni Rial            | ACTIVO | Yemen                                           |             |             
+928        | VES       | Bs              | Bolivar Soberano       | ACTIVO | Venezuela                                       | NULL        | NULL        
+937        | VEF       | Bs F            | Bolivar Fuerte         | INACTI | Venezuela                                       |             |             
+978        | EUR       | €               | Euro                   | ACTIVO | Akrotiri and Dhekelia  Andorra Austria Belgium  |             |             
+
+#### cur_pais
+
+Column name  | Type          | Comment                                            | Null | AI
+-------------|---------------|----------------------------------------------------|------|---
+cod_pais     | varchar(40)   | pais codigo iso 3166 numerico                      | No   | No
+nombre_pais  | varchar(400)  | nombre comun conocido                              | No   | No
+nombre_iso   | varchar(400)  | nombre iso 3166-1                                  | No   | No
+iso3166a2    | varchar(40)   | codigo iso 3166 alfa 2 letras                      | No   | No
+iso3166a3    | varchar(40)   | codigo iso 3166 alfa 3 letras                      | No   | No
+estado       | varchar(40)   | ACTIVO|INACTIVO                                    | Yes  | No
+notas_pais   | varchar(2000) | observaciones                                      | Yes  | No
+sessionflag  | varchar(40)   | quien modifico YYYYMMDDhhmmss + codger + . + ficha | Yes  | No
+sessionficha | varchar(40)   | quien lo creo YYYYMMDDhhmmss + codger + . + ficha  | Yes  | No
+
+
+cod_pais | nombre_pais                               | nombre_iso                                        | iso3166a2 | iso3166a3 | estado | notas_pais                                                                                                                                 | sessionflag | sessionficha
+---------|-------------------------------------------|---------------------------------------------------|-----------|-----------|--------|--------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------
+10       | Antártida                                 | Antártida                                         | AQ        | ATA       | NULL   | Cubre el territorio al sur delparalelo 60º sur.                                                                                            |             |             
+192      | Cuba                                      | Cuba                                              | CU        | CUB       | NULL   |                                                                                                                                            |             |             
+8        | Albania                                   | Albania                                           | AL        | ALB       | NULL   |                                                                                                                                            |             |             
+862      | Venezuela                                 | Venezuela (República Bolivariana de)              | VE        | VEN       | NULL   |                                                                                                                                            |             |             
+
+#### cur_session
+
+Column name | Type        | Comment                        | Null | AI
+------------|-------------|--------------------------------|------|---
+user_id     | varchar(40) | username or user mail          | No   | No
+user_extra  | varchar(45) | reserved column for extra data | Yes  | No
+sessionuser | varchar(40) | YYYYMMDDHHmmss.ip.XXXXXXXX     | No   | No
+
+#### cur_tasas_moneda
+
+
+Column name        | Type           | Comment                                                                                  | Null | AI
+-------------------|----------------|------------------------------------------------------------------------------------------|------|---
+cod_tasa           | varchar(40)    | YYYYMMDDhhmmss                                                                           | No   | No
+cod_moneda_base    | varchar(40)    | cos_iso - moneda en el cual se basa la tasa, base                                        | No   | No
+mon_tasa_moneda    | decimal(40,20) | monto: cuanto moneda -destino- vale moneda -base- cada una tiene una x/1 para la inversa | No   | No
+cod_moneda_destino | varchar(40)    | cos_iso - moneda el cual esta elmonto equiparado                                         | No   | No
+cod_tasa_tipo      | varchar(40)    | OFICIAL|INTERNA                                                                          | No   | No
+sessionflag        | varchar(40)    | quien modifico YYYYMMDDhhmmss + codger + . + ficha                                       | Yes  | No
+sessionficha       | varchar(40)    | quien lo creo YYYYMMDDhhmmss + codger + . + ficha                                        | Yes  | No
+
+cod_tasa       | cod_moneda_base | mon_tasa_moneda              | cod_moneda_destino | cod_tasa_tipo | sessionflag | sessionficha
+---------------|-----------------|------------------------------|--------------------|---------------|-------------|-------------
+20201211080000 | 928             | 0.00000092576231029539       | 840                | INTERNA       | NULL        | NULL        
+20201211080001 | 840             | 1080190.87500000000000000000 | 928                | INTERNA       | NULL        | NULL        
+
+#### cur_usuarios
+
+Column name      | Type        | Comment                                            | Null | AI
+-----------------|-------------|----------------------------------------------------|------|---
+user_id          | varchar(40) | intranet o correo del usuario                      | No   | No
+user_status      | varchar(40) | PASIVO|ACTIVO                                      | Yes  | No
+cur_monedas_base | varchar(40) | lista separada por comas de monedas preferida base | Yes  | No
+cur_monedas_dest | varchar(40) | lista separada monedas get rates                   | Yes  | No
+sessionflag      | varchar(40) | quien modifico YYYYMMDDhhmmss + codger + . + ficha | Yes  | No
+sessionficha     | varchar(40) | quien lo creo YYYYMMDDhhmmss + codger + . + ficha  | Yes  | No
+
+user_id          | user_status | cur_monedas_base | cur_monedas_dest | sessionflag | sessionficha
+-----------------|-------------|------------------|------------------|-------------|-------------
+user_new         | ACTIVO      | 840              | 928              |             |             
 
 
 ## Deploy
